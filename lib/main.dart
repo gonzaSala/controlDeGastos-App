@@ -24,6 +24,42 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  final newExpenseControlName = TextEditingController();
+  final newExpenseControlCantidad = TextEditingController();
+
+  void addNewExpense() {
+    showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+              title: Text('Agregar nuevo gasto'),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  TextField(
+                    controller: newExpenseControlName,
+                  ),
+                  TextField(
+                    controller: newExpenseControlCantidad,
+                  ),
+                ],
+              ),
+              actions: [
+                MaterialButton(
+                  onPressed: save,
+                  child: Text('Guardad'),
+                ),
+                MaterialButton(
+                  onPressed: cancel,
+                  child: Text('Cancelar'),
+                ),
+              ],
+            ));
+  }
+
+  void save() {}
+
+  void cancel() {}
+
   Widget bottomAction(IconData icon) {
     return InkWell(
       child: Padding(
@@ -37,86 +73,29 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        bottomNavigationBar: BottomAppBar(
-          color: const Color.fromARGB(255, 163, 191, 240),
-          notchMargin: 4.0,
-          shape: const CircularNotchedRectangle(),
-          child: Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              bottomAction(FontAwesomeIcons.history),
-              bottomAction(FontAwesomeIcons.chartPie),
-              const SizedBox(width: 42.0),
-              bottomAction(FontAwesomeIcons.wallet),
-              bottomAction(Icons.settings),
-            ],
-          ),
+      bottomNavigationBar: BottomAppBar(
+        color: const Color.fromARGB(255, 163, 191, 240),
+        notchMargin: 4.0,
+        shape: const CircularNotchedRectangle(),
+        child: Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            bottomAction(FontAwesomeIcons.history),
+            bottomAction(FontAwesomeIcons.chartPie),
+            const SizedBox(width: 42.0),
+            bottomAction(FontAwesomeIcons.wallet),
+            bottomAction(Icons.settings),
+          ],
         ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-        floatingActionButton: FloatingActionButton(
-          backgroundColor: Colors.blueAccent,
-          hoverColor: Color.fromARGB(146, 0, 111, 166),
-          child: const Icon(Icons.add),
-          onPressed: () {},
-        ));
-  }
-
-  Widget body() {
-    return SafeArea(
-      child: Column(
-        children: <Widget>[
-          selector(),
-          expenses(),
-          graph(),
-          lista(),
-        ],
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.blueAccent,
+        hoverColor: Color.fromARGB(146, 0, 111, 166),
+        child: const Icon(Icons.add),
+        onPressed: addNewExpense,
       ),
     );
-  }
-
-  Widget selector() => Container();
-  Widget expenses() {
-    return Column(
-      children: <Widget>[
-        Text(
-          "\$2361,41",
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 40.0,
-          ),
-        ),
-        Text(
-          "Total expensas",
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 16.0,
-            color: Colors.blueGrey,
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget graph() {
-    return Container(
-      height: 250.0,
-      child: GraphWidget(),
-    );
-  }
-  Widget item(IconData icon, String nombre ,int porcent){
-     return ListTile(
-      leading: Icon(icon),
-
-     ),
-  }
-
-
-  Widget lista (){
-    return ListView(
-      children: <Widget>[
-        item(FontAwesomeIcons.cartShopping, 'Shopping', 14)
-      ],
-    )
   }
 }
