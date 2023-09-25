@@ -1,6 +1,7 @@
 import 'package:control_gastos/models/expenses_item.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:intl/intl.dart';
 
 void main() {
   runApp(const MyApp());
@@ -30,50 +31,79 @@ class _MyHomePageState extends State<MyHomePage> {
 
   List<Expense> expenses = [];
 
-// Función para guardar un nuevo gasto
   void save() {
     final name = newExpenseControlName.text;
     final cantidad = double.tryParse(newExpenseControlCantidad.text) ?? 0.0;
+    final date = DateTime.now();
 
     if (name.isNotEmpty && cantidad > 0) {
-      expenses.add(Expense(name: name, cantidad: cantidad));
-      Navigator.of(context).pop(); // Cierra el cuadro de diálogo
+      expenses.add(Expense(name: name, cantidad: cantidad, date: date));
+      Navigator.of(context).pop();
+      setState(() {});
     }
-    setState(() {});
   }
 
-// Función para mostrar la lista de gastos
   void viewExpenses() {
-    print(
-        'Mostrar lista de gastos'); // Verifica si esta función se llama correctamente
-    Navigator.of(context).push(MaterialPageRoute(
-      builder: (context) => Scaffold(
-        appBar: AppBar(
-          title: Text('Lista de Gastos'),
-        ),
-        body: ListView.builder(
-          itemCount: expenses.length,
-          itemBuilder: (context, index) {
-            final expense = expenses[index];
-            return ListTile(
-              title: Text(expense.name),
-              subtitle: Text('\$${expense.cantidad.toStringAsFixed(2)}'),
-            );
-          },
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => Scaffold(
+          appBar: AppBar(
+            title: Text('Lista de Gastos'),
+          ),
+          body: ListView.builder(
+            itemCount: expenses.length,
+            itemBuilder: (context, index) {
+              final expense = expenses.reversed.toList()[index];
+              return Dismissible(
+                key: Key(expense.name), // Debe ser una clave única
+                onDismissed: (direction) {
+                  // Eliminar el elemento seleccionado
+                  setState(() {
+                    expenses.removeAt(index);
+                  });
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Se eliminó el gasto: ${expense.name}'),
+                    ),
+                  );
+                },
+                background: Container(
+                  color: Color.fromARGB(255, 255, 86, 86),
+                  child: Icon(FontAwesomeIcons.trash,
+                      color: Color.fromRGBO(198, 199, 199, 0.961)),
+                  alignment: Alignment.centerRight,
+                  padding: EdgeInsets.only(right: 20.0),
+                ),
+                child: ListTile(
+                  title: Text(expense.name),
+                  subtitle: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('\$${expense.cantidad.toStringAsFixed(2)}'),
+                      Text(
+                          'Fecha: ${DateFormat('yyyy-MM-dd HH:mm:ss').format(expense.date)}'),
+                    ],
+                  ),
+                ),
+              );
+            },
+          ),
         ),
       ),
-    ));
+    );
   }
 
-  void cancel() {}
+  void cancel() {
+    Navigator.of(context).pop(); // Cierra el cuadro de diálogo
+  }
 
-  Widget bottomAction(IconData icon) {
+  Widget bottomAction(IconData icon, Function() onTapCallback) {
     return InkWell(
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Icon(icon),
       ),
-      onTap: () {},
+      onTap: onTapCallback,
     );
   }
 
@@ -84,7 +114,7 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text('Control de Gastos'),
       ),
       body: Center(
-        child: Text('Página principal'), // Esto es solo un marcador de posición
+        child: Text('Página principal'),
       ),
       bottomNavigationBar: BottomAppBar(
         color: const Color.fromARGB(255, 163, 191, 240),
@@ -94,11 +124,11 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
-            bottomAction(FontAwesomeIcons.history),
-            bottomAction(FontAwesomeIcons.chartPie),
+            bottomAction(FontAwesomeIcons.history, viewExpenses),
+            bottomAction(FontAwesomeIcons.chartPie, () {}),
             const SizedBox(width: 42.0),
-            bottomAction(FontAwesomeIcons.wallet),
-            bottomAction(Icons.settings),
+            bottomAction(FontAwesomeIcons.wallet, () {}),
+            bottomAction(Icons.settings, () {}),
           ],
         ),
       ),
