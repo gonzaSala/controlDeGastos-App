@@ -2,6 +2,9 @@ import 'package:control_gastos/models/expenses_item.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
+import 'package:fl_chart/fl_chart.dart';
+import 'package:control_gastos/models/chart.dart';
+import 'package:control_gastos/models/chart_util.dart';
 
 void main() {
   runApp(const MyApp());
@@ -97,6 +100,14 @@ class _MyHomePageState extends State<MyHomePage> {
     Navigator.of(context).pop(); // Cierra el cuadro de diálogo
   }
 
+  double calculateTotalExpenses() {
+    double total = 0.0;
+    for (final expense in expenses) {
+      total += expense.cantidad;
+    }
+    return total;
+  }
+
   Widget bottomAction(IconData icon, Function() onTapCallback) {
     return InkWell(
       child: Padding(
@@ -113,8 +124,27 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: Text('Control de Gastos'),
       ),
-      body: Center(
-        child: Text('Página principal'),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.max,
+        children: <Widget>[
+          Text(
+            '\$${calculateTotalExpenses().toStringAsFixed(2)}',
+            style: TextStyle(
+              fontSize: 40,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          Text(
+            'Total gastos',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: Colors.blueGrey,
+            ),
+          ),
+          if (showChart) buildChart(),
+        ],
       ),
       bottomNavigationBar: BottomAppBar(
         color: const Color.fromARGB(255, 163, 191, 240),
@@ -125,7 +155,7 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
             bottomAction(FontAwesomeIcons.history, viewExpenses),
-            bottomAction(FontAwesomeIcons.chartPie, () {}),
+            bottomAction(FontAwesomeIcons.chartPie, toggleChart),
             const SizedBox(width: 42.0),
             bottomAction(FontAwesomeIcons.wallet, () {}),
             bottomAction(Icons.settings, () {}),
@@ -140,6 +170,31 @@ class _MyHomePageState extends State<MyHomePage> {
         onPressed: addNewExpense,
       ),
     );
+  }
+
+  Widget buildChart() {
+    return PieChart(
+      PieChartData(
+        sections: getChartSections(expenses),
+        centerSpaceRadius: 40,
+      ),
+    );
+  }
+
+  bool showChart = false;
+
+  void toggleChart() {
+    setState(() {
+      showChart = !showChart;
+    });
+    if (showChart) {
+      // Navega a la página del gráfico cuando se muestra el gráfico
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => ChartPage(expenses: expenses),
+        ),
+      );
+    }
   }
 
   void addNewExpense() {
