@@ -1,37 +1,27 @@
 import 'package:control_gastos/models/expenses_item.dart';
+import 'package:flutter/material.dart';
 
-class expenseData {
-  List<expenseItem> overAllExpenseList = [];
+class ExpenseListPage extends StatelessWidget {
+  final List<Expense> expenses;
 
-  List<expenseItem> getAllExpenseList (){
-    return overAllExpenseList;
-  };
+  ExpenseListPage({required this.expenses});
 
-  void addNewExpense(expenseItem newExpense){
-    overAllExpenseList.add(newExpense);
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Lista de Gastos'),
+      ),
+      body: ListView.builder(
+        itemCount: expenses.length,
+        itemBuilder: (context, index) {
+          final expense = expenses[index];
+          return ListTile(
+            title: Text(expense.name),
+            subtitle: Text('\$${expense.cantidad.toStringAsFixed(2)}'),
+          );
+        },
+      ),
+    );
   }
-
-  void deleteExpense (expenseItem expense){
-    overAllExpenseList.remove(expense);
-  }
-
-  String getDayName (DateTime dateTime){
-    switch (dateTime.weekday){
-      case 1:
-      return 'Dom';
-      case 2:
-      return 'Lun';
-      case 3:
-      return 'Mar';
-      case 4:
-      return 'Mier';
-      case 5:
-      return 'Jue';
-      case 6:
-      return 'Vie';
-case 7:
-      return 'Sab';
-    }
-  }
-
 }
