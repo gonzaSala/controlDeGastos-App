@@ -13,7 +13,7 @@ List<PieChartSectionData> getChartSections(List<Expense> expenses) {
       color: Colors.primaries[sections.length % Colors.primaries.length],
       value: percentage * 100,
       title: '${expense.name} ${percentage.toStringAsFixed(2)}%',
-      radius: 50,
+      radius: 0,
     );
     sections.add(sectionData);
   }

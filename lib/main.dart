@@ -41,6 +41,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
     if (name.isNotEmpty && cantidad > 0) {
       expenses.add(Expense(name: name, cantidad: cantidad, date: date));
+      newExpenseControlName.clear();
+      newExpenseControlCantidad.clear();
       Navigator.of(context).pop();
       setState(() {});
     }
@@ -60,7 +62,6 @@ class _MyHomePageState extends State<MyHomePage> {
               return Dismissible(
                 key: Key(expense.name), // Debe ser una clave única
                 onDismissed: (direction) {
-                  // Eliminar el elemento seleccionado
                   setState(() {
                     expenses.removeAt(index);
                   });
@@ -97,7 +98,9 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void cancel() {
-    Navigator.of(context).pop(); // Cierra el cuadro de diálogo
+    newExpenseControlName.clear();
+    newExpenseControlCantidad.clear();
+    Navigator.of(context).pop();
   }
 
   double calculateTotalExpenses() {
@@ -124,27 +127,35 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: Text('Control de Gastos'),
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        mainAxisSize: MainAxisSize.max,
-        children: <Widget>[
-          Text(
-            '\$${calculateTotalExpenses().toStringAsFixed(2)}',
-            style: TextStyle(
-              fontSize: 40,
-              fontWeight: FontWeight.bold,
-            ),
+      body: Center(
+        child: Container(
+          height:
+              MediaQuery.of(context).size.height, // Establece una altura fija
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment:
+                CrossAxisAlignment.center, // Centra verticalmente
+            mainAxisSize: MainAxisSize.max,
+            children: <Widget>[
+              Text(
+                '\$${calculateTotalExpenses().toStringAsFixed(2)}',
+                style: TextStyle(
+                  fontSize: 40,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Text(
+                'Total gastos',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.blueGrey,
+                ),
+              ),
+              if (showChart) buildChart(),
+            ],
           ),
-          Text(
-            'Total gastos',
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              color: Colors.blueGrey,
-            ),
-          ),
-          if (showChart) buildChart(),
-        ],
+        ),
       ),
       bottomNavigationBar: BottomAppBar(
         color: const Color.fromARGB(255, 163, 191, 240),
@@ -194,6 +205,9 @@ class _MyHomePageState extends State<MyHomePage> {
           builder: (context) => ChartPage(expenses: expenses),
         ),
       );
+    }
+    if (!showChart) {
+      Navigator.of(context).pop();
     }
   }
 
