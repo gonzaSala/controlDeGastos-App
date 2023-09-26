@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:control_gastos/models/chart.dart';
 import 'package:control_gastos/models/chart_util.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   runApp(const MyApp());
@@ -34,6 +35,34 @@ class _MyHomePageState extends State<MyHomePage> {
 
   List<Expense> expenses = [];
 
+  @override
+  void initState() {
+    super.initState();
+    // Cargar los gastos almacenados cuando se inicie la aplicación
+    loadExpenses();
+  }
+
+  Future<void> loadExpenses() async {
+    final prefs = await SharedPreferences.getInstance();
+    final List<String>? savedExpenses = prefs.getStringList('expenses');
+
+    if (savedExpenses != null) {
+      setState(() {
+        expenses = savedExpenses
+            .map((expenseJson) =>
+                Expense.fromJson(expenseJson as Map<String, dynamic>))
+            .toList();
+      });
+    }
+  }
+
+  Future<void> saveExpenses() async {
+    final prefs = await SharedPreferences.getInstance();
+    final List<String> expenseStrings =
+        expenses.map((expense) => expense.toJson()).cast<String>().toList();
+    await prefs.setStringList('expenses', expenseStrings);
+  }
+
   void save() {
     final name = newExpenseControlName.text;
     final cantidad = double.tryParse(newExpenseControlCantidad.text) ?? 0.0;
@@ -41,10 +70,13 @@ class _MyHomePageState extends State<MyHomePage> {
 
     if (name.isNotEmpty && cantidad > 0) {
       expenses.add(Expense(name: name, cantidad: cantidad, date: date));
+      saveExpenses();
       newExpenseControlName.clear();
       newExpenseControlCantidad.clear();
       Navigator.of(context).pop();
-      setState(() {});
+      setState(() {
+        showChart = true;
+      });
     }
   }
 
@@ -152,6 +184,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   color: Colors.blueGrey,
                 ),
               ),
+              return 
               if (showChart) buildChart(),
             ],
           ),
@@ -183,10 +216,21 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+  List<Expense> getExpensesForCurrentDay() {
+    final now = DateTime.now();
+    return expenses.where((expense) {
+      return expense.date.day == now.day &&
+          expense.date.month == now.month &&
+          expense.date.year == now.year;
+    }).toList();
+  }
+
   Widget buildChart() {
+    final expensesForCurrentDay = getExpensesForCurrentDay();
+
     return PieChart(
       PieChartData(
-        sections: getChartSections(expenses),
+        sections: getChartSections(expensesForCurrentDay),
         centerSpaceRadius: 40,
       ),
     );
