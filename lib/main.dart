@@ -135,6 +135,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       content: Text('Se eliminó el gasto: ${expense.name}'),
                     ),
                   );
+                  saveExpenses();
                 },
                 background: Container(
                   color: Colors.red,
