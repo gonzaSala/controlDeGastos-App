@@ -7,6 +7,24 @@ class ChartPage extends StatelessWidget {
 
   ChartPage({required this.expenses});
 
+  List<Expense> getExpensesForMonth(DateTime month) {
+    return expenses.where((expense) {
+      return expense.date.year == month.year &&
+          expense.date.month == month.month;
+    }).toList();
+  }
+
+  double calculateTotalExpensesForMonth(DateTime month) {
+    double total = 0.0;
+    for (final expense in expenses) {
+      if (expense.date.year == month.year &&
+          expense.date.month == month.month) {
+        total += expense.cantidad;
+      }
+    }
+    return total;
+  }
+
   @override
   Widget build(BuildContext context) {
     // Modifica esta línea para obtener los gastos del día de la semana actual

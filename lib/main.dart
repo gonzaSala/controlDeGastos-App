@@ -35,6 +35,8 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   ThemeMode _themeMode = ThemeMode.light;
 
+  DateTime selectedMonth = DateTime.now();
+
   final newExpenseControlName = TextEditingController();
   final newExpenseControlCantidad = TextEditingController();
 
@@ -46,6 +48,8 @@ class _MyHomePageState extends State<MyHomePage> {
       _themeMode =
           _themeMode == ThemeMode.light ? ThemeMode.dark : ThemeMode.light;
     });
+    print('Tema cambiado a: $_themeMode');
+    setState(() {});
   }
 
   @override
@@ -182,10 +186,6 @@ class _MyHomePageState extends State<MyHomePage> {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisSize: MainAxisSize.max,
             children: <Widget>[
-              ElevatedButton(
-                onPressed: _toggleTheme,
-                child: Text('Cambiar Tema'),
-              ),
               Text(
                 '\$${calculateTotalExpenses().toStringAsFixed(2)}',
                 style: TextStyle(
