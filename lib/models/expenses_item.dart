@@ -20,4 +20,6 @@ class Expense {
       'date': date.toIso8601String(), // Convertir la fecha a una cadena ISO8601
     };
   }
+
+  compareTo(Expense element) {}
 }

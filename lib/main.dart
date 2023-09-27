@@ -2,9 +2,7 @@ import 'package:control_gastos/models/expenses_item.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
-import 'package:fl_chart/fl_chart.dart';
 import 'package:control_gastos/models/chart.dart';
-import 'package:control_gastos/models/chart_util.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
@@ -12,19 +10,25 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(),
-      home: MyHomePage(),
+      home: MyHomePage(
+        toggleTheme: () {}, // Aquí deberías proporcionar la función toggleTheme
+      ),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
+  final Function toggleTheme;
+
+  MyHomePage({required this.toggleTheme});
+
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
@@ -34,6 +38,7 @@ class _MyHomePageState extends State<MyHomePage> {
   final newExpenseControlCantidad = TextEditingController();
 
   List<Expense> expenses = [];
+  bool showChart = false; // Declarar e inicializar showChart
 
   @override
   void initState() {
@@ -74,9 +79,6 @@ class _MyHomePageState extends State<MyHomePage> {
       newExpenseControlName.clear();
       newExpenseControlCantidad.clear();
       Navigator.of(context).pop();
-      setState(() {
-        showChart = true;
-      });
     }
   }
 
@@ -184,8 +186,6 @@ class _MyHomePageState extends State<MyHomePage> {
                   color: Colors.blueGrey,
                 ),
               ),
-              return 
-              if (showChart) buildChart(),
             ],
           ),
         ),
@@ -225,33 +225,16 @@ class _MyHomePageState extends State<MyHomePage> {
     }).toList();
   }
 
-  Widget buildChart() {
-    final expensesForCurrentDay = getExpensesForCurrentDay();
-
-    return PieChart(
-      PieChartData(
-        sections: getChartSections(expensesForCurrentDay),
-        centerSpaceRadius: 40,
-      ),
-    );
-  }
-
-  bool showChart = false;
-
   void toggleChart() {
     setState(() {
       showChart = !showChart;
     });
     if (showChart) {
-      // Navega a la página del gráfico cuando se muestra el gráfico
       Navigator.of(context).push(
         MaterialPageRoute(
           builder: (context) => ChartPage(expenses: expenses),
         ),
       );
-    }
-    if (!showChart) {
-      Navigator.of(context).pop();
     }
   }
 

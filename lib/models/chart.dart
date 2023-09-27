@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:control_gastos/models/expenses_item.dart';
-import 'package:control_gastos/models/chart_util.dart';
 
 class ChartPage extends StatelessWidget {
   final List<Expense> expenses;
@@ -10,15 +9,8 @@ class ChartPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Crear una lista de valores para cada día de la semana
-    final List<double> weeklyExpenses = List.generate(7, (index) {
-      final dayOfWeek =
-          DateTime.now().subtract(Duration(days: 6 - index)).weekday;
-      final totalForDay = expenses
-          .where((expense) => expense.date.weekday == dayOfWeek)
-          .fold(0.0, (sum, expense) => sum + expense.cantidad);
-      return totalForDay;
-    });
+    // Modifica esta línea para obtener los gastos del día de la semana actual
+    final List<double> weeklyExpenses = calculateWeeklyExpenses();
 
     return Scaffold(
       appBar: AppBar(
@@ -29,15 +21,16 @@ class ChartPage extends StatelessWidget {
         child: BarChart(
           BarChartData(
             alignment: BarChartAlignment.spaceAround,
-            maxY: weeklyExpenses.reduce(
-                    (value, element) => value > element ? value : element) +
-                100, // Ajusta el valor máximo según tus necesidades
+            maxY: weeklyExpenses.reduce((value, element) {
+                  return value > element ? value : element;
+                }) +
+                100, // Adjust the maximum value as needed
             titlesData: FlTitlesData(
               leftTitles: SideTitles(showTitles: true, reservedSize: 30),
               bottomTitles: SideTitles(
                 showTitles: true,
                 getTitles: (double value) {
-                  // Mapea los valores a los días de la semana
+                  // Map values to days of the week
                   switch (value.toInt()) {
                     case 0:
                       return 'Lun';
@@ -84,9 +77,9 @@ class ChartPage extends StatelessWidget {
                 x: index,
                 barRods: [
                   BarChartRodData(
-                    y: weeklyExpenses[index],
+                    y: weeklyExpenses[index], // Use the amount for comparison
                     width: 16,
-                    colors: Colors.accents,
+                    colors: [Colors.accents[index % Colors.accents.length]],
                   ),
                 ],
               ),
@@ -95,5 +88,26 @@ class ChartPage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  // Modifica esta función para calcular los gastos para cada día de la semana
+  List<double> calculateWeeklyExpenses() {
+    final now = DateTime.now();
+    final daysOfWeek = [
+      DateTime.monday,
+      DateTime.tuesday,
+      DateTime.wednesday,
+      DateTime.thursday,
+      DateTime.friday,
+      DateTime.saturday,
+      DateTime.sunday
+    ];
+
+    return daysOfWeek.map((day) {
+      final totalForDay = expenses
+          .where((expense) => expense.date.weekday == day)
+          .fold(0.0, (sum, expense) => sum + expense.cantidad);
+      return totalForDay;
+    }).toList();
   }
 }
