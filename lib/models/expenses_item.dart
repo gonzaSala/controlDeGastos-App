@@ -4,6 +4,7 @@ class Expense {
   final DateTime date;
 
   Expense({required this.name, required this.cantidad, required this.date});
+  List<Expense> expenses = [];
 
   factory Expense.fromJson(Map<String, dynamic> json) {
     return Expense(

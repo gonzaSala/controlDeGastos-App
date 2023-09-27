@@ -1,10 +1,13 @@
-import 'package:control_gastos/models/expenses_item.dart';
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:control_gastos/models/chart.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
-import 'package:control_gastos/models/chart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:control_gastos/models/theme.dart';
+import 'package:table_calendar/table_calendar.dart';
+import 'package:control_gastos/models/expenses_item.dart';
 
 void main() {
   runApp(const MyApp());
@@ -17,9 +20,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Control de Gastos',
-      theme: lightTheme, // Utiliza el tema claro por defecto
-      darkTheme: darkTheme, // Utiliza el tema oscuro por defecto
-      themeMode: ThemeMode.light, // Establece el modo de tema por defecto
+      theme: ThemeData.light(),
+      darkTheme: ThemeData.dark(),
+      themeMode: ThemeMode.light,
       home: const MyHomePage(),
     );
   }
@@ -33,30 +36,23 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  ThemeMode _themeMode = ThemeMode.light;
-
   DateTime selectedMonth = DateTime.now();
-
-  final newExpenseControlName = TextEditingController();
-  final newExpenseControlCantidad = TextEditingController();
-
+  DateTime _currentDate = DateTime.now();
+  double _dailyTotalExpenses = 0.0;
+  bool showChart = false;
+  Map<DateTime, List<Expense>> expenseHistory = {};
+  TextEditingController newExpenseControlName = TextEditingController();
+  TextEditingController newExpenseControlCantidad = TextEditingController();
   List<Expense> expenses = [];
-  bool showChart = false; // Declarar e inicializar showChart
 
-  void _toggleTheme() {
-    setState(() {
-      _themeMode =
-          _themeMode == ThemeMode.light ? ThemeMode.dark : ThemeMode.light;
-    });
-    print('Tema cambiado a: $_themeMode');
-    setState(() {});
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    // Cargar los gastos almacenados cuando se inicie la aplicación
-    loadExpenses();
+  void _resetDailyTotalExpenses() {
+    final now = DateTime.now();
+    if (_currentDate.year != now.year ||
+        _currentDate.month != now.month ||
+        _currentDate.day != now.day) {
+      _currentDate = now;
+      _dailyTotalExpenses = 0.0;
+    }
   }
 
   Future<void> loadExpenses() async {
@@ -67,7 +63,7 @@ class _MyHomePageState extends State<MyHomePage> {
       setState(() {
         expenses = savedExpenses
             .map((expenseJson) =>
-                Expense.fromJson(expenseJson as Map<String, dynamic>))
+                Expense.fromJson(Map<String, dynamic>.from(expenseJson as Map)))
             .toList();
       });
     }
@@ -76,7 +72,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Future<void> saveExpenses() async {
     final prefs = await SharedPreferences.getInstance();
     final List<String> expenseStrings =
-        expenses.map((expense) => expense.toJson()).cast<String>().toList();
+        expenses.map((expense) => json.encode(expense.toJson())).toList();
     await prefs.setStringList('expenses', expenseStrings);
   }
 
@@ -86,16 +82,27 @@ class _MyHomePageState extends State<MyHomePage> {
     final date = DateTime.now();
 
     if (name.isNotEmpty && cantidad > 0) {
-      expenses.add(Expense(name: name, cantidad: cantidad, date: date));
+      final expense = Expense(name: name, cantidad: cantidad, date: date);
+      expenses.add(expense);
+      addToExpenseHistory(expense);
       saveExpenses();
       newExpenseControlName.clear();
       newExpenseControlCantidad.clear();
       Navigator.of(context).pop();
       setState(() {
-        // Calcula el nuevo total de gastos y actualiza la variable showChart
-        showChart =
-            false; // Asumiendo que deseas ocultar el gráfico después de agregar un gasto
+        _resetDailyTotalExpenses();
+        showChart = false;
       });
+    }
+  }
+
+  void addToExpenseHistory(Expense expense) {
+    final date =
+        DateTime(expense.date.year, expense.date.month, expense.date.day);
+    if (expenseHistory.containsKey(date)) {
+      expenseHistory[date]!.add(expense);
+    } else {
+      expenseHistory[date] = [expense];
     }
   }
 
@@ -111,10 +118,17 @@ class _MyHomePageState extends State<MyHomePage> {
             itemBuilder: (context, index) {
               final expense = expenses.reversed.toList()[index];
               return Dismissible(
-                key: Key(expense.name), // Debe ser una clave única
+                key: Key(expense.name),
                 onDismissed: (direction) {
                   setState(() {
                     expenses.removeAt(index);
+                    // Remove from expense history as well
+                    final date = DateTime(
+                      expense.date.year,
+                      expense.date.month,
+                      expense.date.day,
+                    );
+                    expenseHistory[date]?.remove(expense);
                   });
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
@@ -123,9 +137,8 @@ class _MyHomePageState extends State<MyHomePage> {
                   );
                 },
                 background: Container(
-                  color: Color.fromARGB(255, 255, 86, 86),
-                  child: Icon(FontAwesomeIcons.trash,
-                      color: Color.fromRGBO(198, 199, 199, 0.961)),
+                  color: Colors.red,
+                  child: Icon(FontAwesomeIcons.trash, color: Colors.white),
                   alignment: Alignment.centerRight,
                   padding: EdgeInsets.only(right: 20.0),
                 ),
@@ -136,7 +149,8 @@ class _MyHomePageState extends State<MyHomePage> {
                     children: [
                       Text('\$${expense.cantidad.toStringAsFixed(2)}'),
                       Text(
-                          'Fecha: ${DateFormat('yyyy-MM-dd HH:mm:ss').format(expense.date)}'),
+                        'Fecha: ${DateFormat('yyyy-MM-dd HH:mm:ss').format(expense.date)}',
+                      ),
                     ],
                   ),
                 ),
@@ -148,10 +162,11 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  void cancel() {
-    newExpenseControlName.clear();
-    newExpenseControlCantidad.clear();
-    Navigator.of(context).pop();
+  @override
+  void initState() {
+    super.initState();
+    loadExpenses();
+    _resetDailyTotalExpenses();
   }
 
   double calculateTotalExpenses() {
@@ -187,6 +202,74 @@ class _MyHomePageState extends State<MyHomePage> {
             mainAxisSize: MainAxisSize.max,
             children: <Widget>[
               Text(
+                '\$${_dailyTotalExpenses.toStringAsFixed(2)}',
+                style: TextStyle(
+                  fontSize: 40,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Text(
+                'Total gastos diarios',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.blueGrey,
+                ),
+              ),
+              Container(
+                width: 400,
+                height: 350,
+                child: TableCalendar(
+                  firstDay: DateTime.utc(2023, 1, 1),
+                  lastDay: DateTime.utc(2023, 12, 31),
+                  focusedDay: _currentDate,
+                  calendarFormat: CalendarFormat.month,
+                  calendarBuilders: CalendarBuilders(
+                    todayBuilder: (context, date, events) {
+                      // Define un color de fondo personalizado para los días
+                      Color backgroundColor = Colors
+                          .blue; // Cambia este color según tus preferencias
+                      return Container(
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          shape: BoxShape
+                              .circle, // Haz que el fondo sea redondeado
+                          color:
+                              backgroundColor, // Establece el color de fondo personalizado
+                        ),
+                        child: Text(
+                          date.day.toString(),
+                          style: TextStyle(
+                            fontSize:
+                                18, // Ajusta el tamaño de fuente según tus preferencias
+                            color: Colors
+                                .white, // Cambia el color del texto según tus preferencias
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                  headerStyle: HeaderStyle(
+                    titleCentered: true,
+                    formatButtonVisible: false,
+                  ),
+                  onPageChanged: (newMonth) {
+                    setState(() {
+                      selectedMonth = newMonth;
+                    });
+                  },
+                  selectedDayPredicate: (day) {
+                    final date = DateTime(day.year, day.month, day.day);
+                    return expenseHistory.containsKey(date);
+                  },
+                  onDaySelected: (selectedDay, focusedDay) {
+                    setState(() {
+                      _currentDate = selectedDay;
+                    });
+                  },
+                ),
+              ),
+              Text(
                 '\$${calculateTotalExpenses().toStringAsFixed(2)}',
                 style: TextStyle(
                   fontSize: 40,
@@ -215,19 +298,19 @@ class _MyHomePageState extends State<MyHomePage> {
           children: <Widget>[
             bottomAction(FontAwesomeIcons.history, viewExpenses),
             bottomAction(FontAwesomeIcons.chartPie, toggleChart),
-            const SizedBox(width: 42.0),
-            bottomAction(FontAwesomeIcons.wallet, () {}),
+            const SizedBox(width: 122.0),
             PopupMenuButton(
               itemBuilder: (context) => [
                 PopupMenuItem(
                   child: ListTile(
                     leading: Icon(Icons.brightness_6),
                     title: Text('Cambiar Tema'),
-                    onTap:
-                        _toggleTheme, // Cambia el tema al presionar la opción
+                    onTap: () {
+                      _toggleTheme();
+                      Navigator.of(context).pop();
+                    },
                   ),
                 ),
-                // Puedes agregar más opciones de menú aquí si lo deseas
               ],
             ),
           ],
@@ -236,20 +319,11 @@ class _MyHomePageState extends State<MyHomePage> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.blueAccent,
-        hoverColor: Color.fromARGB(146, 0, 111, 166),
+        hoverColor: const Color.fromARGB(146, 0, 111, 166),
         child: const Icon(Icons.add),
         onPressed: addNewExpense,
       ),
     );
-  }
-
-  List<Expense> getExpensesForCurrentDay() {
-    final now = DateTime.now();
-    return expenses.where((expense) {
-      return expense.date.day == now.day &&
-          expense.date.month == now.month &&
-          expense.date.year == now.year;
-    }).toList();
   }
 
   void toggleChart() {
@@ -263,6 +337,18 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       );
     }
+  }
+
+  void _toggleTheme() {
+    setState(() {
+      if (Theme.of(context).brightness == Brightness.light) {
+        ThemeMode _themeMode = ThemeMode.dark;
+        SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
+      } else {
+        ThemeMode _themeMode = ThemeMode.light;
+        SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
+      }
+    });
   }
 
   void addNewExpense() {
@@ -296,5 +382,11 @@ class _MyHomePageState extends State<MyHomePage> {
         ],
       ),
     );
+  }
+
+  void cancel() {
+    newExpenseControlName.clear();
+    newExpenseControlCantidad.clear();
+    Navigator.of(context).pop();
   }
 }
