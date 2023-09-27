@@ -4,6 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:control_gastos/models/chart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:control_gastos/models/theme.dart';
 
 void main() {
   runApp(const MyApp());
@@ -15,30 +16,45 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(),
-      home: MyHomePage(
-        toggleTheme: () {}, // Aquí deberías proporcionar la función toggleTheme
-      ),
+      title: 'Control de Gastos',
+      theme: lightTheme, // Utiliza el tema claro por defecto
+      darkTheme: darkTheme, // Utiliza el tema oscuro por defecto
+      themeMode: ThemeMode.light, // Establece el modo de tema por defecto
+      home: const MyHomePage(),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  final Function toggleTheme;
-
-  MyHomePage({required this.toggleTheme});
+  const MyHomePage({Key? key}) : super(key: key);
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  ThemeMode _themeMode = ThemeMode.light;
+
   final newExpenseControlName = TextEditingController();
   final newExpenseControlCantidad = TextEditingController();
 
   List<Expense> expenses = [];
   bool showChart = false; // Declarar e inicializar showChart
+
+  void _toggleTheme() {
+    if (showChart) {
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => PaginaDelGrafico(),
+        ),
+      );
+    } else {
+      setState(() {
+        _themeMode =
+            _themeMode == ThemeMode.light ? ThemeMode.dark : ThemeMode.light;
+      });
+    }
+  }
 
   @override
   void initState() {
@@ -79,6 +95,11 @@ class _MyHomePageState extends State<MyHomePage> {
       newExpenseControlName.clear();
       newExpenseControlCantidad.clear();
       Navigator.of(context).pop();
+      setState(() {
+        // Calcula el nuevo total de gastos y actualiza la variable showChart
+        showChart =
+            false; // Asumiendo que deseas ocultar el gráfico después de agregar un gasto
+      });
     }
   }
 
@@ -163,14 +184,25 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: Center(
         child: Container(
-          height:
-              MediaQuery.of(context).size.height, // Establece una altura fija
+          height: MediaQuery.of(context).size.height,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment:
-                CrossAxisAlignment.center, // Centra verticalmente
+            crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisSize: MainAxisSize.max,
             children: <Widget>[
+              ElevatedButton(
+                onPressed: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => PaginaDelGrafico(),
+                  ),
+                ),
+                child: Text('Ver Gráfico'),
+              ),
+              ElevatedButton(
+                onPressed: _toggleTheme,
+                child: Text('Cambiar Tema'),
+              ),
               Text(
                 '\$${calculateTotalExpenses().toStringAsFixed(2)}',
                 style: TextStyle(
