@@ -42,18 +42,10 @@ class _MyHomePageState extends State<MyHomePage> {
   bool showChart = false; // Declarar e inicializar showChart
 
   void _toggleTheme() {
-    if (showChart) {
-      Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (context) => PaginaDelGrafico(),
-        ),
-      );
-    } else {
-      setState(() {
-        _themeMode =
-            _themeMode == ThemeMode.light ? ThemeMode.dark : ThemeMode.light;
-      });
-    }
+    setState(() {
+      _themeMode =
+          _themeMode == ThemeMode.light ? ThemeMode.dark : ThemeMode.light;
+    });
   }
 
   @override
@@ -191,15 +183,6 @@ class _MyHomePageState extends State<MyHomePage> {
             mainAxisSize: MainAxisSize.max,
             children: <Widget>[
               ElevatedButton(
-                onPressed: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => PaginaDelGrafico(),
-                  ),
-                ),
-                child: Text('Ver Gráfico'),
-              ),
-              ElevatedButton(
                 onPressed: _toggleTheme,
                 child: Text('Cambiar Tema'),
               ),
@@ -234,7 +217,19 @@ class _MyHomePageState extends State<MyHomePage> {
             bottomAction(FontAwesomeIcons.chartPie, toggleChart),
             const SizedBox(width: 42.0),
             bottomAction(FontAwesomeIcons.wallet, () {}),
-            bottomAction(Icons.settings, () {}),
+            PopupMenuButton(
+              itemBuilder: (context) => [
+                PopupMenuItem(
+                  child: ListTile(
+                    leading: Icon(Icons.brightness_6),
+                    title: Text('Cambiar Tema'),
+                    onTap:
+                        _toggleTheme, // Cambia el tema al presionar la opción
+                  ),
+                ),
+                // Puedes agregar más opciones de menú aquí si lo deseas
+              ],
+            ),
           ],
         ),
       ),
