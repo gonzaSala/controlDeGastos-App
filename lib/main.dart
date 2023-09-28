@@ -1,6 +1,8 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
 import 'package:control_gastos/models/chart.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -9,7 +11,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:control_gastos/models/expenses_item.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 
@@ -36,6 +40,19 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  void agregarDatosAFirestore() async {
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+    // Crea un documento en una colección llamada "gastos"
+    await firestore.collection('gastos').add({
+      'nombre': 'Ejemplo de gasto',
+      'cantidad': 100.0,
+      'fecha': Timestamp.now(),
+    });
+
+    print('Datos agregados a Firestore');
+  }
+
   DateTime selectedMonth = DateTime.now();
   DateTime _currentDate = DateTime.now();
   double _dailyTotalExpenses = 0.0;
@@ -44,6 +61,19 @@ class _MyHomePageState extends State<MyHomePage> {
   TextEditingController newExpenseControlName = TextEditingController();
   TextEditingController newExpenseControlCantidad = TextEditingController();
   List<Expense> expenses = [];
+
+  Future<void> addExpenseToFirestore(Expense expense) async {
+    try {
+      final collection = FirebaseFirestore.instance.collection('expenses');
+      await collection.add({
+        'name': expense.name,
+        'cantidad': expense.cantidad,
+        'date': expense.date,
+      });
+    } catch (e) {
+      print('Error al agregar el gasto a Firestore: $e');
+    }
+  }
 
   void _resetDailyTotalExpenses() {
     final now = DateTime.now();
@@ -74,6 +104,7 @@ class _MyHomePageState extends State<MyHomePage> {
     final List<String> expenseStrings =
         expenses.map((expense) => json.encode(expense.toJson())).toList();
     await prefs.setStringList('expenses', expenseStrings);
+    print(expenseStrings);
   }
 
   void save() {
@@ -85,6 +116,7 @@ class _MyHomePageState extends State<MyHomePage> {
       final expense = Expense(name: name, cantidad: cantidad, date: date);
       expenses.add(expense);
       addToExpenseHistory(expense);
+      addExpenseToFirestore(expense);
       saveExpenses();
       newExpenseControlName.clear();
       newExpenseControlCantidad.clear();
