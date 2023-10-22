@@ -1,3 +1,4 @@
+import 'package:control_gastos/screens/addPage.dart';
 import 'package:control_gastos/screens/homePage.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -18,7 +19,13 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Material App',
-      home: HomePage(),
+      theme: ThemeData(
+        primarySwatch: Colors.orange,
+      ),
+      routes: {
+        '/': (BuildContext context) => HomePage(),
+        '/add': (BuildContext context) => AddPage(),
+      },
     );
   }
 }
