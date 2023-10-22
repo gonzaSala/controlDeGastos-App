@@ -7,6 +7,7 @@ class MonthWidget extends StatefulWidget {
   final List<DocumentSnapshot> documents;
   final double total;
   final List<double> perDay;
+  final Map<String, double> categories;
 
   MonthWidget({Key? key, required this.documents})
       : total = documents.map((doc) => doc['value']).fold(0.0, (a, b) => a + b),
@@ -15,6 +16,15 @@ class MonthWidget extends StatefulWidget {
               .where((doc) => doc['day'] == (index + 1))
               .map((doc) => doc['value'])
               .fold(0.0, (a, b) => a + b);
+        }),
+        categories = documents.fold({}, (Map<String, double> map, document) {
+          if (!map.containsKey(document['category'])) {
+            map[document['category']] == 0.0;
+          }
+
+          map[document['category']] =
+              (map[document['category']] ?? 0) + document['value'];
+          return map;
         }),
         super(key: key);
 
@@ -108,9 +118,14 @@ class _MonthWidgetState extends State<MonthWidget> {
   Widget _list() {
     return Expanded(
       child: ListView.separated(
-          itemCount: 15,
-          itemBuilder: (BuildContext context, int index) =>
-              _item(FontAwesomeIcons.cartShopping, 'Shopping', 14, 145.12),
+          itemCount: widget.categories.keys.length,
+          itemBuilder: (BuildContext context, int index) {
+            var key = widget.categories.keys.elementAt(index);
+            var data = widget.categories[key];
+
+            return _item(FontAwesomeIcons.cartShopping, key,
+                (100 * data! ~/ widget.total).toInt(), data!);
+          },
           separatorBuilder: (BuildContext context, int index) {
             return Container(
               color: Colors.blueAccent.withOpacity(0.15),
