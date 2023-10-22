@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:control_gastos/models/expenses_item.dart';
+import 'package:control_gastos/widgets/expenses_item.dart';
 
 class ChartPage extends StatelessWidget {
   final List<Expense> expenses;
