@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "927740364518",
-    "project_id": "appfluttercontroldegastos",
-    "storage_bucket": "appfluttercontroldegastos.appspot.com"
+    "project_number": "797954929256",
+    "project_id": "appcontrolgastos-d2b1f",
+    "storage_bucket": "appcontrolgastos-d2b1f.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:927740364518:android:2786694913a1988def9d27",
+        "mobilesdk_app_id": "1:797954929256:android:8be87012db56904fc9c1dd",
         "android_client_info": {
           "package_name": "com.example.control_gastos"
         }
@@ -15,7 +15,26 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyCxw7PBVzYFL7mi5yMUVYeLrBmV_mDQUiQ"
+          "current_key": "AIzaSyB7FYJxA3R5rX_fxAS0dUOtGiK0Cfa6Aws"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:797954929256:android:8f59f84cefc4abf1c9c1dd",
+        "android_client_info": {
+          "package_name": "com.gonzaSala.app_control_gastos"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB7FYJxA3R5rX_fxAS0dUOtGiK0Cfa6Aws"
         }
       ],
       "services": {
