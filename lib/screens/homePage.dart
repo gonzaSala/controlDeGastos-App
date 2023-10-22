@@ -16,19 +16,11 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  late PageController _controller;
+  PageController? _controller;
   int currentPage = 9;
+  Stream<QuerySnapshot>? _query;
 
-  @override
-  void initState() {
-    super.initState();
-
-    //  FirebaseFirestore.instance
-    //  .collection('expenses')
-    //  .where('month', isEqualTo: currentPage + 1)
-    //  .snapshots()
-    //  .listen((data) => data.docs.forEach((doc) => print(doc['category'])));
-
+  _HomePageState() {
     _controller = PageController(
       initialPage: currentPage,
       viewportFraction: 0.4,
@@ -77,7 +69,19 @@ class _HomePageState extends State<HomePage> {
     return SafeArea(
       child: Column(children: <Widget>[
         _selector(),
-        monthWidget(),
+        StreamBuilder<QuerySnapshot>(
+            stream: _query,
+            builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> data) {
+              if (data.hasData) {
+                return MonthWidget(
+                  documents: data.data?.docs ?? [],
+                );
+              }
+
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            }),
       ]),
     );
   }
@@ -120,6 +124,11 @@ class _HomePageState extends State<HomePage> {
         onPageChanged: (newPage) {
           setState(() {
             currentPage = newPage;
+
+            _query = FirebaseFirestore.instance
+                .collection('expenses')
+                .where('month', isEqualTo: currentPage + 1)
+                .snapshots();
           });
         },
         controller: _controller,

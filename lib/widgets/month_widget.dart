@@ -1,15 +1,28 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:control_gastos/widgets/graph_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class monthWidget extends StatefulWidget {
-  const monthWidget({super.key});
+class MonthWidget extends StatefulWidget {
+  final List<DocumentSnapshot> documents;
+  final double total;
+  final List<double> perDay;
+
+  MonthWidget({Key? key, required this.documents})
+      : total = documents.map((doc) => doc['value']).fold(0.0, (a, b) => a + b),
+        perDay = List.generate(30, (int index) {
+          return documents
+              .where((doc) => doc['day'] == (index + 1))
+              .map((doc) => doc['value'])
+              .fold(0.0, (a, b) => a + b);
+        }),
+        super(key: key);
 
   @override
-  State<monthWidget> createState() => _monthWidgetState();
+  State<MonthWidget> createState() => _MonthWidgetState();
 }
 
-class _monthWidgetState extends State<monthWidget> {
+class _MonthWidgetState extends State<MonthWidget> {
   @override
   Widget build(BuildContext context) {
     return Expanded(
@@ -31,7 +44,7 @@ class _monthWidgetState extends State<monthWidget> {
     return Column(
       children: <Widget>[
         Text(
-          '\$2361,41',
+          '\$${widget.total.toStringAsFixed(2)}',
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 40.0,
@@ -50,7 +63,7 @@ class _monthWidgetState extends State<monthWidget> {
   }
 
   Widget _graph() {
-    return Container(height: 250.0, child: GraphWidget());
+    return Container(height: 250.0, child: GraphWidget(data: widget.perDay));
   }
 
   Widget _item(IconData icon, String name, int percent, double value) {

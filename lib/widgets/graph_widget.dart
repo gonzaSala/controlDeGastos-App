@@ -4,21 +4,14 @@ import 'package:charts_flutter/flutter.dart';
 import 'package:flutter/material.dart';
 
 class GraphWidget extends StatefulWidget {
+  final List<double> data;
+
+  const GraphWidget({super.key, required this.data});
   @override
   _GraphWidgetState createState() => _GraphWidgetState();
 }
 
 class _GraphWidgetState extends State<GraphWidget> {
-  var data;
-
-  @override
-  void initState() {
-    super.initState();
-
-    var r = Random();
-    data = List<double>.generate(30, (index) => r.nextDouble() * 1500);
-  }
-
   _onSelectionChanged(SelectionModel model) {
     final selectedDatum = model.selectedDatum;
 
@@ -43,7 +36,7 @@ class _GraphWidgetState extends State<GraphWidget> {
       Series<double, int>(
           id: 'Gasto',
           colorFn: (_, __) => MaterialPalette.blue.shadeDefault,
-          data: data,
+          data: widget.data,
           domainFn: (value, index) => index!,
           measureFn: (value, _) => value,
           strokeWidthPxFn: (_, __) => 4),
