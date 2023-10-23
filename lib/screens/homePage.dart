@@ -44,20 +44,22 @@ class _HomePageState extends State<HomePage> {
         notchMargin: 8.0,
         shape: CircularNotchedRectangle(),
         child: Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              _bottomAction(FontAwesomeIcons.clockRotateLeft),
-              _bottomAction(FontAwesomeIcons.chartPie),
-              SizedBox(
-                width: 48.0,
-              ),
-              _bottomAction(FontAwesomeIcons.wallet),
-              _bottomAction(Icons.settings),
-            ]),
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            _bottomAction(FontAwesomeIcons.clockRotateLeft),
+            _bottomAction(FontAwesomeIcons.chartPie),
+            SizedBox(
+              width: 48.0,
+            ),
+            _bottomAction(FontAwesomeIcons.wallet),
+            _bottomAction(Icons.settings),
+          ],
+        ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: FloatingActionButton(
+        heroTag: 'add_button',
         child: Icon(Icons.add),
         onPressed: () {
           Navigator.of(context).pushNamed('/add');

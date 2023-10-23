@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 
 class CategorySelectorWidget extends StatefulWidget {
   final Map<String, IconData> categories;
-  const CategorySelectorWidget({super.key, required this.categories});
+  final Function(String) onValueChanged;
+
+  const CategorySelectorWidget(
+      {super.key, required this.categories, required this.onValueChanged});
 
   @override
   State<CategorySelectorWidget> createState() => _CategorySelectorWidgetState();
@@ -55,6 +58,7 @@ class _CategorySelectorWidgetState extends State<CategorySelectorWidget> {
           setState(() {
             currentItem = name;
           });
+          widget.onValueChanged(name);
         },
         child: CategoryWidget(
           name: name,
