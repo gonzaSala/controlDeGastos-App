@@ -1,21 +1,22 @@
 {
   "project_info": {
-    "project_number": "797954929256",
-    "project_id": "appcontrolgastos-d2b1f",
-    "storage_bucket": "appcontrolgastos-d2b1f.appspot.com"
+    "project_number": "230472895213",
+    "firebase_url": "https://controlgastos-96763-default-rtdb.firebaseio.com",
+    "project_id": "controlgastos-96763",
+    "storage_bucket": "controlgastos-96763.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:797954929256:android:8be87012db56904fc9c1dd",
+        "mobilesdk_app_id": "1:230472895213:android:7b860b12480bc5da92dae4",
         "android_client_info": {
-          "package_name": "com.example.control_gastos"
+          "package_name": "com.android.application"
         }
       },
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyB7FYJxA3R5rX_fxAS0dUOtGiK0Cfa6Aws"
+          "current_key": "AIzaSyBNbtnfcEsCJCX4-onwaeZYNQ6lR2VePZU"
         }
       ],
       "services": {
@@ -26,15 +27,15 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:797954929256:android:8f59f84cefc4abf1c9c1dd",
+        "mobilesdk_app_id": "1:230472895213:android:df3483fe3b6a723092dae4",
         "android_client_info": {
-          "package_name": "com.gonzaSala.app_control_gastos"
+          "package_name": "com.example.control_gastos"
         }
       },
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyB7FYJxA3R5rX_fxAS0dUOtGiK0Cfa6Aws"
+          "current_key": "AIzaSyBNbtnfcEsCJCX4-onwaeZYNQ6lR2VePZU"
         }
       ],
       "services": {

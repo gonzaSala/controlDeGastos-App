@@ -44,38 +44,42 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyDpD1NTb5uEORxMEI8qJUHyGL1TORAioak',
-    appId: '1:797954929256:web:d9314531626ac84bc9c1dd',
-    messagingSenderId: '797954929256',
-    projectId: 'appcontrolgastos-d2b1f',
-    authDomain: 'appcontrolgastos-d2b1f.firebaseapp.com',
-    storageBucket: 'appcontrolgastos-d2b1f.appspot.com',
-    measurementId: 'G-K1GF4QX5C1',
+    apiKey: 'AIzaSyCb2VygiZ0O1a-E3niuoFBw17_cns3dANI',
+    appId: '1:230472895213:web:b41b8d828aa4152192dae4',
+    messagingSenderId: '230472895213',
+    projectId: 'controlgastos-96763',
+    authDomain: 'controlgastos-96763.firebaseapp.com',
+    databaseURL: 'https://controlgastos-96763-default-rtdb.firebaseio.com',
+    storageBucket: 'controlgastos-96763.appspot.com',
+    measurementId: 'G-VV1Y4VD5NK',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyB7FYJxA3R5rX_fxAS0dUOtGiK0Cfa6Aws',
-    appId: '1:797954929256:android:8be87012db56904fc9c1dd',
-    messagingSenderId: '797954929256',
-    projectId: 'appcontrolgastos-d2b1f',
-    storageBucket: 'appcontrolgastos-d2b1f.appspot.com',
+    apiKey: 'AIzaSyBNbtnfcEsCJCX4-onwaeZYNQ6lR2VePZU',
+    appId: '1:230472895213:android:df3483fe3b6a723092dae4',
+    messagingSenderId: '230472895213',
+    projectId: 'controlgastos-96763',
+    databaseURL: 'https://controlgastos-96763-default-rtdb.firebaseio.com',
+    storageBucket: 'controlgastos-96763.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyAbzdZUr8zn6OX4Oboo2REPq6quJZJuRGM',
-    appId: '1:797954929256:ios:44d14a89f1658698c9c1dd',
-    messagingSenderId: '797954929256',
-    projectId: 'appcontrolgastos-d2b1f',
-    storageBucket: 'appcontrolgastos-d2b1f.appspot.com',
+    apiKey: 'AIzaSyDE6FdOeso4KXLC7LbrSm8xnvgVZ8Vbd9k',
+    appId: '1:230472895213:ios:208f3b2ce87d4e8392dae4',
+    messagingSenderId: '230472895213',
+    projectId: 'controlgastos-96763',
+    databaseURL: 'https://controlgastos-96763-default-rtdb.firebaseio.com',
+    storageBucket: 'controlgastos-96763.appspot.com',
     iosBundleId: 'com.example.controlGastos',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyAbzdZUr8zn6OX4Oboo2REPq6quJZJuRGM',
-    appId: '1:797954929256:ios:0538e8bf44c08091c9c1dd',
-    messagingSenderId: '797954929256',
-    projectId: 'appcontrolgastos-d2b1f',
-    storageBucket: 'appcontrolgastos-d2b1f.appspot.com',
+    apiKey: 'AIzaSyDE6FdOeso4KXLC7LbrSm8xnvgVZ8Vbd9k',
+    appId: '1:230472895213:ios:f65b291f128b6d9192dae4',
+    messagingSenderId: '230472895213',
+    projectId: 'controlgastos-96763',
+    databaseURL: 'https://controlgastos-96763-default-rtdb.firebaseio.com',
+    storageBucket: 'controlgastos-96763.appspot.com',
     iosBundleId: 'com.example.controlGastos.RunnerTests',
   );
 }
