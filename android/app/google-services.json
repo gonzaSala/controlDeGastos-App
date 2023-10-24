@@ -1,33 +1,13 @@
 {
   "project_info": {
-    "project_number": "230472895213",
-    "firebase_url": "https://controlgastos-96763-default-rtdb.firebaseio.com",
-    "project_id": "controlgastos-96763",
-    "storage_bucket": "controlgastos-96763.appspot.com"
+    "project_number": "683396525388",
+    "project_id": "controlgastos-64bb9",
+    "storage_bucket": "controlgastos-64bb9.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:230472895213:android:7b860b12480bc5da92dae4",
-        "android_client_info": {
-          "package_name": "com.android.application"
-        }
-      },
-      "oauth_client": [],
-      "api_key": [
-        {
-          "current_key": "AIzaSyBNbtnfcEsCJCX4-onwaeZYNQ6lR2VePZU"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": []
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:230472895213:android:df3483fe3b6a723092dae4",
+        "mobilesdk_app_id": "1:683396525388:android:59869a08743268b72473e9",
         "android_client_info": {
           "package_name": "com.example.control_gastos"
         }
@@ -35,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyBNbtnfcEsCJCX4-onwaeZYNQ6lR2VePZU"
+          "current_key": "AIzaSyAKlnmr1i5xQ7y0W3oLcVc4wwuBjTV_wEg"
         }
       ],
       "services": {
