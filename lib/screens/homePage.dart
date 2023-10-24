@@ -1,3 +1,4 @@
+import 'package:control_gastos/login_state.dart';
 import 'package:control_gastos/widgets/graph_widget.dart';
 import 'package:control_gastos/widgets/month_widget.dart';
 import 'package:flutter/material.dart';
@@ -5,6 +6,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({
@@ -27,7 +29,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _bottomAction(IconData icon) {
+  Widget _bottomAction(IconData icon, Function callback) {
     return InkWell(
       child: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -47,13 +49,15 @@ class _HomePageState extends State<HomePage> {
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
-            _bottomAction(FontAwesomeIcons.clockRotateLeft),
-            _bottomAction(FontAwesomeIcons.chartPie),
+            _bottomAction(FontAwesomeIcons.clockRotateLeft, () {}),
+            _bottomAction(FontAwesomeIcons.chartPie, () {}),
             SizedBox(
               width: 48.0,
             ),
-            _bottomAction(FontAwesomeIcons.wallet),
-            _bottomAction(Icons.settings),
+            _bottomAction(FontAwesomeIcons.wallet, () {}),
+            _bottomAction(Icons.settings, () {
+              Provider.of<LoginState>(context).logout();
+            }),
           ],
         ),
       ),
