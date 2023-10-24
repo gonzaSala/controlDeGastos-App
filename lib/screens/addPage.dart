@@ -14,6 +14,9 @@ class AddPage extends StatefulWidget {
 class _AddPageState extends State<AddPage> {
   late String category;
   int value = 0;
+  _AddPageState() {
+    category = "initial_value";
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -180,7 +183,7 @@ class _AddPageState extends State<AddPage> {
                 ),
               ),
               onPressed: () {
-                if (value > 0 && category != '') {
+                if (value > 0 && category != '' && category.isNotEmpty) {
                   FirebaseFirestore.instance.collection('expenses').add({
                     'category': category,
                     'value': value,
