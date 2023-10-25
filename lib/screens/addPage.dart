@@ -186,7 +186,7 @@ class _AddPageState extends State<AddPage> {
               ),
               onPressed: () {
                 var user = Provider.of<LoginState>(context).currentUser();
-                if (value > 0 && category != '' && category.isNotEmpty) {
+                if (value > 0 && category != '') {
                   FirebaseFirestore.instance
                       .collection('user')
                       .doc(user?.uid)
