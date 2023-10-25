@@ -9,9 +9,9 @@ class MonthWidget extends StatefulWidget {
   final List<double> perDay;
   final Map<String, double> categories;
 
-  MonthWidget({Key? key, required this.documents})
+  MonthWidget({Key? key, required this.documents, required, days})
       : total = documents.map((doc) => doc['value']).fold(0.0, (a, b) => a + b),
-        perDay = List.generate(30, (int index) {
+        perDay = List.generate(days, (int index) {
           return documents
               .where((doc) => doc['day'] == (index + 1))
               .map((doc) => doc['value'])

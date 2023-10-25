@@ -1,4 +1,5 @@
 import 'package:control_gastos/login_state.dart';
+import 'package:control_gastos/util.dart';
 import 'package:control_gastos/widgets/graph_widget.dart';
 import 'package:control_gastos/widgets/month_widget.dart';
 import 'package:flutter/material.dart';
@@ -95,6 +96,7 @@ class _HomePageState extends State<HomePage> {
             builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> data) {
               if (data.hasData) {
                 return MonthWidget(
+                  days: daysInMonth(currentPage + 1),
                   documents: data.data?.docs ?? [],
                 );
               }
