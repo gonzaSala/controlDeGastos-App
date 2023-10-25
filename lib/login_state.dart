@@ -6,15 +6,34 @@ class LoginState with ChangeNotifier {
   final GoogleSignIn googleSignIn = GoogleSignIn();
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
   bool loggedIn = false;
+  bool loading = false;
+  User? user;
+
   bool isLoggedIn() => loggedIn;
 
+  bool isLoading() => loading;
+
+  User? currentUser() {
+    User? user = FirebaseAuth.instance.currentUser;
+    return user;
+  }
+
   void login() async {
-    var user = handleSignIn();
-    loggedIn = true;
+    loading = true;
     notifyListeners();
+    user = await handleSignIn();
+
+    if (user != null) {
+      loggedIn = true;
+      notifyListeners();
+    } else {
+      loggedIn = false;
+      notifyListeners();
+    }
   }
 
   void logout() {
+    googleSignIn.signOut();
     loggedIn = false;
     notifyListeners();
   }

@@ -19,7 +19,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   PageController? _controller;
-  int currentPage = 9;
+  int currentPage = DateTime.now().month - 1;
   Stream<QuerySnapshot>? _query;
 
   _HomePageState() {
@@ -41,35 +41,48 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      bottomNavigationBar: BottomAppBar(
-        notchMargin: 8.0,
-        shape: CircularNotchedRectangle(),
-        child: Row(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: <Widget>[
-            _bottomAction(FontAwesomeIcons.clockRotateLeft, () {}),
-            _bottomAction(FontAwesomeIcons.chartPie, () {}),
-            SizedBox(
-              width: 48.0,
+    return Consumer<LoginState>(
+      builder: (BuildContext context, LoginState state, Widget? child) {
+        var user = Provider.of<LoginState>(context).currentUser();
+        _query = FirebaseFirestore.instance
+            .collection('user')
+            .doc(user?.uid)
+            .collection('expenses')
+            .where('month', isEqualTo: currentPage + 1)
+            .snapshots();
+
+        return Scaffold(
+          bottomNavigationBar: BottomAppBar(
+            notchMargin: 8.0,
+            shape: CircularNotchedRectangle(),
+            child: Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                _bottomAction(FontAwesomeIcons.clockRotateLeft, () {}),
+                _bottomAction(FontAwesomeIcons.chartPie, () {}),
+                SizedBox(
+                  width: 48.0,
+                ),
+                _bottomAction(FontAwesomeIcons.wallet, () {}),
+                _bottomAction(Icons.settings, () {
+                  Provider.of<LoginState>(context).logout();
+                }),
+              ],
             ),
-            _bottomAction(FontAwesomeIcons.wallet, () {}),
-            _bottomAction(Icons.settings, () {
-              Provider.of<LoginState>(context).logout();
-            }),
-          ],
-        ),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: FloatingActionButton(
-        heroTag: 'add_button',
-        child: Icon(Icons.add),
-        onPressed: () {
-          Navigator.of(context).pushNamed('/add');
-        },
-      ),
-      body: _body(),
+          ),
+          floatingActionButtonLocation:
+              FloatingActionButtonLocation.centerDocked,
+          floatingActionButton: FloatingActionButton(
+            heroTag: 'add_button',
+            child: Icon(Icons.add),
+            onPressed: () {
+              Navigator.of(context).pushNamed('/add');
+            },
+          ),
+          body: _body(),
+        );
+      },
     );
   }
 
@@ -132,11 +145,6 @@ class _HomePageState extends State<HomePage> {
         onPageChanged: (newPage) {
           setState(() {
             currentPage = newPage;
-
-            _query = FirebaseFirestore.instance
-                .collection('expenses')
-                .where('month', isEqualTo: currentPage + 1)
-                .snapshots();
           });
         },
         controller: _controller,

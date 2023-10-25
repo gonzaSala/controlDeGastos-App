@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:control_gastos/login_state.dart';
 import 'package:control_gastos/widgets/category_selector_widget.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 
 class AddPage extends StatefulWidget {
   const AddPage({super.key});
@@ -183,8 +185,13 @@ class _AddPageState extends State<AddPage> {
                 ),
               ),
               onPressed: () {
+                var user = Provider.of<LoginState>(context).currentUser();
                 if (value > 0 && category != '' && category.isNotEmpty) {
-                  FirebaseFirestore.instance.collection('expenses').add({
+                  FirebaseFirestore.instance
+                      .collection('user')
+                      .doc(user?.uid)
+                      .collection('expenses')
+                      .add({
                     'category': category,
                     'value': value,
                     'month': DateTime.now().month,
