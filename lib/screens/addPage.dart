@@ -16,9 +16,6 @@ class AddPage extends StatefulWidget {
 class _AddPageState extends State<AddPage> {
   late String category;
   int value = 0;
-  _AddPageState() {
-    category = "initial_value";
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -167,16 +164,19 @@ class _AddPageState extends State<AddPage> {
   }
 
   Widget _submit() {
-    return Builder(builder: (BuildContext context) {
-      return Hero(
-        tag: 'add_button',
-        child: Container(
-          height: 50,
-          width: double.infinity,
-          decoration: BoxDecoration(
-            color: Colors.blueAccent,
-          ),
-          child: MaterialButton(
+    return Consumer<LoginState>(
+      builder: (context, loginState, child) {
+        var user = loginState.currentUser();
+
+        return Hero(
+          tag: 'add_button',
+          child: Container(
+            height: 50,
+            width: double.infinity,
+            decoration: BoxDecoration(
+              color: Colors.blueAccent,
+            ),
+            child: MaterialButton(
               child: Text(
                 'Sumar gasto',
                 style: TextStyle(
@@ -184,10 +184,10 @@ class _AddPageState extends State<AddPage> {
                   fontSize: 20,
                 ),
               ),
-              onPressed: () {
-                var user = Provider.of<LoginState>(context).currentUser();
+              onPressed: () async {
                 if (value > 0 && category != '') {
-                  FirebaseFirestore.instance
+                  print('Adding expense');
+                  await FirebaseFirestore.instance
                       .collection('user')
                       .doc(user?.uid)
                       .collection('expenses')
@@ -197,14 +197,21 @@ class _AddPageState extends State<AddPage> {
                     'month': DateTime.now().month,
                     'day': DateTime.now().day,
                   });
-                  Navigator.of(context).pop();
+
+                  // No es necesario actualizar la consulta aquí
+
+                  Navigator.of(context)
+                      .pop(true); // Indicar que se agregó un gasto
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content: Text('Selecciona un valor y una categoría')));
+                    content: Text('Selecciona un valor y una categoría'),
+                  ));
                 }
-              }),
-        ),
-      );
-    });
+              },
+            ),
+          ),
+        );
+      },
+    );
   }
 }

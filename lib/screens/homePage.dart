@@ -45,6 +45,7 @@ class _HomePageState extends State<HomePage> {
     return Consumer<LoginState>(
       builder: (BuildContext context, LoginState state, Widget? child) {
         var user = Provider.of<LoginState>(context).currentUser();
+
         _query = FirebaseFirestore.instance
             .collection('user')
             .doc(user?.uid)
@@ -89,23 +90,33 @@ class _HomePageState extends State<HomePage> {
 
   Widget _body() {
     return SafeArea(
-      child: Column(children: <Widget>[
-        _selector(),
-        StreamBuilder<QuerySnapshot>(
+      child: Column(
+        children: <Widget>[
+          _selector(),
+          StreamBuilder<QuerySnapshot>(
             stream: _query,
-            builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> data) {
-              if (data.hasData) {
-                return MonthWidget(
-                  days: daysInMonth(currentPage + 1),
-                  documents: data.data?.docs ?? [],
-                );
+            builder:
+                (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+              if (snapshot.hasError) {
+                return Text('Error: ${snapshot.error}');
               }
 
-              return Center(
-                child: CircularProgressIndicator(),
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return CircularProgressIndicator();
+              }
+
+              if (snapshot.data == null || snapshot.data!.docs.isEmpty) {
+                return Text('No hay gastos para mostrar.');
+              }
+
+              return MonthWidget(
+                days: daysInMonth(currentPage + 1),
+                documents: snapshot.data?.docs ?? [],
               );
-            }),
-      ]),
+            },
+          ),
+        ],
+      ),
     );
   }
 
