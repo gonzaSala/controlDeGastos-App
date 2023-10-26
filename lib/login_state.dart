@@ -1,17 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginState with ChangeNotifier {
   final GoogleSignIn googleSignIn = GoogleSignIn();
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+  late SharedPreferences prefs;
+
   bool loggedIn = false;
-  bool loading = false;
+  bool loading = true;
   User? user;
 
   bool isLoggedIn() => loggedIn;
 
   bool isLoading() => loading;
+
+  LoginState() {
+    loginState();
+  }
 
   User? currentUser() {
     User? user = FirebaseAuth.instance.currentUser;
@@ -24,6 +31,7 @@ class LoginState with ChangeNotifier {
     user = await handleSignIn();
 
     if (user != null) {
+      prefs.setBool('isLoggedIn', true);
       loggedIn = true;
       notifyListeners();
     } else {
@@ -33,6 +41,7 @@ class LoginState with ChangeNotifier {
   }
 
   void logout() {
+    prefs.clear();
     googleSignIn.signOut();
     loggedIn = false;
     notifyListeners();
@@ -64,6 +73,19 @@ class LoginState with ChangeNotifier {
     } catch (error) {
       print('Error al iniciar sesión con Google: $error');
       return null;
+    }
+  }
+
+  Future<void> loginState() async {
+    prefs = await SharedPreferences.getInstance();
+    if (prefs.containsKey('isLoggedIn')) {
+      user = await firebaseAuth.currentUser;
+      loggedIn = user != null;
+      loading = false;
+      notifyListeners();
+    } else {
+      loading = false;
+      notifyListeners();
     }
   }
 }
