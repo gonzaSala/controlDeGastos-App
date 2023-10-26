@@ -73,11 +73,11 @@ class _AddPageState extends State<AddPage> {
   }
 
   Widget _currentValue() {
-    var realValue = value / 100.00;
+    var realValue = (value / 100.00).toStringAsFixed(2);
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 35.0),
       child: Text(
-        '\$${realValue.toStringAsFixed(2)}',
+        '\$${realValue}',
         style: TextStyle(
             color: Colors.blueAccent,
             fontSize: 50,
@@ -200,8 +200,7 @@ class _AddPageState extends State<AddPage> {
 
                   // No es necesario actualizar la consulta aquí
 
-                  Navigator.of(context)
-                      .pop(true); // Indicar que se agregó un gasto
+                  Navigator.of(context).pop(); // Indicar que se agregó un gasto
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                     content: Text('Selecciona un valor y una categoría'),
