@@ -94,7 +94,7 @@ class _AddPageState extends State<AddPage> {
           if (text == ',') {
             value = value * 100;
           } else {
-            value = value * 10 + int.parse(text);
+            value = value * 100 + int.parse(text);
           }
         });
       },

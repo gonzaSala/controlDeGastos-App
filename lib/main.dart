@@ -1,5 +1,6 @@
 import 'package:control_gastos/login_state.dart';
 import 'package:control_gastos/screens/addPage.dart';
+import 'package:control_gastos/screens/detailsPage.dart';
 import 'package:control_gastos/screens/homePage.dart';
 import 'package:control_gastos/screens/loginPage.dart';
 
@@ -24,8 +25,18 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'Material App',
         theme: ThemeData(
-          primarySwatch: Colors.orange,
+          primarySwatch: Colors.purple,
         ),
+        onGenerateRoute: (settings) {
+          if (settings.name == '/details') {
+            DetailsParams params = settings.arguments as DetailsParams;
+            return MaterialPageRoute(builder: (BuildContext context) {
+              return DetailsPage(
+                params: params,
+              );
+            });
+          }
+        },
         routes: {
           '/': (BuildContext context) {
             var state = Provider.of<LoginState>(context);

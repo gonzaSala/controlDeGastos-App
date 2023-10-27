@@ -67,7 +67,7 @@ class _HomePageState extends State<HomePage> {
                   width: 48.0,
                 ),
                 _bottomAction(FontAwesomeIcons.wallet, () {}),
-                _bottomAction(Icons.settings, () {
+                _bottomAction(Icons.exit_to_app_rounded, () {
                   Provider.of<LoginState>(context).logout();
                 }),
               ],
@@ -112,6 +112,7 @@ class _HomePageState extends State<HomePage> {
               return MonthWidget(
                 days: daysInMonth(currentPage + 1),
                 documents: snapshot.data?.docs ?? [],
+                month: currentPage + 1,
               );
             },
           ),
