@@ -33,14 +33,34 @@ class _DetailsPageState extends State<DetailsPage> {
             .snapshots();
 
         return Scaffold(
-          appBar: AppBar(
-            title: Text(widget.params.categoryName),
-          ),
-          body: ListView.builder(
-            itemBuilder: (BuildContext context, int index) {},
-            itemCount: 0,
-          ),
-        );
+            appBar: AppBar(
+              title: Text(widget.params.categoryName),
+            ),
+            body: StreamBuilder<QuerySnapshot>(
+                stream: _query,
+                builder:
+                    (BuildContext context, AsyncSnapshot<QuerySnapshot> data) {
+                  if (data.hasData) {
+                    return ListView.builder(
+                      itemBuilder: (BuildContext context, int index) {
+                        var documents = data.data?.docs[index];
+
+                        return ListTile(
+                          leading: Text(documents?['day'.toString()]),
+                          title: Text(documents?['value'.toString()]),
+                        );
+                      },
+                      itemCount: data.data?.docs.length,
+                    );
+                  } else {
+                    // Return a placeholder widget or an error message widget.
+                    return Center(
+                      child:
+                          CircularProgressIndicator(), // You can customize this message.
+                    );
+                  }
+                  ;
+                }));
       },
     );
   }

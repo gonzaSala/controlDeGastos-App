@@ -4,15 +4,22 @@ import 'package:control_gastos/widgets/graph_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+enum GraphType { LINES, PIE }
+
 class MonthWidget extends StatefulWidget {
   final List<DocumentSnapshot> documents;
   final double total;
   final List<double> perDay;
   final Map<String, double> categories;
   final int month;
+  final GraphType graphType;
 
   MonthWidget(
-      {Key? key, required this.documents, required days, required this.month})
+      {Key? key,
+      required this.documents,
+      required days,
+      required this.month,
+      required this.graphType})
       : total = documents.map((doc) => doc['value']).fold(0.0, (a, b) => a + b),
         perDay = List.generate(days, (int index) {
           return documents
@@ -22,7 +29,7 @@ class MonthWidget extends StatefulWidget {
         }),
         categories = documents.fold<Map<String, double>>({}, (map, document) {
           if (!map.containsKey(document['category'])) {
-            map[document['category']] = 0.0; // Cambié "==" a "=" aquí
+            map[document['category']] = 0.0;
           }
           map[document['category']] =
               (map[document['category']] ?? 0) + document['value'];

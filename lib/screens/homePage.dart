@@ -22,6 +22,7 @@ class _HomePageState extends State<HomePage> {
   PageController? _controller;
   int currentPage = DateTime.now().month - 1;
   Stream<QuerySnapshot>? _query;
+  GraphType currentType = GraphType.LINES;
 
   _HomePageState() {
     _controller = PageController(
@@ -62,7 +63,16 @@ class _HomePageState extends State<HomePage> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
                 _bottomAction(FontAwesomeIcons.clockRotateLeft, () {}),
-                _bottomAction(FontAwesomeIcons.chartPie, () {}),
+                _bottomAction(FontAwesomeIcons.chartPie, () {
+                  setState(() {
+                    currentType = GraphType.LINES;
+                  });
+                }),
+                _bottomAction(FontAwesomeIcons.chartPie, () {
+                  setState(() {
+                    currentType = GraphType.PIE;
+                  });
+                }),
                 SizedBox(
                   width: 48.0,
                 ),
@@ -95,24 +105,24 @@ class _HomePageState extends State<HomePage> {
           _selector(),
           StreamBuilder<QuerySnapshot>(
             stream: _query,
-            builder:
-                (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-              if (snapshot.hasError) {
-                return Text('Error: ${snapshot.error}');
+            builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> data) {
+              if (data.hasError) {
+                return Text('Error: ${data.error}');
               }
 
-              if (snapshot.connectionState == ConnectionState.waiting) {
+              if (data.connectionState == ConnectionState.waiting) {
                 return CircularProgressIndicator();
               }
 
-              if (snapshot.data == null || snapshot.data!.docs.isEmpty) {
+              if (data.data == null || data.data!.docs.isEmpty) {
                 return Text('No hay gastos para mostrar.');
               }
 
               return MonthWidget(
                 days: daysInMonth(currentPage + 1),
-                documents: snapshot.data?.docs ?? [],
+                documents: data.data?.docs ?? [],
                 month: currentPage + 1,
+                graphType: currentType,
               );
             },
           ),
