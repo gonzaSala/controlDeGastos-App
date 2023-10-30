@@ -63,7 +63,7 @@ class _HomePageState extends State<HomePage> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
                 _bottomAction(FontAwesomeIcons.clockRotateLeft, () {}),
-                _bottomAction(FontAwesomeIcons.chartPie, () {
+                _bottomAction(FontAwesomeIcons.chartLine, () {
                   setState(() {
                     currentType = GraphType.LINES;
                   });

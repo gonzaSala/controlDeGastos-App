@@ -1,15 +1,40 @@
 import 'package:charts_flutter/flutter.dart';
 import 'package:flutter/material.dart';
 
-class GraphWidget extends StatefulWidget {
+class PieGraphWidget extends StatefulWidget {
   final List<double> data;
 
-  const GraphWidget({super.key, required this.data});
+  const PieGraphWidget({super.key, required this.data});
+
   @override
-  _GraphWidgetState createState() => _GraphWidgetState();
+  State<PieGraphWidget> createState() => _PieGraphWidgetState();
 }
 
-class _GraphWidgetState extends State<GraphWidget> {
+class _PieGraphWidgetState extends State<PieGraphWidget> {
+  @override
+  Widget build(BuildContext context) {
+    List<Series<double, num>> series = [
+      Series<double, int>(
+          id: 'Gasto',
+          data: widget.data,
+          domainFn: (value, index) => index!,
+          measureFn: (value, _) => value,
+          strokeWidthPxFn: (_, __) => 4),
+    ];
+
+    return PieChart(series);
+  }
+}
+
+class LinesGraphWidget extends StatefulWidget {
+  final List<double> data;
+
+  const LinesGraphWidget({super.key, required this.data});
+  @override
+  _LinesGraphWidgetState createState() => _LinesGraphWidgetState();
+}
+
+class _LinesGraphWidgetState extends State<LinesGraphWidget> {
   _onSelectionChanged(SelectionModel model) {
     final selectedDatum = model.selectedDatum;
 

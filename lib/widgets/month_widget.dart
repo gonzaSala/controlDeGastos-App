@@ -82,7 +82,13 @@ class _MonthWidgetState extends State<MonthWidget> {
   }
 
   Widget _graph() {
-    return Container(height: 250.0, child: GraphWidget(data: widget.perDay));
+    if (widget.graphType == GraphType.LINES) {
+      return Container(
+          height: 250.0, child: LinesGraphWidget(data: widget.perDay));
+    } else {
+      return Container(
+          height: 250.0, child: PieGraphWidget(data: widget.perDay));
+    }
   }
 
   Widget _item(IconData icon, String name, int percent, double value) {
