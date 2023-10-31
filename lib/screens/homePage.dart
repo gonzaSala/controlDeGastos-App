@@ -37,7 +37,9 @@ class _HomePageState extends State<HomePage> {
         padding: const EdgeInsets.all(8.0),
         child: Icon(icon),
       ),
-      onTap: () {},
+      onTap: () {
+        callback();
+      },
     );
   }
 
@@ -62,15 +64,16 @@ class _HomePageState extends State<HomePage> {
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
-                _bottomAction(FontAwesomeIcons.clockRotateLeft, () {}),
                 _bottomAction(FontAwesomeIcons.chartLine, () {
                   setState(() {
                     currentType = GraphType.LINES;
+                    print('grafico line');
                   });
                 }),
                 _bottomAction(FontAwesomeIcons.chartPie, () {
                   setState(() {
                     currentType = GraphType.PIE;
+                    print('grafico pie');
                   });
                 }),
                 SizedBox(

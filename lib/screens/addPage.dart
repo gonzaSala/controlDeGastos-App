@@ -62,10 +62,17 @@ class _AddPageState extends State<AddPage> {
       height: 80,
       child: CategorySelectorWidget(
         categories: {
-          'Shopping': Icons.shopping_cart,
-          'Alcohol': FontAwesomeIcons.beerMugEmpty,
-          'Comida': FontAwesomeIcons.burger,
           'Varios': Icons.wallet,
+          'Shopping': Icons.shopping_cart,
+          'Comida': FontAwesomeIcons.burger,
+          'Transporte': Icons.directions_bus_sharp,
+          'Alcohol': FontAwesomeIcons.beerMugEmpty,
+          'Salud': Icons.local_hospital_outlined,
+          'Deudas': Icons.business_center_rounded,
+          'Mascotas': Icons.pets_sharp,
+          'Educación': Icons.school_rounded,
+          'Ropa': FontAwesomeIcons.personDress,
+          'Hogar': Icons.home
         },
         onValueChanged: (newCategory) => category = newCategory,
       ),

@@ -30,11 +30,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  fl_chart: ^0.41.0
   firebase_core: ^2.19.0
   cloud_firestore: ^4.11.0
   font_awesome_flutter: ^10.5.0
-  intl: ^0.17.0
   table_calendar: ^3.0.2
   shared_preferences: ^2.2.2
   charts_flutter: ^0.12.0

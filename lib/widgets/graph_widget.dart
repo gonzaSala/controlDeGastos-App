@@ -15,11 +15,11 @@ class _PieGraphWidgetState extends State<PieGraphWidget> {
   Widget build(BuildContext context) {
     List<Series<double, num>> series = [
       Series<double, int>(
-          id: 'Gasto',
-          data: widget.data,
-          domainFn: (value, index) => index!,
-          measureFn: (value, _) => value,
-          strokeWidthPxFn: (_, __) => 4),
+        id: 'Gasto',
+        data: widget.data,
+        domainFn: (value, index) => index!,
+        measureFn: (value, _) => value,
+      )
     ];
 
     return PieChart(series);

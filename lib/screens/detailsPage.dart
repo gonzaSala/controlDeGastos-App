@@ -37,30 +37,77 @@ class _DetailsPageState extends State<DetailsPage> {
               title: Text(widget.params.categoryName),
             ),
             body: StreamBuilder<QuerySnapshot>(
-                stream: _query,
-                builder:
-                    (BuildContext context, AsyncSnapshot<QuerySnapshot> data) {
-                  if (data.hasData) {
-                    return ListView.builder(
-                      itemBuilder: (BuildContext context, int index) {
-                        var documents = data.data?.docs[index];
-
-                        return ListTile(
-                          leading: Text(documents?['day'.toString()]),
-                          title: Text(documents?['value'.toString()]),
-                        );
-                      },
-                      itemCount: data.data?.docs.length,
-                    );
-                  } else {
-                    // Return a placeholder widget or an error message widget.
-                    return Center(
-                      child:
-                          CircularProgressIndicator(), // You can customize this message.
-                    );
-                  }
-                  ;
-                }));
+              stream: _query,
+              builder:
+                  (BuildContext context, AsyncSnapshot<QuerySnapshot> data) {
+                if (data.connectionState == ConnectionState.waiting) {
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                } else if (data.hasError) {
+                  return Center(
+                    child: Text('Error: ${data.error}'),
+                  );
+                } else if (!data.hasData || data.data!.docs.isEmpty) {
+                  return Center(
+                    child: Text('No hay datos para mostrar.'),
+                  );
+                } else {
+                  return ListView.builder(
+                    itemBuilder: (BuildContext context, int index) {
+                      var documents = data.data?.docs[index];
+                      return Dismissible(
+                        key: Key(documents!['uID']),
+                        onDismissed: (direction) {
+                          FirebaseFirestore.instance
+                              .collection('user')
+                              .doc(user?.uid)
+                              .collection('expenses')
+                              .doc(documents!['uID'])
+                              .delete();
+                        },
+                        child: ListTile(
+                          leading: Stack(
+                            alignment: Alignment.center,
+                            children: <Widget>[
+                              Icon(
+                                Icons.calendar_today,
+                                size: 40,
+                              ),
+                              Positioned(
+                                  left: 0,
+                                  right: 0,
+                                  bottom: 8.5,
+                                  child: Text(
+                                    documents!['day'.toString()].toString(),
+                                    textAlign: TextAlign.center,
+                                  )),
+                            ],
+                          ),
+                          title: Container(
+                              decoration: BoxDecoration(
+                                color: Colors.blueAccent.withOpacity(0.2),
+                                borderRadius: BorderRadius.circular(5.0),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  documents!['value'.toString()].toString(),
+                                  style: TextStyle(
+                                    color: Colors.blueAccent,
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 18.0,
+                                  ),
+                                ),
+                              )),
+                        ),
+                      );
+                    },
+                    itemCount: data.data?.docs.length,
+                  );
+                }
+              },
+            ));
       },
     );
   }

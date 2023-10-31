@@ -86,8 +86,11 @@ class _MonthWidgetState extends State<MonthWidget> {
       return Container(
           height: 250.0, child: LinesGraphWidget(data: widget.perDay));
     } else {
-      return Container(
-          height: 250.0, child: PieGraphWidget(data: widget.perDay));
+      print('grafico pie');
+      var perCategory = widget.categories.keys
+          .map((name) => widget.categories[name]! / widget.total)
+          .toList();
+      return Container(height: 250.0, child: PieGraphWidget(data: perCategory));
     }
   }
 
