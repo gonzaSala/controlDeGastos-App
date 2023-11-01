@@ -81,7 +81,7 @@ class _HomePageState extends State<HomePage> {
                 ),
                 _bottomAction(FontAwesomeIcons.wallet, () {}),
                 _bottomAction(Icons.exit_to_app_rounded, () {
-                  Provider.of<LoginState>(context).logout();
+                  Provider.of<LoginState>(context, listen: false).logout();
                 }),
               ],
             ),

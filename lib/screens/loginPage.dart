@@ -14,6 +14,20 @@ class _LoginPageState extends State<LoginPage> {
   late TapGestureRecognizer _recognizer2;
 
   @override
+  void initState() {
+    super.initState();
+    _recognizer1 = TapGestureRecognizer();
+    _recognizer2 = TapGestureRecognizer();
+  }
+
+  @override
+  void dispose() {
+    _recognizer1.dispose();
+    _recognizer2.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
@@ -24,15 +38,15 @@ class _LoginPageState extends State<LoginPage> {
               child: Container(),
             ),
             Text(
-              'Spend-o-meter',
-              style: Theme.of(context).textTheme.bodyLarge,
+              'Cuenta Clara',
+              style: Theme.of(context).textTheme.headlineLarge,
             ),
             Padding(
               padding: const EdgeInsets.all(32.0),
               child: Image.asset('assets/backgroundLogin.png'),
             ),
             Text(
-              'Your personal finance app ',
+              'Tu app de finanzas personales',
               style: Theme.of(context).textTheme.bodySmall,
             ),
             Expanded(flex: 1, child: Container()),
@@ -45,7 +59,7 @@ class _LoginPageState extends State<LoginPage> {
                 }
               },
               child: ElevatedButton(
-                child: Text('Sign In'),
+                child: Text('Ingresar'),
                 onPressed: () {
                   Provider.of<LoginState>(context, listen: false).login();
                 },

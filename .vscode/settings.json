@@ -1,6 +1,7 @@
 {
     "cSpell.words": [
-        "ARGB"
+        "ARGB",
+        "RGBO"
     ],
     "java.configuration.updateBuildConfiguration": "interactive"
 }

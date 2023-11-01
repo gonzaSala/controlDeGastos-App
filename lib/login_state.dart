@@ -33,6 +33,7 @@ class LoginState with ChangeNotifier {
     if (user != null) {
       prefs.setBool('isLoggedIn', true);
       loggedIn = true;
+      loading = false;
       notifyListeners();
     } else {
       loggedIn = false;
@@ -44,6 +45,7 @@ class LoginState with ChangeNotifier {
     prefs.clear();
     googleSignIn.signOut();
     loggedIn = false;
+    loading = false;
     notifyListeners();
   }
 
