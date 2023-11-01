@@ -5,7 +5,6 @@ import 'package:control_gastos/widgets/month_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
@@ -119,7 +118,18 @@ class _HomePageState extends State<HomePage> {
               }
 
               if (data.data == null || data.data!.docs.isEmpty) {
-                return Text('No hay gastos para mostrar.');
+                return Expanded(
+                    child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Image.asset('assets/no-data.png'),
+                    SizedBox(height: 80),
+                    Text(
+                      'No hay gastos para mostrar.',
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
+                  ],
+                ));
               }
 
               return MonthWidget(

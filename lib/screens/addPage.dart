@@ -205,14 +205,22 @@ class _AddPageState extends State<AddPage> {
                     'day': DateTime.now().day,
                     'year': DateTime.now().year,
                   });
-
-                  // No es necesario actualizar la consulta aquí
-
-                  Navigator.of(context).pop(); // Indicar que se agregó un gasto
+                  Navigator.of(context).pop();
                 } else {
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    content: Text('Selecciona un valor y una categoría'),
-                  ));
+                  showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      content: Text('Selecciona un valor y una categoría'),
+                      actions: <Widget>[
+                        FloatingActionButton(
+                          child: Text('Ok'),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                      ],
+                    ),
+                  );
                 }
               },
             ),
