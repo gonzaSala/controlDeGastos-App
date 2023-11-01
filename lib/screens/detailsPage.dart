@@ -3,6 +3,7 @@ import 'package:control_gastos/login_state.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+
 class DetailsParams {
   final String categoryName;
   final int month;
@@ -57,13 +58,13 @@ class _DetailsPageState extends State<DetailsPage> {
                     itemBuilder: (BuildContext context, int index) {
                       var documents = data.data?.docs[index];
                       return Dismissible(
-                        key: Key(documents!['uID']),
-                        onDismissed: (direction) {
-                          FirebaseFirestore.instance
+                        key: Key(documents!.id),
+                        onDismissed: (direction) async {
+                          await FirebaseFirestore.instance
                               .collection('user')
                               .doc(user?.uid)
                               .collection('expenses')
-                              .doc(documents!['uID'])
+                              .doc(documents.id)
                               .delete();
                         },
                         child: ListTile(
