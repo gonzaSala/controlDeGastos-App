@@ -1,61 +1,93 @@
-import 'package:fl_chart/fl_chart.dart';
+import 'package:charts_flutter/flutter.dart';
 import 'package:flutter/material.dart';
 
-class PieGraphWidget extends StatelessWidget {
+class PieGraphWidget extends StatefulWidget {
   final List<double> data;
 
-  const PieGraphWidget({required this.data});
+  const PieGraphWidget({super.key, required this.data});
 
   @override
+  State<PieGraphWidget> createState() => _PieGraphWidgetState();
+}
+
+class _PieGraphWidgetState extends State<PieGraphWidget> {
+  @override
   Widget build(BuildContext context) {
-    return PieChart(
-      PieChartData(
-        sections: List<PieChartSectionData>.generate(
-          data.length,
-          (index) {
-            return PieChartSectionData(
-              color: Color(0xff6A4DBA),
-              value: data[index],
-              title: data[index].toStringAsFixed(1),
-            );
-          },
-        ),
-        sectionsSpace: 0,
-      ),
-    );
+    List<Series<double, num>> series = [
+      Series<double, int>(
+        id: 'Gasto',
+        data: widget.data,
+        domainFn: (value, index) => index!,
+        measureFn: (value, _) => value,
+      )
+    ];
+
+    return PieChart(series);
   }
 }
 
-class LinesGraphWidget extends StatelessWidget {
+class LinesGraphWidget extends StatefulWidget {
   final List<double> data;
 
-  const LinesGraphWidget({required this.data});
+  const LinesGraphWidget({super.key, required this.data});
+  @override
+  _LinesGraphWidgetState createState() => _LinesGraphWidgetState();
+}
+
+class _LinesGraphWidgetState extends State<LinesGraphWidget> {
+  _onSelectionChanged(SelectionModel model) {
+    final selectedDatum = model.selectedDatum;
+
+    var time;
+    final measures = <String, double>{};
+
+    if (selectedDatum.isNotEmpty) {
+      time = selectedDatum.first.datum;
+      selectedDatum.forEach((SeriesDatum datumPair) {
+        final displayName = datumPair.series.displayName ?? "Unknown";
+        measures[displayName] = datumPair.datum;
+      });
+    }
+
+    print(time);
+    print(measures);
+  }
 
   @override
   Widget build(BuildContext context) {
+    List<Series<double, num>> series = [
+      Series<double, int>(
+          id: 'Gasto',
+          colorFn: (_, __) => MaterialPalette.blue.shadeDefault,
+          data: widget.data,
+          domainFn: (value, index) => index!,
+          measureFn: (value, _) => value,
+          strokeWidthPxFn: (_, __) => 4),
+    ];
+
     return LineChart(
-      LineChartData(
-        gridData: FlGridData(show: false),
-        titlesData: FlTitlesData(show: false),
-        borderData: FlBorderData(
-          show: true,
-          border: Border.all(color: const Color(0xff37434d), width: 1),
-        ),
-        minX: 0,
-        maxX: data.length.toDouble() - 1,
-        minY: 0,
-        maxY:
-            data.reduce((value, element) => value > element ? value : element) *
-                1.5,
-        lineBarsData: [
-          LineChartBarData(
-            isCurved: true,
-            spots: List<FlSpot>.generate(data.length, (index) {
-              return FlSpot(index.toDouble(), data[index]);
-            }),
-          ),
-        ],
-      ),
+      series,
+      animate: false,
+      selectionModels: [
+        SelectionModelConfig(
+          type: SelectionModelType.info,
+          changedListener: _onSelectionChanged,
+        )
+      ],
+      domainAxis: NumericAxisSpec(
+          tickProviderSpec: StaticNumericTickProviderSpec([
+        TickSpec(0, label: '01'),
+        TickSpec(4, label: '05'),
+        TickSpec(9, label: '10'),
+        TickSpec(14, label: '15'),
+        TickSpec(19, label: '20'),
+        TickSpec(24, label: '25'),
+        TickSpec(29, label: '30'),
+      ])),
+      primaryMeasureAxis: NumericAxisSpec(
+          tickProviderSpec: BasicNumericTickProviderSpec(
+        desiredTickCount: 4,
+      )),
     );
   }
 }

@@ -34,7 +34,7 @@ dependencies:
   cloud_firestore: ^4.12.2
   font_awesome_flutter: ^10.5.0
   shared_preferences: ^2.2.2
-  fl_chart: ^0.64.0
+  charts_flutter: ^0.12.0
   provider: ^6.0.5
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
