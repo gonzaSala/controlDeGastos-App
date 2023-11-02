@@ -25,7 +25,7 @@ class _AddPageState extends State<AddPage> {
         backgroundColor: Colors.transparent,
         elevation: 0.0,
         title: Text(
-          'Category',
+          'Categoria',
           style: TextStyle(
             color: Colors.grey,
           ),
@@ -58,22 +58,24 @@ class _AddPageState extends State<AddPage> {
   }
 
   Widget _categorySelector() {
+    Map<String, IconData> categories = {
+      'Varios': Icons.wallet,
+      'Shopping': Icons.shopping_cart,
+      'Comida': FontAwesomeIcons.burger,
+      'Transporte': Icons.directions_bus_sharp,
+      'Alcohol': FontAwesomeIcons.beerMugEmpty,
+      'Salud': Icons.local_hospital_outlined,
+      'Deudas': Icons.business_center_rounded,
+      'Mascotas': Icons.pets_sharp,
+      'Educación': Icons.school_rounded,
+      'Ropa': FontAwesomeIcons.personDress,
+      'Hogar': Icons.home,
+    };
+
     return Container(
       height: 80,
       child: CategorySelectorWidget(
-        categories: {
-          'Varios': Icons.wallet,
-          'Shopping': Icons.shopping_cart,
-          'Comida': FontAwesomeIcons.burger,
-          'Transporte': Icons.directions_bus_sharp,
-          'Alcohol': FontAwesomeIcons.beerMugEmpty,
-          'Salud': Icons.local_hospital_outlined,
-          'Deudas': Icons.business_center_rounded,
-          'Mascotas': Icons.pets_sharp,
-          'Educación': Icons.school_rounded,
-          'Ropa': FontAwesomeIcons.personDress,
-          'Hogar': Icons.home
-        },
+        categories: categories,
         onValueChanged: (newCategory) => category = newCategory,
       ),
     );

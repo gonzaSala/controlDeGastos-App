@@ -19,18 +19,18 @@ void main() async {
 
 class MyApp extends StatelessWidget {
   MaterialColor myCustomColor = MaterialColor(
-    0xFF1B0087, // Valor del color violeta
+    0xFF1C85FF, // Valor del color azul
     <int, Color>{
-      50: Color(0xFFD0BEF3), // Tono 50
-      100: Color(0xFFB49BEB), // Tono 100
-      200: Color(0xFF9878E3), // Tono 200
-      300: Color(0xFF7C56DB), // Tono 300
-      400: Color(0xFF6133D3), // Tono 400
-      500: Color(0xFF8B6ED7), // Tono 500 (Principal)
-      600: Color(0xFF4F0FD2), // Tono 600
-      700: Color(0xFF3A00C4), // Tono 700
-      800: Color(0xFF2800A7), // Tono 800
-      900: Color(0xFF1B0087), // Tono 900
+      50: Color(0xFFB3E0FF), // Tono 50
+      100: Color(0xFF81C1FF), // Tono 100
+      200: Color(0xFF4FA3FF), // Tono 200
+      300: Color(0xFF1C85FF), // Tono 300
+      400: Color(0xFF005FD1), // Tono 400
+      500: Color(0xFF1B0087), // Tono 500 (Principal)
+      600: Color(0xFF003E85), // Tono 600
+      700: Color(0xFF002D6F), // Tono 700
+      800: Color(0xFF001F5C), // Tono 800
+      900: Color(0xFF001347), // Tono 900
     },
   );
 

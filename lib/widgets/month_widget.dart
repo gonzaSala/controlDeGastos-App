@@ -63,20 +63,20 @@ class _MonthWidgetState extends State<MonthWidget> {
     return Column(
       children: <Widget>[
         Text(
+          'Total gastos',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 16.0,
+            color: Colors.blueGrey,
+          ),
+        ),
+        Text(
           '\$${widget.total.toStringAsFixed(2)}',
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 40.0,
           ),
         ),
-        Text(
-          'Total expenses',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 16.0,
-            color: Colors.blueGrey,
-          ),
-        )
       ],
     );
   }
@@ -140,20 +140,24 @@ class _MonthWidgetState extends State<MonthWidget> {
   Widget _list() {
     return Expanded(
       child: ListView.separated(
-          itemCount: widget.categories.keys.length,
-          itemBuilder: (BuildContext context, int index) {
-            var key = widget.categories.keys.elementAt(index);
-            var data = widget.categories[key];
+        itemCount: widget.categories.keys.length,
+        itemBuilder: (BuildContext context, int index) {
+          var key = widget.categories.keys.elementAt(index);
+          var data = widget.categories[key];
 
-            return _item(FontAwesomeIcons.cartShopping, key,
-                (100 * data! ~/ widget.total).toInt(), data!);
-          },
-          separatorBuilder: (BuildContext context, int index) {
-            return Container(
-              color: Colors.blueAccent.withOpacity(0.15),
-              height: 4,
-            );
-          }),
+          // Obtén el ícono correspondiente a la categoría
+          var categoryIcon = widget.categories[key];
+
+          return _item(categoryIcon as IconData, key,
+              (100 * data! ~/ widget.total).toInt(), data);
+        },
+        separatorBuilder: (BuildContext context, int index) {
+          return Container(
+            color: Colors.blueAccent.withOpacity(0.15),
+            height: 4,
+          );
+        },
+      ),
     );
   }
 }
