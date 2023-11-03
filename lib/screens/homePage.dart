@@ -137,6 +137,7 @@ class _HomePageState extends State<HomePage> {
                 documents: data.data?.docs ?? [],
                 month: currentPage + 1,
                 graphType: currentType,
+                categoryIcons: {},
               );
             },
           ),

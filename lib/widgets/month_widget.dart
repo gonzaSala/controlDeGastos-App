@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:control_gastos/screens/detailsPage.dart';
 import 'package:control_gastos/widgets/graph_widget.dart';
+import 'package:control_gastos/screens/addPage.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -13,13 +14,15 @@ class MonthWidget extends StatefulWidget {
   final Map<String, double> categories;
   final int month;
   final GraphType graphType;
+  final Map<String, IconData> categoryIcons;
 
   MonthWidget(
       {Key? key,
       required this.documents,
       required days,
       required this.month,
-      required this.graphType})
+      required this.graphType,
+      required this.categoryIcons})
       : total = documents.map((doc) => doc['value']).fold(0.0, (a, b) => a + b),
         perDay = List.generate(days, (int index) {
           return documents
@@ -137,6 +140,22 @@ class _MonthWidgetState extends State<MonthWidget> {
     );
   }
 
+  List<Map<String, IconData>> categoryIcons = [
+    {
+      'Varios': Icons.wallet,
+      'Shopping': Icons.shopping_cart,
+      'Comida': FontAwesomeIcons.burger,
+      'Transporte': Icons.directions_bus_sharp,
+      'Alcohol': FontAwesomeIcons.beerMugEmpty,
+      'Salud': Icons.local_hospital_outlined,
+      'Deudas': Icons.business_center_rounded,
+      'Mascotas': Icons.pets_sharp,
+      'Educación': Icons.school_rounded,
+      'Ropa': FontAwesomeIcons.personDress,
+      'Hogar': Icons.home,
+    }
+  ];
+
   Widget _list() {
     return Expanded(
       child: ListView.separated(
@@ -144,11 +163,10 @@ class _MonthWidgetState extends State<MonthWidget> {
         itemBuilder: (BuildContext context, int index) {
           var key = widget.categories.keys.elementAt(index);
           var data = widget.categories[key];
+          var categoryIcon =
+              categoryIcons.firstWhere((element) => element.containsKey(key));
 
-          // Obtén el ícono correspondiente a la categoría
-          var categoryIcon = widget.categories[key];
-
-          return _item(categoryIcon as IconData, key,
+          return _item(categoryIcon[key] ?? Icons.error, key,
               (100 * data! ~/ widget.total).toInt(), data);
         },
         separatorBuilder: (BuildContext context, int index) {
