@@ -82,11 +82,11 @@ class _AddPageState extends State<AddPage> {
   }
 
   Widget _currentValue() {
-    var realValue = (value / 100.00).toStringAsFixed(2);
+    var realValue = value / 1.0;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 35.0),
       child: Text(
-        '\$${realValue}',
+        "\$${realValue}",
         style: TextStyle(
             color: Colors.blueAccent,
             fontSize: 50,
@@ -101,9 +101,9 @@ class _AddPageState extends State<AddPage> {
       onTap: () {
         setState(() {
           if (text == ',') {
-            value = value * 100;
+            value = value * 10;
           } else {
-            value = value * 100 + int.parse(text);
+            value = value * 10 + int.parse(text);
           }
         });
       },

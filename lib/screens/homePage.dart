@@ -4,7 +4,9 @@ import 'package:control_gastos/widgets/graph_widget.dart';
 import 'package:control_gastos/widgets/month_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
+import 'package:control_gastos/notification_services.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
@@ -29,6 +31,8 @@ class _HomePageState extends State<HomePage> {
       initialPage: currentPage,
       viewportFraction: 0.4,
     );
+
+    initNotifications();
   }
 
   Widget _bottomAction(IconData icon, Function callback) {

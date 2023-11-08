@@ -3,7 +3,6 @@ import 'package:control_gastos/login_state.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-
 class DetailsParams {
   final String categoryName;
   final int month;
@@ -67,6 +66,50 @@ class _DetailsPageState extends State<DetailsPage> {
                               .doc(documents.id)
                               .delete();
                         },
+                        confirmDismiss: (direction) async {
+                          final result = await showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                title: Text(
+                                  '¿Está seguro de que quiere eliminar el gasto de \$${documents!['value'.toString()].toString()}?',
+                                ),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context, false);
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        SnackBar(
+                                          content: Text(
+                                              'Se eliminó el gasto: \$${documents!['value'.toString()].toString()}'),
+                                        ),
+                                      );
+                                    },
+                                    child: const Text(
+                                      'Cancelar',
+                                      style: TextStyle(color: Colors.redAccent),
+                                    ),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context, true);
+                                    },
+                                    child: const Text('Sí, estoy seguro'),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+
+                          return result;
+                        },
+                        background: Container(
+                          color: Color.fromARGB(255, 255, 144, 144),
+                          child: const Icon(Icons.delete),
+                          height: 5,
+                        ),
+                        direction: DismissDirection.endToStart,
                         child: ListTile(
                           leading: Stack(
                             alignment: Alignment.center,
@@ -93,7 +136,7 @@ class _DetailsPageState extends State<DetailsPage> {
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Text(
-                                  documents!['value'.toString()].toString(),
+                                  '\$${documents!['value'.toString()].toString()}',
                                   style: TextStyle(
                                     color: Colors.blueAccent,
                                     fontWeight: FontWeight.w500,
