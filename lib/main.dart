@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:control_gastos/firebase_options.dart';
 import 'package:provider/provider.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -45,6 +46,7 @@ class MyApp extends StatelessWidget {
         title: 'Material App',
         theme: ThemeData(
           primarySwatch: myCustomColor,
+          textTheme: GoogleFonts.poppinsTextTheme(),
         ),
         onGenerateRoute: (settings) {
           if (settings.name == '/details') {

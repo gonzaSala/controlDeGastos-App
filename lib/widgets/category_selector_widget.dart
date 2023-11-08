@@ -30,7 +30,7 @@ class CategoryWidget extends StatelessWidget {
         children: <Widget>[
           Container(
             width: 65,
-            height: 60,
+            height: 50,
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20.0),
                 border: Border.all(
