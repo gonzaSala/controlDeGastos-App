@@ -27,8 +27,8 @@ class _AddPageState extends State<AddPage> {
         automaticallyImplyLeading: false,
         backgroundColor: Colors.transparent,
         elevation: 0.0,
-        title: GestureDetector(
-          onTap: () {
+        title: TextButton(
+          onPressed: () {
             showDatePicker(
                     context: context,
                     initialDate: DateTime.now(),
@@ -39,15 +39,20 @@ class _AddPageState extends State<AddPage> {
               if (newDate != null) {
                 setState(() {
                   date = newDate;
-                  dateStr = date.toString();
+                  dateStr =
+                      '${date.day.toString()}-${date.month.toString()}-${date.year.toString()}';
                 });
               }
             });
           },
+          style: TextButton.styleFrom(
+            padding: EdgeInsets.all(12.0),
+            backgroundColor: Color.fromARGB(255, 249, 144, 128),
+          ),
           child: Text(
             'Categoria ($dateStr)',
             style: TextStyle(
-              color: Colors.grey,
+              color: Color.fromARGB(255, 255, 218, 218),
             ),
           ),
         ),
