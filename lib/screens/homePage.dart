@@ -95,6 +95,7 @@ class _HomePageState extends State<HomePage> {
           floatingActionButton: FloatingActionButton(
             heroTag: 'add_button',
             child: Icon(Icons.add),
+            backgroundColor: Colors.redAccent,
             onPressed: () {
               Navigator.of(context).pushNamed('/add');
             },

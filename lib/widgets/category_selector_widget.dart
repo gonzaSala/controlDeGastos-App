@@ -24,20 +24,25 @@ class CategoryWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      padding: const EdgeInsets.symmetric(horizontal: 12.0),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Container(
-            width: 50,
-            height: 50,
+            width: 65,
+            height: 60,
             decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(25.0),
+                borderRadius: BorderRadius.circular(20.0),
                 border: Border.all(
-                  color: selected ? Colors.blueAccent : Colors.grey,
-                  width: selected ? 3.0 : 1.0,
+                  color: selected
+                      ? Color.fromARGB(255, 249, 144, 128)
+                      : Color.fromARGB(255, 255, 214, 214),
+                  width: selected ? 8.0 : 5.0,
                 )),
-            child: Icon(icon),
+            child: Icon(
+              icon,
+              size: 34,
+            ),
           ),
           Text(name)
         ],
