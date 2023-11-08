@@ -31,8 +31,8 @@ class _HomePageState extends State<HomePage> {
       initialPage: currentPage,
       viewportFraction: 0.4,
     );
-
-    initNotifications();
+    final notificationService = NotificationServices();
+    notificationService.initNotifications();
   }
 
   Widget _bottomAction(IconData icon, Function callback) {

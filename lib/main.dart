@@ -1,4 +1,5 @@
 import 'package:control_gastos/login_state.dart';
+import 'package:control_gastos/notification_services.dart';
 import 'package:control_gastos/screens/addPage.dart';
 import 'package:control_gastos/screens/detailsPage.dart';
 import 'package:control_gastos/screens/homePage.dart';
@@ -15,6 +16,8 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   runApp(MyApp());
+  final notificationService = NotificationServices();
+  notificationService.initNotifications();
 }
 
 class MyApp extends StatelessWidget {

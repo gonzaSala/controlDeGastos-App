@@ -72,7 +72,7 @@ class _LinesGraphWidgetState extends State<LinesGraphWidget> {
     List<Series<double, num>> series = [
       Series<double, int>(
         id: 'Gasto',
-        colorFn: (_, __) => MaterialPalette.red.shadeDefault,
+        colorFn: (_, __) => MaterialPalette.deepOrange.shadeDefault,
         domainFn: (value, index) => index!,
         measureFn: (value, _) => value,
         data: widget.data,
