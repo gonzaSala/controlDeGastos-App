@@ -63,6 +63,7 @@ class _HomePageState extends State<HomePage> {
         return Scaffold(
           bottomNavigationBar: BottomAppBar(
             notchMargin: 8.0,
+            color: Color.fromARGB(255, 225, 184, 184),
             shape: CircularNotchedRectangle(),
             child: Row(
               mainAxisSize: MainAxisSize.max,
@@ -95,7 +96,7 @@ class _HomePageState extends State<HomePage> {
           floatingActionButton: FloatingActionButton(
             heroTag: 'add_button',
             child: Icon(Icons.add),
-            backgroundColor: Colors.redAccent,
+            backgroundColor: const Color.fromARGB(255, 233, 131, 131),
             onPressed: () {
               Navigator.of(context).pushNamed('/add');
             },

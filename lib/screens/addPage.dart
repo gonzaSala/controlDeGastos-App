@@ -88,7 +88,9 @@ class _AddPageState extends State<AddPage> {
       child: Text(
         "\$${realValue}",
         style: TextStyle(
-            color: Colors.redAccent, fontSize: 50, fontWeight: FontWeight.bold),
+            color: const Color.fromARGB(255, 249, 144, 128),
+            fontSize: 50,
+            fontWeight: FontWeight.bold),
       ),
     );
   }
@@ -112,7 +114,7 @@ class _AddPageState extends State<AddPage> {
             text,
             style: TextStyle(
               fontSize: 40.0,
-              color: Colors.grey,
+              color: const Color.fromARGB(255, 18, 18, 18),
             ),
           ),
         ),
@@ -126,8 +128,9 @@ class _AddPageState extends State<AddPage> {
       var height = constraints.biggest.height / 4;
       return Table(
           border: TableBorder.all(
-            color: const Color.fromARGB(255, 183, 150, 150),
+            color: Color.fromARGB(255, 245, 206, 206),
             width: 1,
+            borderRadius: BorderRadius.circular(15.0),
           ),
           children: [
             TableRow(children: [
@@ -159,7 +162,7 @@ class _AddPageState extends State<AddPage> {
                   child: Center(
                     child: Icon(
                       Icons.backspace_rounded,
-                      color: const Color.fromARGB(255, 170, 100, 100),
+                      color: Color.fromARGB(255, 249, 144, 128),
                       size: 40.0,
                     ),
                   ),
@@ -181,7 +184,7 @@ class _AddPageState extends State<AddPage> {
             height: 50,
             width: double.infinity,
             decoration: BoxDecoration(
-              color: Color.fromARGB(255, 117, 39, 62),
+              color: Color.fromARGB(255, 249, 144, 128),
             ),
             child: MaterialButton(
               child: Text(
