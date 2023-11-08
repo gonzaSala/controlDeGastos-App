@@ -17,6 +17,9 @@ class _AddPageState extends State<AddPage> {
   late String category;
   int value = 0;
 
+  String dateStr = 'hoy';
+  DateTime date = DateTime.now();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,10 +27,28 @@ class _AddPageState extends State<AddPage> {
         automaticallyImplyLeading: false,
         backgroundColor: Colors.transparent,
         elevation: 0.0,
-        title: Text(
-          'Categoria',
-          style: TextStyle(
-            color: Colors.grey,
+        title: GestureDetector(
+          onTap: () {
+            showDatePicker(
+                    context: context,
+                    initialDate: DateTime.now(),
+                    firstDate:
+                        DateTime.now().subtract(Duration(hours: 24 * 30)),
+                    lastDate: DateTime.now())
+                .then((newDate) {
+              if (newDate != null) {
+                setState(() {
+                  date = newDate;
+                  dateStr = date.toString();
+                });
+              }
+            });
+          },
+          child: Text(
+            'Categoria ($dateStr)',
+            style: TextStyle(
+              color: Colors.grey,
+            ),
           ),
         ),
         centerTitle: false,
@@ -59,7 +80,7 @@ class _AddPageState extends State<AddPage> {
 
   Widget _categorySelector() {
     Map<String, IconData> categories = {
-      'Varios': Icons.wallet,
+      'Otros': Icons.wallet,
       'Shopping': Icons.shopping_cart,
       'Comida': FontAwesomeIcons.burger,
       'Transporte': Icons.directions_bus_sharp,
@@ -204,9 +225,9 @@ class _AddPageState extends State<AddPage> {
                       .add({
                     'category': category,
                     'value': value,
-                    'month': DateTime.now().month,
-                    'day': DateTime.now().day,
-                    'year': DateTime.now().year,
+                    'month': date.month,
+                    'day': date.day,
+                    'year': date.year,
                   });
                   Navigator.of(context).pop();
                 } else {

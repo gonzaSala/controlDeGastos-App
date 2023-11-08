@@ -98,6 +98,9 @@ class _MonthWidgetState extends State<MonthWidget> {
   }
 
   Widget _item(IconData icon, String name, int percent, double value) {
+    if (name == null) {
+      name = 'Otros';
+    }
     return ListTile(
       onTap: () {
         Navigator.of(context).pushNamed('/details',
