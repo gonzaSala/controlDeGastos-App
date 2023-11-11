@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:control_gastos/screens/detailsPage.dart';
-import 'package:control_gastos/widgets/graph_widget.dart';
 import 'package:control_gastos/screens/addPage.dart';
+import 'package:control_gastos/widgets/graph_widgett.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -86,14 +86,15 @@ class _MonthWidgetState extends State<MonthWidget> {
 
   Widget _graph() {
     if (widget.graphType == GraphType.LINES) {
-      return Container(
-          height: 250.0, child: LinesGraphWidget(data: widget.perDay));
+      return Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Container(
+            height: 280.0,
+            padding: EdgeInsets.all(10),
+            child: LinesGraph(data: widget.perDay)),
+      );
     } else {
-      print('grafico pie');
-      var perCategory = widget.categories.keys
-          .map((name) => widget.categories[name]! / widget.total)
-          .toList();
-      return Container(height: 250.0, child: PieGraphWidget(data: perCategory));
+      return Text("s");
     }
   }
 
@@ -145,7 +146,7 @@ class _MonthWidgetState extends State<MonthWidget> {
 
   List<Map<String, IconData>> categoryIcons = [
     {
-      'Varios': Icons.wallet,
+      'Otros': Icons.wallet,
       'Shopping': Icons.shopping_cart,
       'Comida': FontAwesomeIcons.burger,
       'Transporte': Icons.directions_bus_sharp,
