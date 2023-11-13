@@ -94,7 +94,15 @@ class _MonthWidgetState extends State<MonthWidget> {
             child: LinesGraph(data: widget.perDay)),
       );
     } else {
-      return Text("s");
+      return Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Container(
+            height: 280.0,
+            padding: EdgeInsets.all(5),
+            child: PieGraphWidget(
+              categoryPercentages: widget.categories,
+            )),
+      );
     }
   }
 

@@ -1,7 +1,64 @@
-import 'dart:ffi';
-
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+
+class PieGraphWidget extends StatefulWidget {
+  final Map<String, double> categoryPercentages;
+
+  const PieGraphWidget({
+    Key? key,
+    required this.categoryPercentages,
+  }) : super(key: key);
+
+  @override
+  _PieGraphWidgetState createState() => _PieGraphWidgetState();
+}
+
+class _PieGraphWidgetState extends State<PieGraphWidget> {
+  @override
+  Widget build(BuildContext context) {
+    return PieChart(PieChartData(
+      sections: showingSections(),
+      centerSpaceRadius: 5, // Sin espacio central
+      sectionsSpace: 2, // Sin espacio entre secciones
+    ));
+  }
+
+  List<PieChartSectionData> showingSections() {
+    return widget.categoryPercentages.entries.map((entry) {
+      final categoryName = entry.key;
+      final categoryPercentage = entry.value / 10;
+
+      return PieChartSectionData(
+        value: categoryPercentage,
+        title: '$categoryPercentage%', // Muestra el porcentaje
+        radius: 100,
+        color: getColor(categoryName.length),
+        titleStyle: TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.bold,
+          color: Colors.white,
+        ),
+      );
+    }).toList();
+  }
+
+  Color getColor(int index) {
+    // Código para devolver colores diferentes según el índice
+    // Lo dejo como lo tenías originalmente
+    switch (index % 10) {
+      case 0:
+        return Colors.blue;
+      case 1:
+        return Colors.red;
+      case 2:
+        return Colors.green;
+      case 3:
+        return Colors.amber;
+      default:
+        return Colors.blue;
+    }
+  }
+}
 
 class LinesGraph extends StatefulWidget {
   const LinesGraph({super.key, required this.data});
@@ -30,7 +87,7 @@ class LinesGraphState extends State<LinesGraph> {
           LineChartBarData(
               spots: flSpotList,
               isCurved: true,
-              barWidth: 6,
+              barWidth: 2,
               isStepLineChart: false,
               belowBarData: BarAreaData(
                   show: true,
