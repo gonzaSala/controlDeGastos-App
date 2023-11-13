@@ -25,7 +25,7 @@ class _AddPageState extends State<AddPage> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        backgroundColor: Colors.transparent,
+        backgroundColor: Color.fromARGB(0, 181, 35, 35),
         elevation: 0.0,
         title: TextButton(
           onPressed: () {
@@ -47,7 +47,7 @@ class _AddPageState extends State<AddPage> {
           },
           style: TextButton.styleFrom(
             padding: EdgeInsets.all(12.0),
-            backgroundColor: Color.fromARGB(255, 249, 144, 128),
+            backgroundColor: Color.fromARGB(255, 98, 87, 250),
           ),
           child: Text(
             'Categoria ($dateStr)',
@@ -100,6 +100,10 @@ class _AddPageState extends State<AddPage> {
 
     return Container(
       height: 80,
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(15)),
+          border: Border.all(color: Color.fromARGB(255, 22, 17, 97)),
+          color: Color.fromARGB(255, 8, 6, 38)),
       child: CategorySelectorWidget(
         categories: categories,
         onValueChanged: (newCategory) => category = newCategory,
@@ -114,7 +118,7 @@ class _AddPageState extends State<AddPage> {
       child: Text(
         "\$${realValue}",
         style: TextStyle(
-            color: const Color.fromARGB(255, 249, 144, 128),
+            color: Color.fromARGB(255, 195, 191, 254),
             fontSize: 50,
             fontWeight: FontWeight.bold),
       ),
@@ -140,7 +144,7 @@ class _AddPageState extends State<AddPage> {
             text,
             style: TextStyle(
               fontSize: 40.0,
-              color: const Color.fromARGB(255, 18, 18, 18),
+              color: Color.fromARGB(255, 195, 191, 254),
             ),
           ),
         ),
@@ -210,8 +214,9 @@ class _AddPageState extends State<AddPage> {
             height: 50,
             width: double.infinity,
             decoration: BoxDecoration(
-              color: Color.fromARGB(255, 249, 144, 128),
-            ),
+                color: Color.fromARGB(255, 98, 87, 250),
+                borderRadius: BorderRadius.all(Radius.circular(12)),
+                border: Border.all(color: Color.fromARGB(255, 195, 191, 254))),
             child: MaterialButton(
               child: Text(
                 'Sumar gasto',

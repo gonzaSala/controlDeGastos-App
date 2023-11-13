@@ -35,16 +35,20 @@ class CategoryWidget extends StatelessWidget {
                 borderRadius: BorderRadius.circular(20.0),
                 border: Border.all(
                   color: selected
-                      ? Color.fromARGB(255, 249, 144, 128)
-                      : Color.fromARGB(255, 255, 214, 214),
+                      ? Color.fromARGB(255, 195, 191, 254)
+                      : Color.fromARGB(255, 17, 14, 75),
                   width: selected ? 8.0 : 5.0,
                 )),
             child: Icon(
               icon,
               size: 34,
+              color: Color.fromARGB(255, 195, 191, 254),
             ),
           ),
-          Text(name)
+          Text(
+            name,
+            style: TextStyle(color: Color.fromARGB(255, 195, 191, 254)),
+          )
         ],
       ),
     );

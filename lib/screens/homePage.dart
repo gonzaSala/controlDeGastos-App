@@ -38,7 +38,10 @@ class _HomePageState extends State<HomePage> {
     return InkWell(
       child: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Icon(icon),
+        child: Icon(
+          icon,
+          color: Colors.white60,
+        ),
       ),
       onTap: () {
         callback();
@@ -62,7 +65,7 @@ class _HomePageState extends State<HomePage> {
         return Scaffold(
           bottomNavigationBar: BottomAppBar(
             notchMargin: 8.0,
-            color: Color.fromARGB(255, 225, 184, 184),
+            color: Color.fromARGB(255, 19, 15, 78),
             shape: CircularNotchedRectangle(),
             child: Row(
               mainAxisSize: MainAxisSize.max,
@@ -95,7 +98,7 @@ class _HomePageState extends State<HomePage> {
           floatingActionButton: FloatingActionButton(
             heroTag: 'add_button',
             child: Icon(Icons.add),
-            backgroundColor: const Color.fromARGB(255, 233, 131, 131),
+            backgroundColor: Color.fromARGB(255, 50, 2, 123),
             onPressed: () {
               Navigator.of(context).pushNamed('/add');
             },

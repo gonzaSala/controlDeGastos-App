@@ -101,6 +101,7 @@ class _MonthWidgetState extends State<MonthWidget> {
             padding: EdgeInsets.all(5),
             child: PieGraphWidget(
               categoryPercentages: widget.categories,
+              categoryIcons: widget.categoryIcons,
             )),
       );
     }
@@ -118,6 +119,7 @@ class _MonthWidgetState extends State<MonthWidget> {
       leading: Icon(
         icon,
         size: 32.0,
+        color: Colors.blueGrey,
       ),
       title: Text(
         name,
@@ -183,7 +185,7 @@ class _MonthWidgetState extends State<MonthWidget> {
         },
         separatorBuilder: (BuildContext context, int index) {
           return Container(
-            color: Colors.blueAccent.withOpacity(0.15),
+            color: Color.fromARGB(255, 39, 86, 168).withOpacity(0.18),
             height: 4,
           );
         },

@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 
 class PieGraphWidget extends StatefulWidget {
   final Map<String, double> categoryPercentages;
+  final Map<String, IconData> categoryIcons;
 
   const PieGraphWidget({
     Key? key,
     required this.categoryPercentages,
+    required this.categoryIcons,
   }) : super(key: key);
 
   @override
@@ -18,21 +20,22 @@ class _PieGraphWidgetState extends State<PieGraphWidget> {
   Widget build(BuildContext context) {
     return PieChart(PieChartData(
       sections: showingSections(),
-      centerSpaceRadius: 5, // Sin espacio central
-      sectionsSpace: 2, // Sin espacio entre secciones
+      centerSpaceRadius: 0,
+      sectionsSpace: 2,
+      startDegreeOffset: 180,
+      centerSpaceColor: Colors.grey[200],
     ));
   }
 
   List<PieChartSectionData> showingSections() {
-    return widget.categoryPercentages.entries.map((entry) {
-      final categoryName = entry.key;
-      final categoryPercentage = entry.value / 10;
-
+    return widget.categoryPercentages.keys.map((categoryName) {
+      final IconData icon = widget.categoryIcons[categoryName] ?? Icons.error;
+      final double value = widget.categoryPercentages[categoryName]! / 10 ?? 0;
       return PieChartSectionData(
-        value: categoryPercentage,
-        title: '$categoryPercentage%', // Muestra el porcentaje
+        value: value,
+        color: getColor(categoryName),
+        title: '${value.toStringAsFixed(2)}%',
         radius: 100,
-        color: getColor(categoryName.length),
         titleStyle: TextStyle(
           fontSize: 16,
           fontWeight: FontWeight.bold,
@@ -42,20 +45,33 @@ class _PieGraphWidgetState extends State<PieGraphWidget> {
     }).toList();
   }
 
-  Color getColor(int index) {
-    // Código para devolver colores diferentes según el índice
-    // Lo dejo como lo tenías originalmente
-    switch (index % 10) {
-      case 0:
+  Color getColor(String categoryName) {
+    // Implementación de colores dinámicos para cada categoría
+    switch (categoryName) {
+      case 'Otros':
         return Colors.blue;
-      case 1:
-        return Colors.red;
-      case 2:
+      case 'Shopping':
+        return Colors.deepOrange;
+      case 'Comida':
         return Colors.green;
-      case 3:
+      case 'Transporte':
+        return Colors.orange;
+      case 'Alcohol':
         return Colors.amber;
+      case 'Salud':
+        return Colors.red;
+      case 'Deudas':
+        return Colors.purple;
+      case 'Mascotas':
+        return Colors.brown;
+      case 'Educación':
+        return Colors.indigo;
+      case 'Ropa':
+        return Colors.pink;
+      case 'Hogar':
+        return Colors.teal;
       default:
-        return Colors.blue;
+        return Colors.grey;
     }
   }
 }

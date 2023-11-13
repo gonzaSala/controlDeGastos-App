@@ -47,26 +47,22 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: myCustomColor,
           textTheme: GoogleFonts.poppinsTextTheme(),
+          scaffoldBackgroundColor:
+              Color.fromARGB(255, 0, 0, 0), // Establecer el color de fondo
         ),
         onGenerateRoute: (settings) {
-          if (settings.name == '/details') {
-            DetailsParams params = settings.arguments as DetailsParams;
-            return MaterialPageRoute(builder: (BuildContext context) {
-              return DetailsPage(
-                params: params,
-              );
-            });
-          }
+          //... (código de manejo de rutas)
         },
-        routes: {
-          '/': (BuildContext context) {
-            var state = Provider.of<LoginState>(context);
+        home: Consumer<LoginState>(
+          builder: (context, state, child) {
             if (state.isLoggedIn()) {
               return HomePage();
             } else {
               return LoginPage();
             }
           },
+        ),
+        routes: {
           '/add': (BuildContext context) => AddPage(),
         },
       ),
