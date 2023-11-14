@@ -25,7 +25,7 @@ class _AddPageState extends State<AddPage> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        backgroundColor: Color.fromARGB(0, 181, 35, 35),
+        backgroundColor: Color.fromARGB(0, 255, 74, 74),
         elevation: 0.0,
         title: TextButton(
           onPressed: () {
@@ -46,7 +46,7 @@ class _AddPageState extends State<AddPage> {
             });
           },
           style: TextButton.styleFrom(
-            padding: EdgeInsets.all(12.0),
+            padding: EdgeInsets.all(8.0),
             backgroundColor: Color.fromARGB(255, 98, 87, 250),
           ),
           child: Text(
@@ -143,7 +143,8 @@ class _AddPageState extends State<AddPage> {
           child: Text(
             text,
             style: TextStyle(
-              fontSize: 40.0,
+              fontSize: 42.0,
+              fontWeight: FontWeight.w600,
               color: Color.fromARGB(255, 195, 191, 254),
             ),
           ),
@@ -156,6 +157,7 @@ class _AddPageState extends State<AddPage> {
     return Expanded(child: LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
       var height = constraints.biggest.height / 4;
+
       return Table(
           border: TableBorder.all(
             color: Color.fromARGB(255, 245, 206, 206),

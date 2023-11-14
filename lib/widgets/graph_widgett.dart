@@ -20,10 +20,10 @@ class _PieGraphWidgetState extends State<PieGraphWidget> {
   Widget build(BuildContext context) {
     return PieChart(PieChartData(
       sections: showingSections(),
-      centerSpaceRadius: 0,
+      centerSpaceRadius: 100,
       sectionsSpace: 2,
       startDegreeOffset: 180,
-      centerSpaceColor: Colors.grey[200],
+      centerSpaceColor: Colors.black,
     ));
   }
 
@@ -34,8 +34,8 @@ class _PieGraphWidgetState extends State<PieGraphWidget> {
       return PieChartSectionData(
         value: value,
         color: getColor(categoryName),
-        title: '${value.toStringAsFixed(2)}%',
-        radius: 100,
+        title: '${value.toStringAsFixed(2)}%, ${categoryName}',
+        radius: 30,
         titleStyle: TextStyle(
           fontSize: 16,
           fontWeight: FontWeight.bold,
@@ -172,27 +172,44 @@ class LinesGraphState extends State<LinesGraph> {
                     break;
                 }
                 return Text(text,
-                    style: const TextStyle(color: Colors.black, fontSize: 14));
+                    style: const TextStyle(
+                        color: Color.fromARGB(255, 136, 136, 136),
+                        fontSize: 14));
               },
             ),
           ),
           leftTitles: AxisTitles(
             sideTitles: SideTitles(
-              showTitles: true,
-              reservedSize: 42,
-            ),
+                showTitles: true,
+                reservedSize: 42,
+                getTitlesWidget: (value, key) {
+                  if (value >= 0 && value < widget.data.length) {
+                    final int index = value.toInt();
+                    return Text(
+                      index < widget.data.length
+                          ? '\$${widget.data[index].toStringAsFixed(2)}'
+                          : 'asdas',
+                      style: TextStyle(color: Colors.white),
+                    ); // Devuelve un string vacío si no hay datos para este índice.)
+                  }
+
+                  return Text('asdsad');
+                }),
           ),
           rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
           topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
         ),
         borderData: FlBorderData(
           show: true,
-          border: Border.all(color: Color(0xff37434d), width: 1),
+          border:
+              Border.all(color: Color.fromARGB(255, 136, 136, 136), width: 1),
         ),
         gridData: FlGridData(
           show: true,
           getDrawingHorizontalLine: (value) {
-            return FlLine(color: const Color(0xff37434d), strokeWidth: 1);
+            return FlLine(
+                color: const Color.fromARGB(255, 136, 136, 136),
+                strokeWidth: 1);
           },
           getDrawingVerticalLine: (value) {
             return FlLine(color: const Color(0xff37434d), strokeWidth: 1);

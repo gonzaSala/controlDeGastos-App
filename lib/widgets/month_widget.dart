@@ -24,12 +24,18 @@ class MonthWidget extends StatefulWidget {
       required this.graphType,
       required this.categoryIcons})
       : total = documents.map((doc) => doc['value']).fold(0.0, (a, b) => a + b),
-        perDay = List.generate(days, (int index) {
-          return documents
-              .where((doc) => doc['day'] == (index + 1))
-              .map((doc) => doc['value'])
-              .fold(0.0, (a, b) => a + b);
-        }),
+        perDay = List<double>.generate(
+          days,
+          (index) {
+            final dayDocuments =
+                documents.where((doc) => doc['day'] == (index + 1));
+            return dayDocuments.isEmpty
+                ? 0.0 // No hay documentos para este día
+                : dayDocuments
+                    .map((doc) => doc['value'])
+                    .fold(0.0, (a, b) => a + b);
+          },
+        ),
         categories = documents.fold<Map<String, double>>({}, (map, document) {
           if (!map.containsKey(document['category'])) {
             map[document['category']] = 0.0;
@@ -119,13 +125,14 @@ class _MonthWidgetState extends State<MonthWidget> {
       leading: Icon(
         icon,
         size: 32.0,
-        color: Colors.blueGrey,
+        color: const Color.fromARGB(255, 115, 149, 167),
       ),
       title: Text(
         name,
         style: TextStyle(
           fontWeight: FontWeight.bold,
           fontSize: 20.0,
+          color: const Color.fromARGB(255, 116, 151, 168),
         ),
       ),
       subtitle: Text(

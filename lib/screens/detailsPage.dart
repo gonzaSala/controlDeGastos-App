@@ -117,14 +117,16 @@ class _DetailsPageState extends State<DetailsPage> {
                               Icon(
                                 Icons.calendar_today,
                                 size: 40,
+                                color: Colors.blueGrey,
                               ),
                               Positioned(
                                   left: 0,
                                   right: 0,
-                                  bottom: 8.5,
+                                  bottom: 5.5,
                                   child: Text(
                                     documents!['day'.toString()].toString(),
                                     textAlign: TextAlign.center,
+                                    style: TextStyle(color: Colors.blueGrey),
                                   )),
                             ],
                           ),

@@ -23,33 +23,37 @@ class CategoryWidget extends StatelessWidget {
       required this.selected});
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 12.0),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Container(
-            width: 65,
-            height: 50,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20.0),
-                border: Border.all(
-                  color: selected
-                      ? Color.fromARGB(255, 195, 191, 254)
-                      : Color.fromARGB(255, 17, 14, 75),
-                  width: selected ? 8.0 : 5.0,
-                )),
-            child: Icon(
-              icon,
-              size: 34,
-              color: Color.fromARGB(255, 195, 191, 254),
+    return Container(
+      width: 90,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 5.3),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Container(
+              alignment: Alignment.center,
+              width: 65,
+              height: 50,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20.0),
+                  border: Border.all(
+                    color: selected
+                        ? Color.fromARGB(255, 195, 191, 254)
+                        : Color.fromARGB(255, 17, 14, 75),
+                    width: selected ? 4.0 : 5.0,
+                  )),
+              child: Icon(
+                icon,
+                size: 34,
+                color: Color.fromARGB(255, 195, 191, 254),
+              ),
             ),
-          ),
-          Text(
-            name,
-            style: TextStyle(color: Color.fromARGB(255, 195, 191, 254)),
-          )
-        ],
+            Text(
+              name,
+              style: TextStyle(color: Color.fromARGB(255, 195, 191, 254)),
+            )
+          ],
+        ),
       ),
     );
   }
