@@ -180,21 +180,9 @@ class LinesGraphState extends State<LinesGraph> {
           ),
           leftTitles: AxisTitles(
             sideTitles: SideTitles(
-                showTitles: true,
-                reservedSize: 42,
-                getTitlesWidget: (value, key) {
-                  if (value >= 0 && value < widget.data.length) {
-                    final int index = value.toInt();
-                    return Text(
-                      index < widget.data.length
-                          ? '\$${widget.data[index].toStringAsFixed(2)}'
-                          : 'asdas',
-                      style: TextStyle(color: Colors.white),
-                    ); // Devuelve un string vacío si no hay datos para este índice.)
-                  }
-
-                  return Text('asdsad');
-                }),
+              showTitles: true,
+              reservedSize: 42,
+            ),
           ),
           rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
           topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),

@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 
 class AddPage extends StatefulWidget {
   const AddPage({super.key});
@@ -113,6 +114,7 @@ class _AddPageState extends State<AddPage> {
 
   Widget _currentValue() {
     var realValue = value / 1.0;
+
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 35.0),
       child: Text(
@@ -217,7 +219,7 @@ class _AddPageState extends State<AddPage> {
             width: double.infinity,
             decoration: BoxDecoration(
                 color: Color.fromARGB(255, 98, 87, 250),
-                borderRadius: BorderRadius.all(Radius.circular(12)),
+                borderRadius: BorderRadius.all(Radius.circular(22)),
                 border: Border.all(color: Color.fromARGB(255, 195, 191, 254))),
             child: MaterialButton(
               child: Text(

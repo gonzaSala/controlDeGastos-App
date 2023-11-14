@@ -82,6 +82,7 @@ class _MonthWidgetState extends State<MonthWidget> {
         Text(
           '\$${widget.total.toStringAsFixed(2)}',
           style: TextStyle(
+            color: Colors.blueGrey,
             fontWeight: FontWeight.bold,
             fontSize: 40.0,
           ),
