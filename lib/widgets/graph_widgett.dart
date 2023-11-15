@@ -182,6 +182,14 @@ class LinesGraphState extends State<LinesGraph> {
             sideTitles: SideTitles(
               showTitles: true,
               reservedSize: 42,
+              interval: 100,
+              getTitlesWidget: (value, meta) {
+                String text = value.toString();
+                return Text(text,
+                    style: const TextStyle(
+                        color: Color.fromARGB(255, 136, 136, 136),
+                        fontSize: 14));
+              },
             ),
           ),
           rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
