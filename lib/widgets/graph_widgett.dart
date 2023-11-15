@@ -34,10 +34,11 @@ class _PieGraphWidgetState extends State<PieGraphWidget> {
       return PieChartSectionData(
         value: value,
         color: getColor(categoryName),
+        titlePositionPercentageOffset: BorderSide.strokeAlignOutside,
         title: '${value.toStringAsFixed(2)}%, ${categoryName}',
         radius: 30,
         titleStyle: TextStyle(
-          fontSize: 16,
+          fontSize: 14,
           fontWeight: FontWeight.bold,
           color: Colors.white,
         ),
@@ -46,30 +47,29 @@ class _PieGraphWidgetState extends State<PieGraphWidget> {
   }
 
   Color getColor(String categoryName) {
-    // Implementación de colores dinámicos para cada categoría
     switch (categoryName) {
       case 'Otros':
-        return Colors.blue;
-      case 'Shopping':
-        return Colors.deepOrange;
-      case 'Comida':
-        return Colors.green;
-      case 'Transporte':
-        return Colors.orange;
-      case 'Alcohol':
-        return Colors.amber;
-      case 'Salud':
-        return Colors.red;
-      case 'Deudas':
-        return Colors.purple;
-      case 'Mascotas':
-        return Colors.brown;
-      case 'Educación':
         return Colors.indigo;
-      case 'Ropa':
-        return Colors.pink;
-      case 'Hogar':
+      case 'Shopping':
+        return Colors.purple;
+      case 'Comida':
+        return Colors.blueAccent;
+      case 'Transporte':
+        return Colors.deepPurple;
+      case 'Alcohol':
+        return Colors.blue;
+      case 'Salud':
+        return Colors.pinkAccent;
+      case 'Deudas':
+        return Colors.purpleAccent;
+      case 'Mascotas':
+        return Colors.blueGrey;
+      case 'Educación':
         return Colors.teal;
+      case 'Ropa':
+        return Colors.deepPurpleAccent;
+      case 'Hogar':
+        return Colors.indigoAccent;
       default:
         return Colors.grey;
     }
@@ -182,13 +182,19 @@ class LinesGraphState extends State<LinesGraph> {
             sideTitles: SideTitles(
               showTitles: true,
               reservedSize: 42,
-              interval: 100,
               getTitlesWidget: (value, meta) {
-                String text = value.toString();
-                return Text(text,
-                    style: const TextStyle(
-                        color: Color.fromARGB(255, 136, 136, 136),
-                        fontSize: 14));
+                if (value < 1000) {
+                  return Text(value.toString(),
+                      style: const TextStyle(
+                          color: Color.fromARGB(255, 136, 136, 136),
+                          fontSize: 14));
+                } else {
+                  double text = value.toInt() / 1000;
+                  return Text('${text.toStringAsFixed(1)}K',
+                      style: const TextStyle(
+                          color: Color.fromARGB(255, 136, 136, 136),
+                          fontSize: 14));
+                }
               },
             ),
           ),

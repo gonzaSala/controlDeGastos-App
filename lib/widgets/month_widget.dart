@@ -114,10 +114,12 @@ class _MonthWidgetState extends State<MonthWidget> {
     }
   }
 
-  Widget _item(IconData icon, String name, int percent, double value) {
+  Widget _item(
+      IconData icon, String name, int percent, double value, Color getColor) {
     if (name == null) {
       name = 'Otros';
     }
+
     return ListTile(
       onTap: () {
         Navigator.of(context).pushNamed('/details',
@@ -126,7 +128,7 @@ class _MonthWidgetState extends State<MonthWidget> {
       leading: Icon(
         icon,
         size: 32.0,
-        color: const Color.fromARGB(255, 115, 149, 167),
+        color: getColor,
       ),
       title: Text(
         name,
@@ -187,9 +189,10 @@ class _MonthWidgetState extends State<MonthWidget> {
           var data = widget.categories[key];
           var categoryIcon =
               categoryIcons.firstWhere((element) => element.containsKey(key));
+          var colorIcon = getColor(key);
 
           return _item(categoryIcon[key] ?? Icons.error, key,
-              (100 * data! ~/ widget.total).toInt(), data);
+              (100 * data! ~/ widget.total).toInt(), data, colorIcon);
         },
         separatorBuilder: (BuildContext context, int index) {
           return Container(
@@ -199,5 +202,43 @@ class _MonthWidgetState extends State<MonthWidget> {
         },
       ),
     );
+  }
+
+  Color getColor(String categoryName) {
+    // Implementación de colores dinámicos para cada categoría
+    switch (categoryName) {
+      case 'Otros':
+        return Colors.indigo; // Puedes cambiarlo a un tono diferente de azul
+      case 'Shopping':
+        return Colors.purple; // Puedes cambiarlo a un tono diferente de morado
+      case 'Comida':
+        return Colors
+            .blueAccent; // Puedes cambiarlo a un tono diferente de azul
+      case 'Transporte':
+        return Colors
+            .deepPurple; // Puedes cambiarlo a un tono diferente de morado
+      case 'Alcohol':
+        return Colors.blue; // Puedes cambiarlo a un tono diferente de azul
+      case 'Salud':
+        return Colors
+            .pinkAccent; // Puedes cambiarlo a un tono diferente de rosado
+      case 'Deudas':
+        return Colors
+            .purpleAccent; // Puedes cambiarlo a un tono diferente de morado
+      case 'Mascotas':
+        return Colors
+            .blueGrey; // Puedes cambiarlo a un tono diferente de gris/azul
+      case 'Educación':
+        return Colors
+            .teal; // Puedes cambiarlo a un tono diferente de verde azulado
+      case 'Ropa':
+        return Colors
+            .deepPurpleAccent; // Puedes cambiarlo a un tono diferente de morado
+      case 'Hogar':
+        return Colors
+            .indigoAccent; // Puedes cambiarlo a un tono diferente de azul
+      default:
+        return Colors.grey;
+    }
   }
 }
