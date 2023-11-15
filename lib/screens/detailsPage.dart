@@ -97,7 +97,6 @@ class _DetailsPageState extends State<DetailsPage> {
                           );
 
                           if (result == true) {
-                            // Muestra el SnackBar solo si se selecciona "Sí, estoy seguro"
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
                                 content: Text(
