@@ -19,6 +19,7 @@ class DetailsPage extends StatefulWidget {
 }
 
 class _DetailsPageState extends State<DetailsPage> {
+  bool lastItem = true;
   @override
   Widget build(BuildContext context) {
     return Consumer<LoginState>(
@@ -78,13 +79,6 @@ class _DetailsPageState extends State<DetailsPage> {
                                   TextButton(
                                     onPressed: () {
                                       Navigator.pop(context, false);
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(
-                                        SnackBar(
-                                          content: Text(
-                                              'Se eliminó el gasto: \$${documents!['value'.toString()].toString()}'),
-                                        ),
-                                      );
                                     },
                                     child: const Text(
                                       'Cancelar',
@@ -101,6 +95,17 @@ class _DetailsPageState extends State<DetailsPage> {
                               );
                             },
                           );
+
+                          if (result == true) {
+                            // Muestra el SnackBar solo si se selecciona "Sí, estoy seguro"
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                  'Se eliminó el gasto: \$${documents!['value'.toString()].toString()}',
+                                ),
+                              ),
+                            );
+                          }
 
                           return result;
                         },
@@ -120,32 +125,60 @@ class _DetailsPageState extends State<DetailsPage> {
                                 color: Colors.blueGrey,
                               ),
                               Positioned(
-                                  left: 0,
-                                  right: 0,
-                                  bottom: 5.5,
-                                  child: Text(
-                                    documents!['day'.toString()].toString(),
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(color: Colors.blueGrey),
-                                  )),
+                                left: 0,
+                                right: 0,
+                                bottom: 5.5,
+                                child: Text(
+                                  documents!['day'.toString()].toString(),
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(color: Colors.blueGrey),
+                                ),
+                              ),
                             ],
                           ),
                           title: Container(
-                              decoration: BoxDecoration(
-                                color: Colors.blueAccent.withOpacity(0.2),
-                                borderRadius: BorderRadius.circular(5.0),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text(
-                                  '\$${documents!['value'.toString()].toString()}',
-                                  style: TextStyle(
-                                    color: Colors.blueAccent,
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 18.0,
+                            decoration: BoxDecoration(
+                              color: Colors.blueAccent.withOpacity(0.2),
+                              borderRadius: BorderRadius.circular(5.0),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(5.0),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Row(
+                                    children: [
+                                      SizedBox(
+                                        width: 15,
+                                      ),
+                                      Text(
+                                        '\$${documents!['value'.toString()].toString()}',
+                                        style: TextStyle(
+                                          color: Colors.blueAccent,
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 18.0,
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width: 160,
+                                      ),
+                                      Icon(
+                                        Icons.arrow_left,
+                                        size: 32,
+                                        color: Colors.blueGrey,
+                                      ),
+                                      Icon(
+                                        Icons.delete,
+                                        size: 32,
+                                        color: Colors.blueGrey,
+                                      ),
+                                    ],
                                   ),
-                                ),
-                              )),
+                                ],
+                              ),
+                            ),
+                          ),
                         ),
                       );
                     },

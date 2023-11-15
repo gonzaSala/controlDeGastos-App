@@ -28,14 +28,23 @@ class _PieGraphWidgetState extends State<PieGraphWidget> {
   }
 
   List<PieChartSectionData> showingSections() {
+    double totalPercentage = 0.0;
+    double totalValue =
+        widget.categoryPercentages.values.fold(0.0, (a, b) => a + b);
+
     return widget.categoryPercentages.keys.map((categoryName) {
       final IconData icon = widget.categoryIcons[categoryName] ?? Icons.error;
-      final double value = widget.categoryPercentages[categoryName]! / 10 ?? 0;
+      final double value = widget.categoryPercentages[categoryName] ?? 0;
+
+      double percentage = (value / totalValue) * 100;
+
+      totalPercentage += percentage;
+
       return PieChartSectionData(
-        value: value,
+        value: percentage,
         color: getColor(categoryName),
         titlePositionPercentageOffset: BorderSide.strokeAlignOutside,
-        title: '${value.toStringAsFixed(2)}%, ${categoryName}',
+        title: '${percentage.toStringAsFixed(2)}%, ${categoryName}',
         radius: 30,
         titleStyle: TextStyle(
           fontSize: 14,
@@ -216,8 +225,6 @@ class LinesGraphState extends State<LinesGraph> {
           getDrawingVerticalLine: (value) {
             return FlLine(color: const Color(0xff37434d), strokeWidth: 1);
           },
-          horizontalInterval: 100,
-          verticalInterval: 1,
         ),
       ),
     );
