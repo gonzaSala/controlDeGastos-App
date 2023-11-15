@@ -16,6 +16,7 @@ class AddPage extends StatefulWidget {
 class _AddPageState extends State<AddPage> {
   String category = '';
   int value = 0;
+  String details = '';
 
   String dateStr = 'hoy';
   DateTime date = DateTime.now();
@@ -77,6 +78,7 @@ class _AddPageState extends State<AddPage> {
       children: [
         _categorySelector(),
         _currentValue(),
+        _details(),
         _numpad(),
         _submit(),
       ],
@@ -150,6 +152,38 @@ class _AddPageState extends State<AddPage> {
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _details() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 16.0),
+      child: Column(
+        children: [
+          Text(
+            'Detalles del gasto:',
+            style: TextStyle(color: Colors.white),
+          ),
+          SizedBox(height: 8.0),
+          TextFormField(
+            onChanged: (value) {
+              setState(() {
+                details = value;
+              });
+            },
+            style: TextStyle(color: Colors.white),
+            decoration: InputDecoration(
+              fillColor: Color.fromARGB(255, 22, 17, 97),
+              filled: true,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12.0),
+              ),
+              hintText: 'Ingrese detalles...',
+              hintStyle: TextStyle(color: Colors.white60),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -241,6 +275,7 @@ class _AddPageState extends State<AddPage> {
                     'month': date.month,
                     'day': date.day,
                     'year': date.year,
+                    'details': details,
                   });
                   Navigator.of(context).pop();
                 }

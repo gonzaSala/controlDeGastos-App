@@ -43,6 +43,8 @@ class _HomePageState extends State<HomePage> {
           color: Colors.white60,
         ),
       ),
+      highlightColor: Colors.yellow,
+      borderRadius: BorderRadius.all(Radius.circular(10)),
       onTap: () {
         callback();
       },
