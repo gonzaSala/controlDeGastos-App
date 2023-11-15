@@ -5,7 +5,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 
 class AddPage extends StatefulWidget {
   const AddPage({super.key});
@@ -15,7 +14,7 @@ class AddPage extends StatefulWidget {
 }
 
 class _AddPageState extends State<AddPage> {
-  late String category;
+  String category = '';
   int value = 0;
 
   String dateStr = 'hoy';
@@ -244,7 +243,8 @@ class _AddPageState extends State<AddPage> {
                     'year': date.year,
                   });
                   Navigator.of(context).pop();
-                } else {
+                }
+                if (value == 0 || category == '') {
                   showDialog(
                     context: context,
                     builder: (context) => AlertDialog(
