@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:control_gastos/login_state.dart';
 import 'package:control_gastos/widgets/category_selector_widget.dart';
@@ -20,6 +22,8 @@ class _AddPageState extends State<AddPage> {
 
   String dateStr = 'hoy';
   DateTime date = DateTime.now();
+
+  bool TxtFieldVisible = false;
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +51,8 @@ class _AddPageState extends State<AddPage> {
             });
           },
           style: TextButton.styleFrom(
-            padding: EdgeInsets.all(8.0),
+            side: BorderSide(width: 0.2, color: Colors.amber),
+            padding: EdgeInsets.all(5.0),
             backgroundColor: Color.fromARGB(255, 98, 87, 250),
           ),
           child: Text(
@@ -57,7 +62,7 @@ class _AddPageState extends State<AddPage> {
             ),
           ),
         ),
-        centerTitle: false,
+        centerTitle: true,
         actions: [
           IconButton(
               onPressed: () {
@@ -161,9 +166,17 @@ class _AddPageState extends State<AddPage> {
       padding: const EdgeInsets.symmetric(vertical: 16.0),
       child: Column(
         children: [
-          Text(
-            'Detalles del gasto:',
-            style: TextStyle(color: Colors.white),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              SizedBox(
+                width: 5,
+              ),
+              Text(
+                'Opcional',
+                style: TextStyle(color: Colors.white),
+              ),
+            ],
           ),
           SizedBox(height: 8.0),
           TextFormField(

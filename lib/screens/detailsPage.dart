@@ -6,8 +6,9 @@ import 'package:provider/provider.dart';
 class DetailsParams {
   final String categoryName;
   final int month;
+  final String details;
 
-  DetailsParams(this.categoryName, this.month);
+  DetailsParams(this.categoryName, this.month, this.details);
 }
 
 class DetailsPage extends StatefulWidget {
@@ -31,6 +32,7 @@ class _DetailsPageState extends State<DetailsPage> {
             .collection('expenses')
             .where('month', isEqualTo: widget.params.month)
             .where('category', isEqualTo: widget.params.categoryName)
+            .where('details', isEqualTo: widget.params.details)
             .snapshots();
 
         return Scaffold(
@@ -160,7 +162,7 @@ class _DetailsPageState extends State<DetailsPage> {
                                         ),
                                       ),
                                       SizedBox(
-                                        width: 160,
+                                        width: 130,
                                       ),
                                       Icon(
                                         Icons.arrow_left,
@@ -171,6 +173,17 @@ class _DetailsPageState extends State<DetailsPage> {
                                         Icons.delete,
                                         size: 32,
                                         color: Colors.blueGrey,
+                                      ),
+                                      GestureDetector(
+                                        onTap: () {
+                                          _showInfoDialog(
+                                              context, widget.params.details);
+                                        },
+                                        child: Icon(
+                                          Icons.info,
+                                          size: 32,
+                                          color: Colors.amber,
+                                        ),
                                       ),
                                     ],
                                   ),
@@ -186,6 +199,26 @@ class _DetailsPageState extends State<DetailsPage> {
                 }
               },
             ));
+      },
+    );
+  }
+
+  void _showInfoDialog(BuildContext context, String details) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Detalles del gasto'),
+          content: Text(details),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text('Cerrar'),
+            ),
+          ],
+        );
       },
     );
   }
