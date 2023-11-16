@@ -176,13 +176,31 @@ class _DetailsPageState extends State<DetailsPage> {
                                       ),
                                       GestureDetector(
                                         onTap: () {
-                                          _showInfoDialog(
-                                              context, widget.params.details);
+                                          showDialog(
+                                              context: context,
+                                              builder: (context) {
+                                                return AlertDialog(
+                                                  title: Text(
+                                                      'Detalles del gasto'),
+                                                  content: Text(documents[
+                                                          'details'
+                                                              .toString()] ??
+                                                      ''),
+                                                  actions: [
+                                                    TextButton(
+                                                      onPressed: () {
+                                                        Navigator.pop(context);
+                                                      },
+                                                      child: Text('Cerrar'),
+                                                    ),
+                                                  ],
+                                                );
+                                              });
                                         },
                                         child: Icon(
                                           Icons.info,
                                           size: 32,
-                                          color: Colors.amber,
+                                          color: Colors.blueGrey,
                                         ),
                                       ),
                                     ],
@@ -199,26 +217,6 @@ class _DetailsPageState extends State<DetailsPage> {
                 }
               },
             ));
-      },
-    );
-  }
-
-  void _showInfoDialog(BuildContext context, String details) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text('Detalles del gasto'),
-          content: Text(details),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: Text('Cerrar'),
-            ),
-          ],
-        );
       },
     );
   }

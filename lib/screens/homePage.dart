@@ -148,6 +148,9 @@ class _HomePageState extends State<HomePage> {
                 month: currentPage + 1,
                 graphType: currentType,
                 categoryIcons: {},
+                details:
+                    data.data?.docs.map((doc) => doc['details']).join('\n') ??
+                        'Detalles no disponibles',
               );
             },
           ),

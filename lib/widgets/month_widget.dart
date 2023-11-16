@@ -13,6 +13,7 @@ class MonthWidget extends StatefulWidget {
   final List<double> perDay;
   final Map<String, double> categories;
   final int month;
+  final String details;
   final GraphType graphType;
   final Map<String, IconData> categoryIcons;
 
@@ -22,7 +23,8 @@ class MonthWidget extends StatefulWidget {
       required days,
       required this.month,
       required this.graphType,
-      required this.categoryIcons})
+      required this.categoryIcons,
+      required this.details})
       : total = documents.map((doc) => doc['value']).fold(0.0, (a, b) => a + b),
         perDay = List<double>.generate(
           days,
@@ -114,8 +116,8 @@ class _MonthWidgetState extends State<MonthWidget> {
     }
   }
 
-  Widget _item(IconData icon, String name, int percent, double value,
-      Color getColor, String details) {
+  Widget _item(
+      IconData icon, String name, int percent, double value, Color getColor) {
     if (name == null) {
       name = 'Otros';
     }
@@ -123,7 +125,7 @@ class _MonthWidgetState extends State<MonthWidget> {
     return ListTile(
       onTap: () {
         Navigator.of(context).pushNamed('/details',
-            arguments: DetailsParams(name, widget.month, details));
+            arguments: DetailsParams(name, widget.month, widget.details));
       },
       leading: Icon(
         icon,
@@ -191,13 +193,8 @@ class _MonthWidgetState extends State<MonthWidget> {
               categoryIcons.firstWhere((element) => element.containsKey(key));
           var colorIcon = getColor(key);
 
-          return _item(
-              categoryIcon[key] ?? Icons.error,
-              key,
-              (100 * data! ~/ widget.total).toInt(),
-              data,
-              colorIcon,
-              widget.documents.toString());
+          return _item(categoryIcon[key] ?? Icons.error, key,
+              (100 * data! ~/ widget.total).toInt(), data, colorIcon);
         },
         separatorBuilder: (BuildContext context, int index) {
           return Container(
