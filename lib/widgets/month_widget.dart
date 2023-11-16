@@ -125,7 +125,10 @@ class _MonthWidgetState extends State<MonthWidget> {
     return ListTile(
       onTap: () {
         Navigator.of(context).pushNamed('/details',
-            arguments: DetailsParams(name, widget.month, widget.details));
+            arguments: DetailsParams(
+              name,
+              widget.month,
+            ));
       },
       leading: Icon(
         icon,

@@ -6,9 +6,11 @@ import 'package:provider/provider.dart';
 class DetailsParams {
   final String categoryName;
   final int month;
-  final String details;
 
-  DetailsParams(this.categoryName, this.month, this.details);
+  DetailsParams(
+    this.categoryName,
+    this.month,
+  );
 }
 
 class DetailsPage extends StatefulWidget {
@@ -32,7 +34,6 @@ class _DetailsPageState extends State<DetailsPage> {
             .collection('expenses')
             .where('month', isEqualTo: widget.params.month)
             .where('category', isEqualTo: widget.params.categoryName)
-            .where('details', isEqualTo: widget.params.details)
             .snapshots();
 
         return Scaffold(
@@ -162,7 +163,7 @@ class _DetailsPageState extends State<DetailsPage> {
                                         ),
                                       ),
                                       SizedBox(
-                                        width: 130,
+                                        width: 135,
                                       ),
                                       Icon(
                                         Icons.arrow_left,
@@ -182,10 +183,9 @@ class _DetailsPageState extends State<DetailsPage> {
                                                 return AlertDialog(
                                                   title: Text(
                                                       'Detalles del gasto'),
-                                                  content: Text(documents[
-                                                          'details'
-                                                              .toString()] ??
-                                                      ''),
+                                                  content: Text(
+                                                      (documents['details']) ??
+                                                          ''),
                                                   actions: [
                                                     TextButton(
                                                       onPressed: () {
@@ -198,9 +198,13 @@ class _DetailsPageState extends State<DetailsPage> {
                                               });
                                         },
                                         child: Icon(
-                                          Icons.info,
+                                          (documents['details'] == '')
+                                              ? null
+                                              : Icons.info,
                                           size: 32,
-                                          color: Colors.blueGrey,
+                                          color: (documents['details'] == '')
+                                              ? Colors.blueGrey
+                                              : Colors.blueGrey[300],
                                         ),
                                       ),
                                     ],
