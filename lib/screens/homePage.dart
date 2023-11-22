@@ -132,12 +132,15 @@ class _HomePageState extends State<HomePage> {
                     child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Image.asset('assets/no-data.png'),
-                    SizedBox(height: 80),
                     Text(
                       'No hay gastos para mostrar.',
-                      style: Theme.of(context).textTheme.bodySmall,
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodySmall!
+                          .copyWith(color: Colors.white),
                     ),
+                    SizedBox(height: 80),
+                    Image.asset('assets/nothing.png'),
                   ],
                 ));
               }
