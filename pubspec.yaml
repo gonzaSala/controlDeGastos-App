@@ -58,7 +58,5 @@ flutter_icons:
 flutter:
 
   assets:
-    - assets/no-data.png
-    - assets/backgroundLogin.png
-    - assets/LOGO.png
+    - assets/
   uses-material-design: true

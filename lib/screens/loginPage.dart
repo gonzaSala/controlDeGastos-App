@@ -38,16 +38,22 @@ class _LoginPageState extends State<LoginPage> {
               child: Container(),
             ),
             Text(
-              'Cuenta Clara',
-              style: Theme.of(context).textTheme.headlineLarge,
+              'Only Gastos',
+              style: Theme.of(context)
+                  .textTheme
+                  .headlineLarge!
+                  .copyWith(color: Colors.white),
             ),
             Padding(
               padding: const EdgeInsets.all(32.0),
-              child: Image.asset('assets/backgroundLogin.png'),
+              child: Image.asset('assets/loginPage.png'),
             ),
             Text(
               'Tu app de finanzas personales',
-              style: Theme.of(context).textTheme.bodySmall,
+              style: Theme.of(context)
+                  .textTheme
+                  .bodySmall!
+                  .copyWith(color: Colors.white),
             ),
             Expanded(flex: 1, child: Container()),
             Consumer<LoginState>(
@@ -59,6 +65,7 @@ class _LoginPageState extends State<LoginPage> {
                 }
               },
               child: ElevatedButton(
+                style: ButtonStyle(elevation: MaterialStatePropertyAll(2.5)),
                 child: Text('Ingresar'),
                 onPressed: () {
                   Provider.of<LoginState>(context, listen: false).login();
@@ -71,25 +78,24 @@ class _LoginPageState extends State<LoginPage> {
               child: RichText(
                 textAlign: TextAlign.center,
                 text: TextSpan(
-                    style: Theme.of(context).textTheme.bodyMedium,
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyMedium!
+                        .copyWith(color: Colors.white),
                     text: 'To use this app you need to agree to our',
                     children: [
                       TextSpan(
-                        text: 'Terms of Service',
+                        text: ' Terms of Service',
                         recognizer: _recognizer1,
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyMedium
-                            ?.copyWith(fontWeight: FontWeight.bold),
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            fontWeight: FontWeight.bold, color: Colors.white),
                       ),
                       TextSpan(text: ' and '),
                       TextSpan(
                         text: 'Privacy Policy',
                         recognizer: _recognizer2,
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyMedium
-                            ?.copyWith(fontWeight: FontWeight.bold),
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            fontWeight: FontWeight.bold, color: Colors.white),
                       )
                     ]),
               ),
