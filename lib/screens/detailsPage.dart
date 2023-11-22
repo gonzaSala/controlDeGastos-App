@@ -124,7 +124,7 @@ class _DetailsPageState extends State<DetailsPage> {
                               Icon(
                                 Icons.calendar_today,
                                 size: 40,
-                                color: Colors.blueGrey,
+                                color: Colors.blueGrey[300],
                               ),
                               Positioned(
                                 left: 0,
@@ -133,7 +133,7 @@ class _DetailsPageState extends State<DetailsPage> {
                                 child: Text(
                                   documents!['day'.toString()].toString(),
                                   textAlign: TextAlign.center,
-                                  style: TextStyle(color: Colors.blueGrey),
+                                  style: TextStyle(color: Colors.blueGrey[50]),
                                 ),
                               ),
                             ],
@@ -149,22 +149,16 @@ class _DetailsPageState extends State<DetailsPage> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
+                                  Text(
+                                    '\$${documents!['value'.toString()].toString()}',
+                                    style: TextStyle(
+                                      color: Colors.blueAccent,
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 18.0,
+                                    ),
+                                  ),
                                   Row(
                                     children: [
-                                      SizedBox(
-                                        width: 15,
-                                      ),
-                                      Text(
-                                        '\$${documents!['value'.toString()].toString()}',
-                                        style: TextStyle(
-                                          color: Colors.blueAccent,
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 18.0,
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: 135,
-                                      ),
                                       Icon(
                                         Icons.arrow_left,
                                         size: 32,
@@ -200,8 +194,8 @@ class _DetailsPageState extends State<DetailsPage> {
                                         child: Icon(
                                           (documents['details'] == '')
                                               ? null
-                                              : Icons.info,
-                                          size: 32,
+                                              : Icons.message_rounded,
+                                          size: 28,
                                           color: (documents['details'] == '')
                                               ? Colors.blueGrey
                                               : Colors.blueGrey[300],
