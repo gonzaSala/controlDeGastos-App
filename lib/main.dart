@@ -2,6 +2,7 @@ import 'package:control_gastos/login_state.dart';
 import 'package:control_gastos/notification_services.dart';
 import 'package:control_gastos/screens/addPage.dart';
 import 'package:control_gastos/screens/detailsPage.dart';
+import 'package:control_gastos/screens/groupLogin.dart';
 import 'package:control_gastos/screens/homePage.dart';
 import 'package:control_gastos/screens/loginPage.dart';
 
@@ -52,6 +53,7 @@ class MyApp extends StatelessWidget {
               return LoginPage();
             }
           },
+          '/groupLogin': (BuildContext context) => groupLogin(),
           '/add': (BuildContext context) => AddPage(),
         },
       ),

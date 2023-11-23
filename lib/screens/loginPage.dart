@@ -94,7 +94,7 @@ class _LoginPageState extends State<LoginPage> {
                       iconSize: 80,
                       icon: Image.asset('assets/groupIcon.png'),
                       onPressed: () {
-                        Provider.of<LoginState>(context, listen: false).login();
+                        Navigator.of(context).pushNamed('/groupLogin');
                       },
                     ),
                   ],
