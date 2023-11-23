@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:control_gastos/expenses_repository.dart';
 import 'package:control_gastos/login_state.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -25,16 +26,10 @@ class _DetailsPageState extends State<DetailsPage> {
   bool lastItem = true;
   @override
   Widget build(BuildContext context) {
-    return Consumer<LoginState>(
-      builder: (BuildContext context, LoginState state, Widget? child) {
-        var user = Provider.of<LoginState>(context).currentUser();
-        var _query = FirebaseFirestore.instance
-            .collection('user')
-            .doc(user?.uid)
-            .collection('expenses')
-            .where('month', isEqualTo: widget.params.month)
-            .where('category', isEqualTo: widget.params.categoryName)
-            .snapshots();
+    return Consumer<expensesRepository>(
+      builder: (BuildContext context, expensesRepository db, Widget? child) {
+        var _query =
+            db.queryByCategory(widget.params.month, widget.params.categoryName);
 
         return Scaffold(
             appBar: AppBar(
@@ -63,12 +58,7 @@ class _DetailsPageState extends State<DetailsPage> {
                       return Dismissible(
                         key: Key(documents!.id),
                         onDismissed: (direction) async {
-                          await FirebaseFirestore.instance
-                              .collection('user')
-                              .doc(user?.uid)
-                              .collection('expenses')
-                              .doc(documents.id)
-                              .delete();
+                          await db.delete(documents.id);
                         },
                         confirmDismiss: (direction) async {
                           final result = await showDialog(

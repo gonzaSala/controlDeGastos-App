@@ -10,6 +10,9 @@ class groupLogin extends StatefulWidget {
 }
 
 class _groupLoginState extends State<groupLogin> {
+  final String hintText = '';
+  final bool obscureText = true;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -1,3 +1,4 @@
+import 'package:control_gastos/expenses_repository.dart';
 import 'package:control_gastos/login_state.dart';
 import 'package:control_gastos/notification_services.dart';
 import 'package:control_gastos/screens/addPage.dart';
@@ -17,16 +18,29 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(MyApp());
   final notificationService = NotificationServices();
   notificationService.initNotifications();
+
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<LoginState>(
-      create: (BuildContext context) => LoginState(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<LoginState>(
+          create: (BuildContext context) => LoginState(),
+        ),
+        ProxyProvider<LoginState, expensesRepository>(
+          update: (_, LoginState value, __) {
+            if (value.isLoggedIn()) {
+              return expensesRepository(userId: value.currentUser()!.uid);
+            }
+            return expensesRepository(userId: '');
+          },
+        ),
+      ],
       child: MaterialApp(
         title: 'Material App',
         theme: ThemeData(
