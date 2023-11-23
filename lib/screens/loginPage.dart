@@ -31,76 +31,113 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Column(
-          children: <Widget>[
-            Expanded(
-              flex: 1,
-              child: Container(),
-            ),
-            Text(
-              'Only Gastos',
-              style: Theme.of(context)
-                  .textTheme
-                  .headlineLarge!
-                  .copyWith(color: Colors.white),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(32.0),
-              child: Image.asset('assets/loginPage.png'),
-            ),
-            Text(
-              'Tu app de finanzas personales',
-              style: Theme.of(context)
-                  .textTheme
-                  .bodySmall!
-                  .copyWith(color: Colors.white),
-            ),
-            Expanded(flex: 1, child: Container()),
-            Consumer<LoginState>(
-              builder: (BuildContext context, LoginState value, Widget? child) {
-                if (value.isLoading()) {
-                  return CircularProgressIndicator();
-                } else {
-                  return child!;
-                }
-              },
-              child: ElevatedButton(
-                style: ButtonStyle(elevation: MaterialStatePropertyAll(2.5)),
-                child: Text('Ingresar'),
-                onPressed: () {
-                  Provider.of<LoginState>(context, listen: false).login();
+        child: Center(
+          child: Column(
+            children: <Widget>[
+              Expanded(
+                flex: 1,
+                child: Container(),
+              ),
+              Text(
+                'Only Gastos',
+                style: Theme.of(context)
+                    .textTheme
+                    .headlineLarge!
+                    .copyWith(color: Colors.white),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(32.0),
+                child: Image.asset('assets/loginPage.png'),
+              ),
+              Text(
+                'Tu app de finanzas personales',
+                style: Theme.of(context)
+                    .textTheme
+                    .bodySmall!
+                    .copyWith(color: Colors.white),
+              ),
+              Expanded(flex: 2, child: Container()),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Text(
+                    'Uso personal',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  Text(
+                    'Uso grupal',
+                    style: TextStyle(color: Colors.white),
+                  )
+                ],
+              ),
+              Consumer<LoginState>(
+                builder:
+                    (BuildContext context, LoginState value, Widget? child) {
+                  if (value.isLoading()) {
+                    return CircularProgressIndicator();
+                  } else {
+                    return child!;
+                  }
                 },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    IconButton(
+                      iconSize: 80,
+                      icon: Image.asset('assets/googleIcon.png'),
+                      onPressed: () {
+                        Provider.of<LoginState>(context, listen: false).login();
+                      },
+                    ),
+                    IconButton(
+                      iconSize: 80,
+                      icon: Image.asset('assets/groupIcon.png'),
+                      onPressed: () {
+                        Provider.of<LoginState>(context, listen: false).login();
+                      },
+                    ),
+                  ],
+                ),
               ),
-            ),
-            Expanded(flex: 1, child: Container()),
-            Padding(
-              padding: const EdgeInsets.all(32.0),
-              child: RichText(
-                textAlign: TextAlign.center,
-                text: TextSpan(
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyMedium!
-                        .copyWith(color: Colors.white),
-                    text: 'To use this app you need to agree to our',
-                    children: [
-                      TextSpan(
-                        text: ' Terms of Service',
-                        recognizer: _recognizer1,
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            fontWeight: FontWeight.bold, color: Colors.white),
-                      ),
-                      TextSpan(text: ' and '),
-                      TextSpan(
-                        text: 'Privacy Policy',
-                        recognizer: _recognizer2,
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            fontWeight: FontWeight.bold, color: Colors.white),
-                      )
-                    ]),
-              ),
-            )
-          ],
+              Expanded(flex: 1, child: Container()),
+              Padding(
+                padding: const EdgeInsets.all(32.0),
+                child: RichText(
+                  textAlign: TextAlign.center,
+                  text: TextSpan(
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyMedium!
+                          .copyWith(color: Colors.white),
+                      text: 'To use this app you need to agree to our',
+                      children: [
+                        TextSpan(
+                          text: ' Terms of Service',
+                          recognizer: _recognizer1,
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyMedium
+                              ?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white),
+                        ),
+                        TextSpan(text: ' and '),
+                        TextSpan(
+                          text: 'Privacy Policy',
+                          recognizer: _recognizer2,
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyMedium
+                              ?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white),
+                        )
+                      ]),
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );

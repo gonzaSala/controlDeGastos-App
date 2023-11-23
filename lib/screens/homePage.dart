@@ -88,7 +88,11 @@ class _HomePageState extends State<HomePage> {
                 SizedBox(
                   width: 48.0,
                 ),
-                _bottomAction(FontAwesomeIcons.wallet, () {}),
+                _bottomAction(Icons.plus_one, () {
+                  setState(() {
+                    _showInviteDialog(context);
+                  });
+                }),
                 _bottomAction(Icons.exit_to_app_rounded, () {
                   Provider.of<LoginState>(context, listen: false).logout();
                 }),
@@ -140,7 +144,9 @@ class _HomePageState extends State<HomePage> {
                           .copyWith(color: Colors.white),
                     ),
                     SizedBox(height: 80),
-                    Image.asset('assets/nothing.png'),
+                    Image.asset(
+                      'assets/nothing.png',
+                    ),
                   ],
                 ));
               }
@@ -216,6 +222,52 @@ class _HomePageState extends State<HomePage> {
           _pageItem('Diciembre', 11),
         ],
       ),
+    );
+  }
+
+  void _showInviteDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        String email =
+            ''; // Variable para almacenar el correo electrónico ingresado
+
+        return AlertDialog(
+          title: Text('Invitar a alguien'),
+          content: Column(
+            children: [
+              Text(
+                  'Ingrese el correo electrónico de la persona que desea invitar:'),
+              SizedBox(height: 10),
+              TextField(
+                onChanged: (value) {
+                  email =
+                      value; // Actualiza la variable con el correo electrónico ingresado
+                },
+                decoration: InputDecoration(
+                  hintText: 'Correo electrónico',
+                ),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Cierra el cuadro de diálogo
+              },
+              child: Text('Cancelar'),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                await Provider.of<LoginState>(context, listen: false)
+                    .addUser(email);
+                print('Invitar a: $email');
+              },
+              child: Text('Enviar invitación'),
+            ),
+          ],
+        );
+      },
     );
   }
 }

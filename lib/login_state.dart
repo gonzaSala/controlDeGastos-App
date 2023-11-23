@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -88,6 +89,70 @@ class LoginState with ChangeNotifier {
     } else {
       loading = false;
       notifyListeners();
+    }
+  }
+
+  final FirebaseFirestore firestore = FirebaseFirestore.instance;
+  Future<void> shareDataWithUser(String userEmail) async {
+    try {
+      // Obtener la referencia del documento del usuario actual
+      DocumentReference currentUserDoc =
+          firestore.collection('users').doc(user!.uid);
+
+      // Obtener la referencia del documento del usuario con el que se compartirán los datos
+      DocumentReference otherUserDoc =
+          firestore.collection('users').doc(userEmail);
+
+      // Obtener los datos del usuario actual
+      DocumentSnapshot currentUserSnapshot = await currentUserDoc.get();
+      Map<String, dynamic>? currentUserData =
+          currentUserSnapshot.data() as Map<String, dynamic>?;
+
+      if (currentUserData != null) {
+        // Compartir los datos del usuario actual con el otro usuario
+        await otherUserDoc.set(currentUserData, SetOptions(merge: true));
+      }
+
+      print('Datos compartidos con éxito con $userEmail');
+    } catch (error) {
+      print('Error al compartir datos: $error');
+    }
+  }
+
+  // Método para obtener datos compartidos de otro usuario
+  Future<Map<String, dynamic>?> getSharedData(String userEmail) async {
+    try {
+      // Obtener la referencia del documento del usuario con el que se compartirán los datos
+      DocumentReference otherUserDoc =
+          firestore.collection('users').doc(userEmail);
+
+      // Obtener los datos compartidos del otro usuario
+      DocumentSnapshot otherUserSnapshot = await otherUserDoc.get();
+      Map<String, dynamic>? otherUserData =
+          otherUserSnapshot.data() as Map<String, dynamic>?;
+
+      return otherUserData;
+    } catch (error) {
+      print('Error al obtener datos compartidos: $error');
+      return null;
+    }
+  }
+
+  Future<void> addUser(String userEmail) async {
+    try {
+      // Validar la dirección de correo electrónico (puedes agregar una validación más robusta)
+      if (userEmail.isNotEmpty && userEmail.contains('@')) {
+        // Enviar invitación a través de Cloud Functions o tu servicio preferido
+        // Puedes utilizar Firebase Cloud Functions, enviar un correo electrónico, etc.
+        // Aquí, simularemos que la invitación se envió correctamente.
+
+        print('Invitación enviada a $userEmail');
+        await shareDataWithUser(userEmail); // Compartir datos con el usuario
+      } else {
+        print('Dirección de correo electrónico no válida');
+      }
+    } catch (error) {
+      print('Error al agregar usuario: $error');
     }
   }
 }
