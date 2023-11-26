@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:control_gastos/expenses_repository.dart';
 import 'package:control_gastos/login_state.dart';
+import 'package:control_gastos/screens/UI.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -14,16 +15,18 @@ class DetailsParams {
   );
 }
 
-class DetailsPage extends StatefulWidget {
+class DetailsPageConteiner extends StatefulWidget {
   final DetailsParams params;
-  const DetailsPage({super.key, required this.params});
+  const DetailsPageConteiner({Key? key, required this.params})
+      : super(key: key);
 
   @override
-  State<DetailsPage> createState() => _DetailsPageState();
+  State<DetailsPageConteiner> createState() => _DetailsPageConteinerState();
 }
 
-class _DetailsPageState extends State<DetailsPage> {
+class _DetailsPageConteinerState extends State<DetailsPageConteiner> {
   bool lastItem = true;
+
   @override
   Widget build(BuildContext context) {
     return Consumer<expensesRepository>(
@@ -31,181 +34,120 @@ class _DetailsPageState extends State<DetailsPage> {
         var _query =
             db.queryByCategory(widget.params.month, widget.params.categoryName);
 
-        return Scaffold(
-            appBar: AppBar(
-              title: Text(widget.params.categoryName),
-            ),
-            body: StreamBuilder<QuerySnapshot>(
-              stream: _query,
-              builder:
-                  (BuildContext context, AsyncSnapshot<QuerySnapshot> data) {
-                if (data.connectionState == ConnectionState.waiting) {
-                  return Center(
-                    child: CircularProgressIndicator(),
-                  );
-                } else if (data.hasError) {
-                  return Center(
-                    child: Text('Error: ${data.error}'),
-                  );
-                } else if (!data.hasData || data.data!.docs.isEmpty) {
-                  return Center(
-                    child: Text('No hay datos para mostrar.'),
-                  );
-                } else {
-                  return ListView.builder(
-                    itemBuilder: (BuildContext context, int index) {
-                      var documents = data.data?.docs[index];
-                      return Dismissible(
-                        key: Key(documents!.id),
-                        onDismissed: (direction) async {
-                          await db.delete(documents.id);
-                        },
-                        confirmDismiss: (direction) async {
-                          final result = await showDialog(
-                            context: context,
-                            builder: (context) {
-                              return AlertDialog(
-                                title: Text(
-                                  '¿Está seguro de que quiere eliminar el gasto de \$${documents!['value'.toString()].toString()}?',
-                                ),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.pop(context, false);
-                                    },
-                                    child: const Text(
-                                      'Cancelar',
-                                      style: TextStyle(color: Colors.redAccent),
-                                    ),
-                                  ),
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.pop(context, true);
-                                    },
-                                    child: const Text('Sí, estoy seguro'),
-                                  ),
-                                ],
-                              );
-                            },
-                          );
+        return StreamBuilder<QuerySnapshot>(
+          stream: _query,
+          builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> data) {
+            if (data.connectionState == ConnectionState.waiting) {
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            } else if (data.hasError) {
+              return Center(
+                child: Text('Error: ${data.error}'),
+              );
+            } else if (!data.hasData || data.data!.docs.isEmpty) {
+              return Center(
+                child: Text('No hay datos para mostrar.'),
+              );
+            } else {
+              return DetailsPage(
+                categoryName: widget.params.categoryName,
+                documents: data.data!.docs,
+                OnDelete: (documentId) {
+                  db.delete(documentId);
+                },
+                details: data.data?.docs[0]['details'],
+              );
+            }
+          },
+        );
+      },
+    );
+  }
+}
 
-                          if (result == true) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text(
-                                  'Se eliminó el gasto: \$${documents!['value'.toString()].toString()}',
-                                ),
-                              ),
-                            );
-                          }
+class DetailsPage extends StatelessWidget {
+  final String categoryName;
+  final List<DocumentSnapshot> documents;
+  final Function(String) OnDelete;
+  final String details;
 
-                          return result;
-                        },
-                        background: Container(
-                          color: Color.fromARGB(255, 255, 144, 144),
-                          child: const Icon(Icons.delete),
-                          height: 5,
-                        ),
-                        direction: DismissDirection.endToStart,
-                        child: ListTile(
-                          leading: Stack(
-                            alignment: Alignment.center,
-                            children: <Widget>[
-                              Icon(
-                                Icons.calendar_today,
-                                size: 40,
-                                color: Colors.blueGrey[300],
-                              ),
-                              Positioned(
-                                left: 0,
-                                right: 0,
-                                bottom: 5.5,
-                                child: Text(
-                                  documents!['day'.toString()].toString(),
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(color: Colors.blueGrey[50]),
-                                ),
-                              ),
-                            ],
-                          ),
-                          title: Container(
-                            decoration: BoxDecoration(
-                              color: Colors.blueAccent.withOpacity(0.2),
-                              borderRadius: BorderRadius.circular(5.0),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(5.0),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    '\$${documents!['value'.toString()].toString()}',
-                                    style: TextStyle(
-                                      color: Colors.blueAccent,
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 18.0,
-                                    ),
-                                  ),
-                                  Row(
-                                    children: [
-                                      Icon(
-                                        Icons.arrow_left,
-                                        size: 32,
-                                        color: Colors.blueGrey,
-                                      ),
-                                      Icon(
-                                        Icons.delete,
-                                        size: 32,
-                                        color: Colors.blueGrey,
-                                      ),
-                                      GestureDetector(
-                                        onTap: () {
-                                          showDialog(
-                                              context: context,
-                                              builder: (context) {
-                                                return AlertDialog(
-                                                  title: Text(
-                                                      'Detalles del gasto'),
-                                                  content: Text(
-                                                      (documents['details']) ??
-                                                          ''),
-                                                  actions: [
-                                                    TextButton(
-                                                      onPressed: () {
-                                                        Navigator.pop(context);
-                                                      },
-                                                      child: Text('Cerrar'),
-                                                    ),
-                                                  ],
-                                                );
-                                              });
-                                        },
-                                        child: Icon(
-                                          (documents['details'] == '')
-                                              ? null
-                                              : Icons.message_rounded,
-                                          size: 28,
-                                          color: (documents['details'] == '')
-                                              ? Colors.blueGrey
-                                              : Colors.blueGrey[300],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
+  const DetailsPage({
+    Key? key,
+    required this.categoryName,
+    required this.documents,
+    required this.OnDelete,
+    required this.details,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(categoryName),
+      ),
+      body: ListView.builder(
+        itemCount: documents.length,
+        itemBuilder: (BuildContext context, int index) {
+          var document = documents[index];
+
+          return Dismissible(
+              key: Key(document.id),
+              onDismissed: (direction) async {
+                OnDelete(document.id);
+              },
+              confirmDismiss: (direction) async {
+                final result = await showDialog(
+                  context: context,
+                  builder: (context) {
+                    return AlertDialog(
+                      title: Text(
+                        '¿Está seguro de que quiere eliminar el gasto de \$${document['value'].toString()}?',
+                      ),
+                      actions: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.pop(context, false);
+                          },
+                          child: const Text(
+                            'Cancelar',
+                            style: TextStyle(color: Colors.redAccent),
                           ),
                         ),
-                      );
-                    },
-                    itemCount: data.data?.docs.length,
+                        TextButton(
+                          onPressed: () {
+                            Navigator.pop(context, true);
+                          },
+                          child: const Text('Sí, estoy seguro'),
+                        ),
+                      ],
+                    );
+                  },
+                );
+
+                if (result == true) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        'Se eliminó el gasto: \$${document['value'].toString()}',
+                      ),
+                    ),
                   );
                 }
+
+                return result;
               },
-            ));
-      },
+              background: Container(
+                color: Color.fromARGB(255, 255, 144, 144),
+                child: const Icon(Icons.delete),
+                height: 5,
+              ),
+              direction: DismissDirection.endToStart,
+              child: new DayExpensesListTile(documents: document) // ListTile(
+
+              );
+        },
+      ),
     );
   }
 }

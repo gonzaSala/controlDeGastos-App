@@ -56,7 +56,7 @@ class _AddPageState extends State<AddPage> {
             backgroundColor: Color.fromARGB(255, 98, 87, 250),
           ),
           child: Text(
-            'Categoria ($dateStr)',
+            'Fecha ($dateStr)',
             style: TextStyle(
               color: Color.fromARGB(255, 255, 218, 218),
             ),

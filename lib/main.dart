@@ -52,7 +52,7 @@ class MyApp extends StatelessWidget {
           if (settings.name == '/details') {
             DetailsParams params = settings.arguments as DetailsParams;
             return MaterialPageRoute(builder: (BuildContext context) {
-              return DetailsPage(
+              return DetailsPageConteiner(
                 params: params,
               );
             });
