@@ -1,4 +1,5 @@
-import 'package:control_gastos/login_state.dart';
+import 'package:control_gastos/expenses_repository.dart';
+import 'package:control_gastos/states/login_state.dart';
 import 'package:control_gastos/util.dart';
 import 'package:control_gastos/widgets/month_widget.dart';
 import 'package:flutter/material.dart';
@@ -53,16 +54,11 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<LoginState>(
-      builder: (BuildContext context, LoginState state, Widget? child) {
+    return Consumer<expensesRepository>(
+      builder: (BuildContext context, expensesRepository db, Widget? child) {
         var user = Provider.of<LoginState>(context).currentUser();
 
-        _query = FirebaseFirestore.instance
-            .collection('user')
-            .doc(user?.uid)
-            .collection('expenses')
-            .where('month', isEqualTo: currentPage + 1)
-            .snapshots();
+        _query = db.queryByMonth(currentPage + 1);
 
         return Scaffold(
           bottomNavigationBar: BottomAppBar(

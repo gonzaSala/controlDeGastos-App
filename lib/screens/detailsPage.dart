@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:control_gastos/expenses_repository.dart';
-import 'package:control_gastos/login_state.dart';
+import 'package:control_gastos/states/login_state.dart';
 import 'package:control_gastos/screens/UI.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

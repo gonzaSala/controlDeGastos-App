@@ -1,7 +1,7 @@
 import 'dart:ffi';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:control_gastos/login_state.dart';
+import 'package:control_gastos/states/login_state.dart';
 import 'package:control_gastos/widgets/category_selector_widget.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';

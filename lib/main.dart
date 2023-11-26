@@ -1,11 +1,12 @@
 import 'package:control_gastos/expenses_repository.dart';
-import 'package:control_gastos/login_state.dart';
+import 'package:control_gastos/states/login_state.dart';
 import 'package:control_gastos/notification_services.dart';
 import 'package:control_gastos/screens/addPage.dart';
 import 'package:control_gastos/screens/detailsPage.dart';
 import 'package:control_gastos/screens/groupLogin.dart';
 import 'package:control_gastos/screens/homePage.dart';
 import 'package:control_gastos/screens/loginPage.dart';
+import 'package:control_gastos/states/theme_state.dart';
 
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -29,6 +30,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider<ThemeState>(
+          create: (_) => ThemeState(),
+        ),
         ChangeNotifierProvider<LoginState>(
           create: (BuildContext context) => LoginState(),
         ),
