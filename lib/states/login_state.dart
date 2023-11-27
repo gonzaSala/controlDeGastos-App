@@ -44,6 +44,7 @@ class LoginState with ChangeNotifier {
       prefs.setBool('isLoggedIn', true);
       loggedIn = true;
       loading = false;
+      setUserId(user!.uid);
       notifyListeners();
     } else {
       loggedIn = false;
@@ -95,6 +96,7 @@ class LoginState with ChangeNotifier {
       user = await firebaseAuth.currentUser;
       loggedIn = user != null;
       loading = false;
+      setUserId(user!.uid);
       notifyListeners();
     } else {
       loading = false;
@@ -102,34 +104,24 @@ class LoginState with ChangeNotifier {
     }
   }
 
-  final FirebaseFirestore firestore = FirebaseFirestore.instance;
-  Future<void> shareDataWithUser(String userEmail) async {
+  Future<void> loginWithGroup(String groupName, String groupPassword) async {
     try {
-      if (user != null) {
-        // Obtener la referencia del documento del usuario actual
-        DocumentReference currentUserDoc =
-            firestore.collection('users').doc(user!.uid);
+      // Inicia sesión con el grupo utilizando el nombre del grupo como correo electrónico
+      UserCredential userCredential =
+          await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: '$groupName@myapp.com',
+        password: groupPassword,
+      );
 
-        // Obtener la referencia del documento del usuario con el que se compartirán los datos
-        DocumentReference otherUserDoc =
-            firestore.collection('users').doc(userEmail);
+      String groupId = userCredential.user!.uid;
 
-        // Obtener los datos del usuario actual
-        DocumentSnapshot currentUserSnapshot = await currentUserDoc.get();
-        Map<String, dynamic>? currentUserData =
-            currentUserSnapshot.data() as Map<String, dynamic>?;
-
-        if (currentUserData != null) {
-          // Compartir los datos del usuario actual con el otro usuario
-          await otherUserDoc.set(currentUserData, SetOptions(merge: true));
-        }
-
-        print('Datos compartidos con éxito con $userEmail');
-      } else {
-        print('Usuario no autenticado');
-      }
+      setUserId(groupId);
     } catch (error) {
-      print('Error al compartir datos: $error');
+      var navigatorKey;
+      ScaffoldMessenger.of(navigatorKey.currentContext!).showSnackBar(SnackBar(
+        content: Text('Error al iniciar sesión en el grupo: $error'),
+        duration: Duration(seconds: 3),
+      ));
     }
   }
 }

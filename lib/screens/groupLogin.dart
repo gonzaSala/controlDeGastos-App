@@ -1,5 +1,8 @@
+import 'package:control_gastos/screens/homePage.dart';
+import 'package:control_gastos/states/login_state.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class groupLogin extends StatefulWidget {
   @override
@@ -27,7 +30,8 @@ class _groupLoginState extends State<groupLogin> {
                     iconSize: 80,
                     icon: Image.asset('assets/groupIcon.png'),
                     onPressed: () {
-                      Navigator.of(context).pushNamed('/groupLogin');
+                      Navigator.of(context)
+                          .pop(); // Cambiado a 'pop' para volver atrás
                     },
                   ),
                 ],
@@ -75,7 +79,6 @@ class _groupLoginState extends State<groupLogin> {
                 children: [
                   ElevatedButton(
                     onPressed: () async {
-                      // Llama al método para crear el grupo y pasar los controladores
                       await _createGroup(groupNameController.text,
                           groupPasswordController.text);
                     },
@@ -83,7 +86,6 @@ class _groupLoginState extends State<groupLogin> {
                   ),
                   ElevatedButton(
                     onPressed: () async {
-                      // Llama al método para iniciar sesión con el grupo
                       await _loginWithGroup(groupNameController.text,
                           groupPasswordController.text);
                     },
@@ -119,16 +121,8 @@ class _groupLoginState extends State<groupLogin> {
 
   Future<void> _loginWithGroup(String groupName, String groupPassword) async {
     try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: '$groupName',
-        password: groupPassword,
-      );
-
-      // Muestra un mensaje de éxito
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text('Iniciado sesión con éxito en el grupo.'),
-        duration: Duration(seconds: 3),
-      ));
+      await Provider.of<LoginState>(context, listen: false)
+          .loginWithGroup(groupName, groupPassword);
     } catch (error) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text('Error al iniciar sesión en el grupo: $error'),
