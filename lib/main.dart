@@ -65,6 +65,7 @@ class MyApp extends StatelessWidget {
         routes: {
           '/': (BuildContext context) {
             var state = Provider.of<LoginState>(context);
+            print('isLoggedIn: ${state.isLoggedIn()}');
             if (state.isLoggedIn()) {
               return HomePage();
             } else {

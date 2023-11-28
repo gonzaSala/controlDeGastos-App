@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:control_gastos/screens/homePage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -26,25 +27,22 @@ class LoginState with ChangeNotifier {
 
   bool isLoading() => loading;
 
-  LoginState() {
-    loginState();
-  }
-
   User? currentUser() {
     User? user = FirebaseAuth.instance.currentUser;
     return user;
   }
 
   void login() async {
+    prefs = await SharedPreferences.getInstance();
     loading = true;
     notifyListeners();
     user = await handleSignIn();
 
     if (user != null) {
+      setUserId(user!.uid);
       prefs.setBool('isLoggedIn', true);
       loggedIn = true;
       loading = false;
-      setUserId(user!.uid);
       notifyListeners();
     } else {
       loggedIn = false;
@@ -87,41 +85,6 @@ class LoginState with ChangeNotifier {
     } catch (error) {
       print('Error al iniciar sesión con Google: $error');
       return null;
-    }
-  }
-
-  Future<void> loginState() async {
-    prefs = await SharedPreferences.getInstance();
-    if (prefs.containsKey('isLoggedIn')) {
-      user = await firebaseAuth.currentUser;
-      loggedIn = user != null;
-      loading = false;
-      setUserId(user!.uid);
-      notifyListeners();
-    } else {
-      loading = false;
-      notifyListeners();
-    }
-  }
-
-  Future<void> loginWithGroup(String groupName, String groupPassword) async {
-    try {
-      // Inicia sesión con el grupo utilizando el nombre del grupo como correo electrónico
-      UserCredential userCredential =
-          await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: '$groupName@myapp.com',
-        password: groupPassword,
-      );
-
-      String groupId = userCredential.user!.uid;
-
-      setUserId(groupId);
-    } catch (error) {
-      var navigatorKey;
-      ScaffoldMessenger.of(navigatorKey.currentContext!).showSnackBar(SnackBar(
-        content: Text('Error al iniciar sesión en el grupo: $error'),
-        duration: Duration(seconds: 3),
-      ));
     }
   }
 }

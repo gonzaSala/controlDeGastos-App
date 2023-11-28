@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:control_gastos/screens/homePage.dart';
 import 'package:control_gastos/states/login_state.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -30,8 +31,7 @@ class _groupLoginState extends State<groupLogin> {
                     iconSize: 80,
                     icon: Image.asset('assets/groupIcon.png'),
                     onPressed: () {
-                      Navigator.of(context)
-                          .pop(); // Cambiado a 'pop' para volver atrás
+                      Navigator.of(context).pop();
                     },
                   ),
                 ],
@@ -78,18 +78,14 @@ class _groupLoginState extends State<groupLogin> {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   ElevatedButton(
-                    onPressed: () async {
-                      await _createGroup(groupNameController.text,
-                          groupPasswordController.text);
+                    onPressed: () {
+                      _createGroup();
                     },
                     child: Text('Crear Grupo'),
                   ),
                   ElevatedButton(
-                    onPressed: () async {
-                      await _loginWithGroup(groupNameController.text,
-                          groupPasswordController.text);
-                    },
-                    child: Text('Iniciar sesión'),
+                    onPressed: () async {},
+                    child: Text('Unirse al Grupo'),
                   ),
                 ],
               ),
@@ -100,34 +96,34 @@ class _groupLoginState extends State<groupLogin> {
     );
   }
 
-  Future<void> _createGroup(String groupName, String groupPassword) async {
+  Future<void> _createGroup() async {
     try {
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: '$groupName@myapp.com',
-        password: groupPassword,
-      );
+      String groupName = groupNameController.text;
+      String groupPassword = groupPasswordController.text;
 
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text('Grupo creado con éxito.'),
-        duration: Duration(seconds: 3),
-      ));
-    } catch (error) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text('Error al crear el grupo: $error'),
-        duration: Duration(seconds: 3),
-      ));
-    }
-  }
+      if (groupName.isNotEmpty && groupPassword.isNotEmpty) {
+        // Obtener una referencia a la colección de grupos
+        CollectionReference groupsCollection =
+            FirebaseFirestore.instance.collection('groups');
 
-  Future<void> _loginWithGroup(String groupName, String groupPassword) async {
-    try {
-      await Provider.of<LoginState>(context, listen: false)
-          .loginWithGroup(groupName, groupPassword);
-    } catch (error) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text('Error al iniciar sesión en el grupo: $error'),
-        duration: Duration(seconds: 3),
-      ));
+        // Añadir un nuevo documento a la colección
+        DocumentReference newGroupRef = await groupsCollection.add({
+          'groupName': groupName,
+          'groupPassword': groupPassword,
+        });
+
+        // Imprimir el ID del nuevo grupo generado por Firestore
+        print('Nuevo grupo creado con ID: ${newGroupRef.id}');
+
+        // Puedes agregar más lógica aquí, como navegar a la pantalla principal del grupo
+        // o realizar otras operaciones necesarias después de crear el grupo.
+      } else {
+        // Manejar el caso en el que los campos estén vacíos
+        print('Por favor, complete todos los campos.');
+      }
+    } catch (e) {
+      // Manejar cualquier error que pueda ocurrir al crear el grupo
+      print('Error al crear el grupo: $e');
     }
   }
 }
