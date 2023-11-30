@@ -74,18 +74,41 @@ class _groupLoginState extends State<groupLogin> {
                 ),
               ),
               SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  ElevatedButton(
-                    onPressed: () {},
-                    child: Text('Crear Grupo'),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {},
-                    child: Text('Unirse al Grupo'),
-                  ),
-                ],
+              Consumer<LoginState>(
+                builder:
+                    (BuildContext context, LoginState value, Widget? child) {
+                  if (value.isLoading()) {
+                    return CircularProgressIndicator();
+                  } else {
+                    return child!;
+                  }
+                },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        String email =
+                            groupNameController.text + '@onlygastos.com';
+                        String password = groupPasswordController.text;
+                        Provider.of<LoginState>(context, listen: false)
+                            .registerWithEmailPassword(email, password);
+                      },
+                      child: Text('Crear Grupo'),
+                    ),
+                    ElevatedButton(
+                      onPressed: () async {
+                        String email =
+                            groupNameController.text + '@onlygastos.com';
+                        String password = groupPasswordController.text;
+                        await Provider.of<LoginState>(context, listen: false)
+                            .loginWithEmailPassword(email, password);
+                        Navigator.pushReplacementNamed(context, '/');
+                      },
+                      child: Text('Unirse al Grupo'),
+                    ),
+                  ],
+                ),
               ),
             ],
           ),

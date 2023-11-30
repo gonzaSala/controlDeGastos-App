@@ -70,16 +70,16 @@ class MyApp extends StatelessWidget {
             print('isLoggedIn: ${state.isLoggedIn()}');
             if (state.isLoggedIn()) {
               print('Building HomePage');
-              FirebaseAuth.instance.currentUser?.reload();
 
               return HomePage();
             } else {
               print('Building LoginPage');
+
               return LoginPage();
             }
           },
-          '/groupLogin': (BuildContext context) => groupLogin(),
           '/add': (BuildContext context) => AddPage(),
+          '/groupLogin': (BuildContext context) => groupLogin(),
         },
       ),
     );

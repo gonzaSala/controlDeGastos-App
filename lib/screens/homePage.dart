@@ -59,10 +59,6 @@ class _HomePageState extends State<HomePage> {
     return Consumer<expensesRepository>(
       builder: (BuildContext context, expensesRepository db, Widget? child) {
         var user = Provider.of<LoginState>(context).currentUser();
-        if (user == null) {
-          return LoginPage();
-        }
-
         _query = db.queryByMonth(currentPage + 1);
 
         return Scaffold(

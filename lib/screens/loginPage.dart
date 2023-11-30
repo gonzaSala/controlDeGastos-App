@@ -88,7 +88,8 @@ class _LoginPageState extends State<LoginPage> {
                       iconSize: 80,
                       icon: Image.asset('assets/googleIcon.png'),
                       onPressed: () {
-                        Provider.of<LoginState>(context, listen: false).login();
+                        Provider.of<LoginState>(context, listen: false)
+                            .loginWithGoogle();
                       },
                     ),
                     IconButton(

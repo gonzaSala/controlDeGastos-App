@@ -9,8 +9,8 @@ class LoginState with ChangeNotifier {
   final GoogleSignIn googleSignIn = GoogleSignIn();
   final FirebaseAuth auth = FirebaseAuth.instance;
 
-  bool loggedIn = true;
-  bool loading = true;
+  bool loggedIn = false;
+  bool loading = false;
   User? user;
 
   bool isLoggedIn() => loggedIn;
@@ -22,8 +22,8 @@ class LoginState with ChangeNotifier {
     return user;
   }
 
-  void login() async {
-    print('Iniciando sesión...');
+  void loginWithGoogle() async {
+    print('Iniciando sesión con Google...');
     loading = true;
     notifyListeners();
 
@@ -34,11 +34,68 @@ class LoginState with ChangeNotifier {
       loggedIn = true;
       await FirebaseAuth.instance.currentUser?.reload();
       notifyListeners();
-      print('Inicio de sesión exitoso.');
+      print('Inicio de sesión con Google exitoso.');
     } else {
       loggedIn = false;
       notifyListeners();
-      print('Inicio de sesión fallido.');
+      print('Inicio de sesión con Google fallido.');
+    }
+  }
+
+  Future loginWithEmailPassword(String email, String password) async {
+    print('Iniciando sesión con email y contraseña...');
+    loading = true;
+    notifyListeners();
+
+    try {
+      final UserCredential authResult = await auth.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+
+      final User? user = authResult.user;
+
+      loading = false;
+      if (user != null) {
+        loggedIn = true;
+        await FirebaseAuth.instance.currentUser?.reload();
+        notifyListeners();
+        print('Inicio de sesión con email y contraseña exitoso.');
+      }
+    } catch (error) {
+      loading = false;
+      loggedIn = false;
+      notifyListeners();
+      print('Error al iniciar sesión con email y contraseña: $error');
+    }
+  }
+
+  void registerWithEmailPassword(String email, String password) async {
+    print('Registrando con email y contraseña...');
+    loading = true;
+    notifyListeners();
+
+    try {
+      final UserCredential authResult =
+          await auth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+
+      final User? user = authResult.user;
+
+      loading = false;
+      if (user != null) {
+        loggedIn = true;
+        await FirebaseAuth.instance.currentUser?.reload();
+        notifyListeners();
+        print('Registro con email y contraseña exitoso.');
+      }
+    } catch (error) {
+      loading = false;
+      loggedIn = false;
+      notifyListeners();
+      print('Error al registrar con email y contraseña: $error');
     }
   }
 
@@ -70,7 +127,7 @@ class LoginState with ChangeNotifier {
 
       final User? user = authResult.user;
 
-      print('Inicio de sesión exitoso: ${user?.displayName}');
+      print('Inicio de sesión con Google exitoso: ${user?.displayName}');
       return user;
     } catch (error) {
       print('Error al iniciar sesión con Google: $error');
