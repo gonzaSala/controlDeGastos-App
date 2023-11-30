@@ -4,22 +4,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginState with ChangeNotifier {
   final GoogleSignIn googleSignIn = GoogleSignIn();
-  final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
-  late SharedPreferences prefs;
-  String _userId = ''; // Inicializar _userId para evitar problemas de null
+  final FirebaseAuth auth = FirebaseAuth.instance;
 
-  String get userId => _userId;
-
-  void setUserId(String userId) {
-    _userId = userId;
-    notifyListeners();
-  }
-
-  bool loggedIn = false;
+  bool loggedIn = true;
   bool loading = true;
   User? user;
 
@@ -33,29 +23,29 @@ class LoginState with ChangeNotifier {
   }
 
   void login() async {
-    prefs = await SharedPreferences.getInstance();
+    print('Iniciando sesión...');
     loading = true;
     notifyListeners();
+
     user = await handleSignIn();
 
+    loading = false;
     if (user != null) {
-      setUserId(user!.uid);
-      prefs.setBool('isLoggedIn', true);
       loggedIn = true;
-      loading = false;
+      await FirebaseAuth.instance.currentUser?.reload();
       notifyListeners();
+      print('Inicio de sesión exitoso.');
     } else {
       loggedIn = false;
-      loading = false;
       notifyListeners();
+      print('Inicio de sesión fallido.');
     }
   }
 
   void logout() {
-    prefs.clear();
     googleSignIn.signOut();
+    auth.signOut();
     loggedIn = false;
-    loading = false;
     notifyListeners();
   }
 
@@ -76,7 +66,7 @@ class LoginState with ChangeNotifier {
 
     try {
       final UserCredential authResult =
-          await firebaseAuth.signInWithCredential(credential);
+          await auth.signInWithCredential(credential);
 
       final User? user = authResult.user;
 

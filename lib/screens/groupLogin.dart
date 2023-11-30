@@ -78,13 +78,11 @@ class _groupLoginState extends State<groupLogin> {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   ElevatedButton(
-                    onPressed: () {
-                      _createGroup();
-                    },
+                    onPressed: () {},
                     child: Text('Crear Grupo'),
                   ),
                   ElevatedButton(
-                    onPressed: () async {},
+                    onPressed: () {},
                     child: Text('Unirse al Grupo'),
                   ),
                 ],
@@ -94,36 +92,5 @@ class _groupLoginState extends State<groupLogin> {
         ),
       ),
     );
-  }
-
-  Future<void> _createGroup() async {
-    try {
-      String groupName = groupNameController.text;
-      String groupPassword = groupPasswordController.text;
-
-      if (groupName.isNotEmpty && groupPassword.isNotEmpty) {
-        // Obtener una referencia a la colección de grupos
-        CollectionReference groupsCollection =
-            FirebaseFirestore.instance.collection('groups');
-
-        // Añadir un nuevo documento a la colección
-        DocumentReference newGroupRef = await groupsCollection.add({
-          'groupName': groupName,
-          'groupPassword': groupPassword,
-        });
-
-        // Imprimir el ID del nuevo grupo generado por Firestore
-        print('Nuevo grupo creado con ID: ${newGroupRef.id}');
-
-        // Puedes agregar más lógica aquí, como navegar a la pantalla principal del grupo
-        // o realizar otras operaciones necesarias después de crear el grupo.
-      } else {
-        // Manejar el caso en el que los campos estén vacíos
-        print('Por favor, complete todos los campos.');
-      }
-    } catch (e) {
-      // Manejar cualquier error que pueda ocurrir al crear el grupo
-      print('Error al crear el grupo: $e');
-    }
   }
 }

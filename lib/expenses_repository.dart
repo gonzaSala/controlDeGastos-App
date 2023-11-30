@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class expensesRepository {
-  final String userId;
+  final String? userId;
 
   expensesRepository({required this.userId});
 

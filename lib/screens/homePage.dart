@@ -1,7 +1,9 @@
 import 'package:control_gastos/expenses_repository.dart';
+import 'package:control_gastos/screens/loginPage.dart';
 import 'package:control_gastos/states/login_state.dart';
 import 'package:control_gastos/util.dart';
 import 'package:control_gastos/widgets/month_widget.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -57,6 +59,9 @@ class _HomePageState extends State<HomePage> {
     return Consumer<expensesRepository>(
       builder: (BuildContext context, expensesRepository db, Widget? child) {
         var user = Provider.of<LoginState>(context).currentUser();
+        if (user == null) {
+          return LoginPage();
+        }
 
         _query = db.queryByMonth(currentPage + 1);
 

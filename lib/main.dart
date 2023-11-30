@@ -7,6 +7,7 @@ import 'package:control_gastos/screens/groupLogin.dart';
 import 'package:control_gastos/screens/homePage.dart';
 import 'package:control_gastos/screens/loginPage.dart';
 import 'package:control_gastos/states/theme_state.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -38,7 +39,8 @@ class MyApp extends StatelessWidget {
         ),
         ProxyProvider<LoginState, expensesRepository>(
           update: (_, LoginState value, __) {
-            if (value.isLoggedIn()) {
+            if (value.isLoggedIn() && value.currentUser() != null) {
+              print('currentUser: ${value.currentUser()}');
               return expensesRepository(userId: value.currentUser()!.uid);
             }
             return expensesRepository(userId: '');
@@ -67,8 +69,12 @@ class MyApp extends StatelessWidget {
             var state = Provider.of<LoginState>(context);
             print('isLoggedIn: ${state.isLoggedIn()}');
             if (state.isLoggedIn()) {
+              print('Building HomePage');
+              FirebaseAuth.instance.currentUser?.reload();
+
               return HomePage();
             } else {
+              print('Building LoginPage');
               return LoginPage();
             }
           },
