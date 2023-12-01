@@ -21,9 +21,9 @@ class _PieGraphWidgetState extends State<PieGraphWidget> {
     return PieChart(PieChartData(
       sections: showingSections(),
       centerSpaceRadius: 100,
-      sectionsSpace: 2,
+      sectionsSpace: 8,
       startDegreeOffset: 180,
-      centerSpaceColor: Colors.black,
+      centerSpaceColor: const Color.fromARGB(0, 0, 0, 0),
     ));
   }
 
@@ -107,7 +107,7 @@ class LinesGraphState extends State<LinesGraph> {
 
     return LineChart(
       LineChartData(
-        backgroundColor: Color(0xFF01032D),
+        backgroundColor: Color.fromARGB(176, 1, 3, 45),
         lineBarsData: [
           LineChartBarData(
               spots: flSpotList,

@@ -52,26 +52,4 @@ class expensesRepository {
       'details': details,
     });
   }
-
-  addSharedExpense(
-    String categoryName,
-    String details,
-    int value,
-    DateTime date,
-    String sharedWithUserId,
-  ) {
-    FirebaseFirestore.instance
-        .collection('user')
-        .doc(sharedWithUserId)
-        .collection('expenses')
-        .add({
-      'category': categoryName,
-      'value': value,
-      'month': date.month,
-      'day': date.day,
-      'year': date.year,
-      'details': details,
-      'sharedBy': userId,
-    });
-  }
 }

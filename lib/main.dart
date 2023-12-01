@@ -1,4 +1,5 @@
 import 'package:control_gastos/expenses_repository.dart';
+import 'package:control_gastos/screens/detailsPageContainer.dart';
 import 'package:control_gastos/states/login_state.dart';
 import 'package:control_gastos/notification_services.dart';
 import 'package:control_gastos/screens/addPage.dart';
@@ -12,6 +13,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:control_gastos/firebase_options.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -49,37 +51,90 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         title: 'Material App',
-        theme: ThemeData(
-          textTheme: GoogleFonts.poppinsTextTheme(),
-          scaffoldBackgroundColor: Colors.black,
-          primarySwatch: Colors.deepPurple,
+        theme: ThemeData.light().copyWith(
+          scaffoldBackgroundColor: Colors.transparent,
+          appBarTheme: AppBarTheme(
+            backgroundColor: Color.fromARGB(126, 135, 135, 135),
+          ),
+          textTheme: GoogleFonts.latoTextTheme(Theme.of(context).textTheme),
+          brightness: Brightness.dark,
+          primaryColor: Color.fromARGB(255, 255, 255, 255),
+          secondaryHeaderColor: const Color.fromARGB(255, 4, 169, 92),
+          // Otras propiedades del tema según sea necesario
+        ),
+        builder: (context, child) => ResponsiveBreakpoints.builder(
+          child: child!,
+          breakpoints: [
+            const Breakpoint(start: 0, end: 450, name: MOBILE),
+            const Breakpoint(start: 451, end: 800, name: TABLET),
+            const Breakpoint(start: 801, end: 1920, name: DESKTOP),
+            const Breakpoint(start: 1921, end: double.infinity, name: '4K'),
+          ],
         ),
         onGenerateRoute: (settings) {
           if (settings.name == '/details') {
             DetailsParams params = settings.arguments as DetailsParams;
             return MaterialPageRoute(builder: (BuildContext context) {
-              return DetailsPageConteiner(
+              return DetailsPageContainer(
                 params: params,
               );
             });
           }
         },
+        home: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                const Color.fromARGB(255, 0, 50, 25), // Color más oscuro
+                const Color.fromARGB(255, 0, 20, 50), // Color más oscuro
+              ],
+            ),
+          ),
+          child: Stack(children: [
+            Builder(
+              builder: (context) {
+                var state = Provider.of<LoginState>(context);
+                print('isLoggedIn: ${state.isLoggedIn()}');
+                if (state.isLoggedIn()) {
+                  print('Building HomePage');
+                  return HomePage();
+                } else {
+                  print('Building LoginPage');
+                  return LoginPage();
+                }
+              },
+            ),
+          ]),
+        ),
         routes: {
-          '/': (BuildContext context) {
-            var state = Provider.of<LoginState>(context);
-            print('isLoggedIn: ${state.isLoggedIn()}');
-            if (state.isLoggedIn()) {
-              print('Building HomePage');
-
-              return HomePage();
-            } else {
-              print('Building LoginPage');
-
-              return LoginPage();
-            }
-          },
-          '/add': (BuildContext context) => AddPage(),
-          '/groupLogin': (BuildContext context) => groupLogin(),
+          '/add': (BuildContext context) => Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [
+                      const Color.fromARGB(255, 0, 50, 25), // Color más oscuro
+                      const Color.fromARGB(255, 0, 20, 50), // Color más oscuro
+                    ],
+                  ),
+                ),
+                child: AddPage(),
+              ),
+          '/groupLogin': (BuildContext context) => Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [
+                      const Color.fromARGB(255, 0, 50, 25), // Color más oscuro
+                      const Color.fromARGB(255, 0, 20, 50), // Color más oscuro
+                    ],
+                  ),
+                ),
+                child: groupLogin(),
+              ),
         },
       ),
     );

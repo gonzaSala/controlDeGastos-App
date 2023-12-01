@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:control_gastos/screens/detailsPage.dart';
 import 'package:control_gastos/screens/addPage.dart';
+import 'package:control_gastos/screens/detailsPageContainer.dart';
 import 'package:control_gastos/widgets/graph_widgett.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
