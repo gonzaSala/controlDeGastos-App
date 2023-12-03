@@ -30,7 +30,7 @@ class _AddPageState extends State<AddPage> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        backgroundColor: Color.fromARGB(0, 255, 74, 74),
+        backgroundColor: Color.fromARGB(0, 78, 51, 51),
         elevation: 0.0,
         title: TextButton(
           onPressed: () {
@@ -51,9 +51,12 @@ class _AddPageState extends State<AddPage> {
             });
           },
           style: TextButton.styleFrom(
-            side: BorderSide(width: 0.2, color: Colors.amber),
-            padding: EdgeInsets.all(5.0),
-            backgroundColor: Color.fromARGB(255, 98, 87, 250),
+            side: BorderSide(
+                width: 0.2,
+                color:
+                    const Color.fromARGB(255, 255, 255, 255).withOpacity(0.5)),
+            padding: EdgeInsets.only(left: 30.0, right: 30.0),
+            backgroundColor: Color.fromARGB(30, 255, 255, 255),
           ),
           child: Text(
             'Fecha ($dateStr)',
@@ -109,8 +112,8 @@ class _AddPageState extends State<AddPage> {
       height: 80,
       decoration: BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(15)),
-          border: Border.all(color: Color.fromARGB(255, 22, 17, 97)),
-          color: Color.fromARGB(255, 8, 6, 38)),
+          border: Border.all(color: Color.fromARGB(71, 255, 255, 255)),
+          color: Color.fromARGB(31, 126, 126, 126)),
       child: CategorySelectorWidget(
         categories: categories,
         onValueChanged: (newCategory) => category = newCategory,
@@ -187,7 +190,7 @@ class _AddPageState extends State<AddPage> {
             },
             style: TextStyle(color: Colors.white),
             decoration: InputDecoration(
-              fillColor: Color.fromARGB(255, 22, 17, 97),
+              fillColor: Color.fromARGB(41, 194, 194, 194),
               filled: true,
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12.0),
@@ -260,55 +263,59 @@ class _AddPageState extends State<AddPage> {
 
         return Hero(
           tag: 'add_button',
-          child: Container(
-            height: 50,
-            width: double.infinity,
-            decoration: BoxDecoration(
-                color: Color.fromARGB(255, 98, 87, 250),
-                borderRadius: BorderRadius.all(Radius.circular(22)),
-                border: Border.all(color: Color.fromARGB(255, 195, 191, 254))),
-            child: MaterialButton(
-              child: Text(
-                'Sumar gasto',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 20,
+          child: Padding(
+            padding: const EdgeInsets.all(5.0),
+            child: Container(
+              height: 50,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                  color: Color.fromARGB(60, 98, 87, 250),
+                  borderRadius: BorderRadius.all(Radius.circular(22)),
+                  border:
+                      Border.all(color: Color.fromARGB(255, 195, 191, 254))),
+              child: MaterialButton(
+                child: Text(
+                  'Sumar gasto',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                  ),
                 ),
+                onPressed: () async {
+                  if (value > 0 && category != '') {
+                    print('Adding expense');
+                    await FirebaseFirestore.instance
+                        .collection('user')
+                        .doc(user?.uid)
+                        .collection('expenses')
+                        .add({
+                      'category': category,
+                      'value': value,
+                      'month': date.month,
+                      'day': date.day,
+                      'year': date.year,
+                      'details': details,
+                    });
+                    Navigator.of(context).pop();
+                  }
+                  if (value == 0 || category == '') {
+                    showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        content: Text('Selecciona un valor y una categoría'),
+                        actions: <Widget>[
+                          FloatingActionButton(
+                            child: Text('Ok'),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                        ],
+                      ),
+                    );
+                  }
+                },
               ),
-              onPressed: () async {
-                if (value > 0 && category != '') {
-                  print('Adding expense');
-                  await FirebaseFirestore.instance
-                      .collection('user')
-                      .doc(user?.uid)
-                      .collection('expenses')
-                      .add({
-                    'category': category,
-                    'value': value,
-                    'month': date.month,
-                    'day': date.day,
-                    'year': date.year,
-                    'details': details,
-                  });
-                  Navigator.of(context).pop();
-                }
-                if (value == 0 || category == '') {
-                  showDialog(
-                    context: context,
-                    builder: (context) => AlertDialog(
-                      content: Text('Selecciona un valor y una categoría'),
-                      actions: <Widget>[
-                        FloatingActionButton(
-                          child: Text('Ok'),
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                        ),
-                      ],
-                    ),
-                  );
-                }
-              },
             ),
           ),
         );

@@ -64,8 +64,10 @@ class _HomePageState extends State<HomePage> {
         return Scaffold(
           bottomNavigationBar: BottomAppBar(
             notchMargin: 8.0,
-            color: Color.fromARGB(255, 19, 15, 78),
+            color: Color.fromARGB(45, 255, 255, 255),
             shape: CircularNotchedRectangle(),
+            elevation: 10,
+            shadowColor: Color.fromARGB(118, 234, 0, 255),
             child: Row(
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -99,7 +101,8 @@ class _HomePageState extends State<HomePage> {
           floatingActionButton: FloatingActionButton(
             heroTag: 'add_button',
             child: Icon(Icons.add),
-            backgroundColor: Color.fromARGB(255, 50, 2, 123),
+            elevation: 8,
+            backgroundColor: Color.fromARGB(102, 234, 0, 255),
             onPressed: () {
               Navigator.of(context).pushNamed('/add');
             },
@@ -167,7 +170,7 @@ class _HomePageState extends State<HomePage> {
     final selected = TextStyle(
       fontSize: 20.0,
       fontWeight: FontWeight.bold,
-      color: Colors.blueGrey,
+      color: const Color.fromARGB(255, 113, 143, 159),
     );
 
     final unselected = TextStyle(

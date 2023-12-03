@@ -83,15 +83,17 @@ class MyApp extends StatelessWidget {
         },
         home: Container(
           decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [
-                const Color.fromARGB(255, 0, 50, 25), // Color más oscuro
-                const Color.fromARGB(255, 0, 20, 50), // Color más oscuro
-              ],
-            ),
-          ),
+              gradient: LinearGradient(
+            colors: [
+              Color(0xff000000),
+              Color(0xff614497),
+              Color(0xff8b4497),
+              Color(0xff97447a)
+            ],
+            stops: [0.25, 0.75, 0.87, 0.93],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          )),
           child: Stack(children: [
             Builder(
               builder: (context) {
@@ -111,28 +113,32 @@ class MyApp extends StatelessWidget {
         routes: {
           '/add': (BuildContext context) => Container(
                 decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    colors: [
-                      const Color.fromARGB(255, 0, 50, 25), // Color más oscuro
-                      const Color.fromARGB(255, 0, 20, 50), // Color más oscuro
-                    ],
-                  ),
-                ),
+                    gradient: LinearGradient(
+                  colors: [
+                    Color(0xff000000),
+                    Color(0xff614497),
+                    Color(0xff8b4497),
+                    Color(0xff97447a)
+                  ],
+                  stops: [0.25, 0.75, 0.87, 0.93],
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                )),
                 child: AddPage(),
               ),
           '/groupLogin': (BuildContext context) => Container(
                 decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    colors: [
-                      const Color.fromARGB(255, 0, 50, 25), // Color más oscuro
-                      const Color.fromARGB(255, 0, 20, 50), // Color más oscuro
-                    ],
-                  ),
-                ),
+                    gradient: LinearGradient(
+                  colors: [
+                    Color(0xff000000),
+                    Color(0xff614497),
+                    Color(0xff8b4497),
+                    Color(0xff97447a)
+                  ],
+                  stops: [0.25, 0.75, 0.87, 0.93],
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                )),
                 child: groupLogin(),
               ),
         },

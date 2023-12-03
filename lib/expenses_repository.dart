@@ -24,6 +24,15 @@ class expensesRepository {
         .snapshots();
   }
 
+  Stream<QuerySnapshot> queryByDay(int day) {
+    return FirebaseFirestore.instance
+        .collection('user')
+        .doc(userId)
+        .collection('expenses')
+        .where('day', isEqualTo: day)
+        .snapshots();
+  }
+
   delete(String documentId) {
     FirebaseFirestore.instance
         .collection('user')

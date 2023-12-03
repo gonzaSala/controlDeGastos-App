@@ -38,8 +38,8 @@ class CategoryWidget extends StatelessWidget {
                   borderRadius: BorderRadius.circular(20.0),
                   border: Border.all(
                     color: selected
-                        ? Color.fromARGB(255, 195, 191, 254)
-                        : Color.fromARGB(255, 17, 14, 75),
+                        ? Color.fromARGB(149, 111, 75, 122)
+                        : Color.fromARGB(72, 74, 74, 81),
                     width: selected ? 4.0 : 5.0,
                   )),
               child: Icon(

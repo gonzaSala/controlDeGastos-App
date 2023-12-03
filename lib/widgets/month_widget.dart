@@ -54,36 +54,135 @@ class MonthWidget extends StatefulWidget {
 }
 
 class _MonthWidgetState extends State<MonthWidget> {
+  int selectedDay = 3;
+  String selectedOption = 'optionMonth';
+
   @override
   Widget build(BuildContext context) {
     return Expanded(
       child: Column(
         children: <Widget>[
-          _expenses(),
+          if (selectedOption == 'optionMonth') _expensesMonth(),
+          if (selectedOption == 'optionDay') _expensesDay(),
           _graph(),
           Container(
             color: Colors.blueAccent.withOpacity(0.18),
             height: 14,
           ),
-          _list()
+          _list(),
+          if (selectedOption == 'optionDay') _daySelector(),
         ],
       ),
     );
   }
 
-  Widget _expenses() {
+  Widget _popMenu() {
+    return PopupMenuButton<String>(
+      icon: Icon(Icons.keyboard_arrow_down_sharp, color: Colors.white),
+      itemBuilder: (BuildContext context) => [
+        PopupMenuItem<String>(
+          value: 'optionMonth',
+          child: Text('Mes'),
+        ),
+        PopupMenuItem<String>(
+          value: 'optionDay',
+          child: Text('Dia'),
+        ),
+      ],
+      onSelected: (String value) {
+        setState(() {
+          selectedOption = value;
+        });
+      },
+      offset: Offset(0, 40), // Ajusta la posición vertical del menú
+      elevation: 4, // Sombra del menú emergente
+      color: Colors.white, // Color de fondo del menú emergente
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(15.0), // Bordes redondeados
+      ),
+    );
+  }
+
+  Widget _expensesMonth() {
     return Column(
       children: <Widget>[
-        Text(
-          'Total gastos',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 16.0,
-            color: Colors.blueGrey[300],
+        Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+          _popMenu(),
+          SizedBox(
+            width: 80,
           ),
-        ),
+          Text(
+            'Total gastos del mes',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 16.0,
+              color: Colors.blueGrey[300],
+            ),
+          ),
+        ]),
         Text(
           '\$${widget.total.toStringAsFixed(2)}',
+          style: TextStyle(
+            color: Colors.blueGrey[200],
+            fontWeight: FontWeight.bold,
+            fontSize: 40.0,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _daySelector() {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Text('Seleccionar día:'),
+          SizedBox(width: 10),
+          Container(
+            width: 60,
+            child: TextFormField(
+              keyboardType: TextInputType.number,
+              onChanged: (value) {
+                setState(() {
+                  selectedDay = int.tryParse(value) ?? 1;
+                });
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _expensesDay() {
+    // Filtrar los documentos para obtener solo los del día seleccionado
+    final dayDocuments =
+        widget.documents.where((doc) => doc['day'] == selectedDay);
+
+    // Calcular el total de gastos del día
+    double totalExpensesDay =
+        dayDocuments.map((doc) => doc['value']).fold(0.0, (a, b) => a + b);
+
+    return Column(
+      children: <Widget>[
+        Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+          _popMenu(),
+          SizedBox(
+            width: 80,
+          ),
+          Text(
+            'Total gastos del día $selectedDay',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 16.0,
+              color: Colors.blueGrey[300],
+            ),
+          ),
+        ]),
+        Text(
+          '\$${totalExpensesDay.toStringAsFixed(2)}',
           style: TextStyle(
             color: Colors.blueGrey[200],
             fontWeight: FontWeight.bold,
@@ -141,14 +240,14 @@ class _MonthWidgetState extends State<MonthWidget> {
         style: TextStyle(
           fontWeight: FontWeight.bold,
           fontSize: 20.0,
-          color: const Color.fromARGB(255, 116, 151, 168),
+          color: Color.fromARGB(255, 167, 186, 196),
         ),
       ),
       subtitle: Text(
         '$percent% of expenses',
         style: TextStyle(
           fontSize: 16,
-          color: Colors.blueGrey,
+          color: Color.fromARGB(255, 141, 155, 162),
         ),
       ),
       trailing: Container(
@@ -161,7 +260,7 @@ class _MonthWidgetState extends State<MonthWidget> {
             child: Text(
               '\$$value',
               style: TextStyle(
-                color: Colors.blueAccent,
+                color: const Color.fromARGB(255, 114, 163, 247),
                 fontWeight: FontWeight.w500,
                 fontSize: 18.0,
               ),
