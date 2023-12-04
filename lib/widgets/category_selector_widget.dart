@@ -24,7 +24,7 @@ class CategoryWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 90,
+      width: 80,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 5.3),
         child: Column(
@@ -33,7 +33,7 @@ class CategoryWidget extends StatelessWidget {
             Container(
               alignment: Alignment.center,
               width: 65,
-              height: 50,
+              height: 55,
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20.0),
                   border: Border.all(
@@ -80,9 +80,13 @@ class _CategorySelectorWidgetState extends State<CategorySelectorWidget> {
         ),
       ));
     });
-    return ListView(
-      scrollDirection: Axis.horizontal,
-      children: widgets,
+    return SafeArea(
+      right: true,
+      left: true,
+      child: ListView(
+        scrollDirection: Axis.horizontal,
+        children: widgets,
+      ),
     );
   }
 }

@@ -1,10 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:control_gastos/expenses_repository.dart';
 import 'package:control_gastos/screens/detailsPage.dart';
 import 'package:control_gastos/screens/addPage.dart';
 import 'package:control_gastos/screens/detailsPageContainer.dart';
+import 'package:control_gastos/states/login_state.dart';
 import 'package:control_gastos/widgets/graph_widgett.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+import 'package:collection/collection.dart';
 
 enum GraphType { LINES, PIE }
 
@@ -18,22 +24,22 @@ class MonthWidget extends StatefulWidget {
   final GraphType graphType;
   final Map<String, IconData> categoryIcons;
 
-  MonthWidget(
-      {Key? key,
-      required this.documents,
-      required days,
-      required this.month,
-      required this.graphType,
-      required this.categoryIcons,
-      required this.details})
-      : total = documents.map((doc) => doc['value']).fold(0.0, (a, b) => a + b),
+  MonthWidget({
+    Key? key,
+    required this.documents,
+    required days,
+    required this.month,
+    required this.graphType,
+    required this.categoryIcons,
+    required this.details,
+  })  : total = documents.map((doc) => doc['value']).fold(0.0, (a, b) => a + b),
         perDay = List<double>.generate(
           days,
           (index) {
             final dayDocuments =
                 documents.where((doc) => doc['day'] == (index + 1));
             return dayDocuments.isEmpty
-                ? 0.0 // No hay documentos para este día
+                ? 0.0
                 : dayDocuments
                     .map((doc) => doc['value'])
                     .fold(0.0, (a, b) => a + b);
@@ -55,7 +61,32 @@ class MonthWidget extends StatefulWidget {
 
 class _MonthWidgetState extends State<MonthWidget> {
   int selectedDay = 3;
+  Future<void> _loadLastMonthExpenses() async {
+    try {
+      // Obtén la suma de los gastos del mes anterior
+      double lastMonthExpenses =
+          await Provider.of<expensesRepository>(context, listen: false)
+              .sumExpensesLastMonth();
+
+      // Haz lo que quieras con lastMonthExpenses, por ejemplo, mostrarlo en el log
+      print('Gastos del mes anterior: $lastMonthExpenses');
+    } catch (e) {
+      // Manejar errores según tus necesidades
+      print('Error al cargar los gastos del mes anterior: $e');
+    }
+  }
+
   String selectedOption = 'optionMonth';
+  List<int> daysInMonth = [];
+
+  @override
+  void initState() {
+    super.initState();
+    final now = DateTime.now();
+    final lastDayOfMonth = DateTime(now.year, now.month + 1, 0).day;
+    daysInMonth = List<int>.generate(lastDayOfMonth, (index) => index + 1);
+    _loadLastMonthExpenses();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -64,13 +95,13 @@ class _MonthWidgetState extends State<MonthWidget> {
         children: <Widget>[
           if (selectedOption == 'optionMonth') _expensesMonth(),
           if (selectedOption == 'optionDay') _expensesDay(),
+          if (selectedOption == 'optionDay') _daySelector(),
           _graph(),
           Container(
             color: Colors.blueAccent.withOpacity(0.18),
             height: 14,
           ),
           _list(),
-          if (selectedOption == 'optionDay') _daySelector(),
         ],
       ),
     );
@@ -106,20 +137,23 @@ class _MonthWidgetState extends State<MonthWidget> {
   Widget _expensesMonth() {
     return Column(
       children: <Widget>[
-        Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-          _popMenu(),
-          SizedBox(
-            width: 80,
-          ),
-          Text(
-            'Total gastos del mes',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 16.0,
-              color: Colors.blueGrey[300],
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            _popMenu(),
+            SizedBox(
+              width: 80,
             ),
-          ),
-        ]),
+            Text(
+              'Total gastos del mes',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 16.0,
+                color: Colors.blueGrey[300],
+              ),
+            ),
+          ],
+        ),
         Text(
           '\$${widget.total.toStringAsFixed(2)}',
           style: TextStyle(
@@ -134,22 +168,44 @@ class _MonthWidgetState extends State<MonthWidget> {
 
   Widget _daySelector() {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(5.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Text('Seleccionar día:'),
+          Text(
+            'Seleccionar día:',
+            style: TextStyle(color: Colors.white),
+          ),
           SizedBox(width: 10),
-          Container(
-            width: 60,
-            child: TextFormField(
-              keyboardType: TextInputType.number,
-              onChanged: (value) {
-                setState(() {
-                  selectedDay = int.tryParse(value) ?? 1;
-                });
-              },
+          DropdownButton<int>(
+            value: selectedDay,
+            items: daysInMonth.map((day) {
+              return DropdownMenuItem<int>(
+                value: day,
+                child: Text(
+                  day.toString(),
+                  style: TextStyle(color: Colors.white),
+                ),
+              );
+            }).toList(),
+            onChanged: (value) {
+              setState(() {
+                selectedDay = value!;
+              });
+            },
+            menuMaxHeight: 100,
+            underline: Container(
+              height: 2, // Altura de la línea de debajo del botón
+              color: const Color.fromARGB(
+                  127, 255, 255, 255), // Color de la línea de debajo del botón
             ),
+            alignment: AlignmentDirectional.centerEnd,
+            elevation: 15,
+            padding: EdgeInsets.symmetric(horizontal: 2),
+            style: TextStyle(
+                color: const Color.fromARGB(
+                    255, 23, 22, 22)), // Estilo del texto del botón
+            dropdownColor: const Color.fromARGB(255, 33, 31, 31),
           ),
         ],
       ),
@@ -313,35 +369,29 @@ class _MonthWidgetState extends State<MonthWidget> {
     // Implementación de colores dinámicos para cada categoría
     switch (categoryName) {
       case 'Otros':
-        return Colors.indigo; // Puedes cambiarlo a un tono diferente de azul
+        return const Color.fromARGB(
+            255, 241, 111, 71); // Cambiado a un tono diferente de naranja
       case 'Shopping':
-        return Colors.purple; // Puedes cambiarlo a un tono diferente de morado
+        return Colors.indigoAccent; // Cambiado a un tono diferente de índigo
       case 'Comida':
-        return Colors
-            .blueAccent; // Puedes cambiarlo a un tono diferente de azul
+        return Colors.green; // Cambiado a un tono diferente de verde
       case 'Transporte':
-        return Colors
-            .deepPurple; // Puedes cambiarlo a un tono diferente de morado
+        return Colors.amber; // Cambiado a un tono diferente de ámbar
       case 'Alcohol':
-        return Colors.blue; // Puedes cambiarlo a un tono diferente de azul
+        return Colors.red; // Cambiado a un tono diferente de rojo
       case 'Salud':
         return Colors
-            .pinkAccent; // Puedes cambiarlo a un tono diferente de rosado
+            .tealAccent; // Cambiado a un tono diferente de verde azulado
       case 'Deudas':
-        return Colors
-            .purpleAccent; // Puedes cambiarlo a un tono diferente de morado
+        return Colors.purpleAccent; // Cambiado a un tono diferente de morado
       case 'Mascotas':
-        return Colors
-            .blueGrey; // Puedes cambiarlo a un tono diferente de gris/azul
+        return Colors.brown; // Cambiado a un tono diferente de marrón
       case 'Educación':
-        return Colors
-            .teal; // Puedes cambiarlo a un tono diferente de verde azulado
+        return Colors.cyan; // Cambiado a un tono diferente de cian
       case 'Ropa':
-        return Colors
-            .deepPurpleAccent; // Puedes cambiarlo a un tono diferente de morado
+        return Colors.pink; // Cambiado a un tono diferente de rosa
       case 'Hogar':
-        return Colors
-            .indigoAccent; // Puedes cambiarlo a un tono diferente de azul
+        return Colors.lightBlue; // Cambiado a un tono diferente de azul claro
       default:
         return Colors.grey;
     }

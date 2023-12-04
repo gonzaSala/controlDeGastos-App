@@ -31,9 +31,11 @@ class DayExpensesListTile extends StatelessWidget {
       ),
       title: Container(
         decoration: BoxDecoration(
-          color: Colors.blueAccent.withOpacity(0.2),
-          borderRadius: BorderRadius.circular(5.0),
-        ),
+            color: Color.fromARGB(141, 49, 49, 49),
+            borderRadius: BorderRadius.circular(5.0),
+            border: Border.all(
+                color: Color.fromARGB(78, 255, 255, 255),
+                strokeAlign: BorderSide.strokeAlignOutside)),
         child: Padding(
           padding: const EdgeInsets.all(5.0),
           child: Row(
@@ -52,12 +54,12 @@ class DayExpensesListTile extends StatelessWidget {
                   Icon(
                     Icons.arrow_left,
                     size: 32,
-                    color: Colors.blueGrey,
+                    color: const Color.fromARGB(255, 146, 196, 221),
                   ),
                   Icon(
                     Icons.delete,
                     size: 32,
-                    color: Colors.blueGrey,
+                    color: Color.fromARGB(118, 146, 196, 221),
                   ),
                   GestureDetector(
                     onTap: () {
@@ -65,8 +67,21 @@ class DayExpensesListTile extends StatelessWidget {
                         context: context,
                         builder: (context) {
                           return AlertDialog(
+                            elevation: 8,
+                            shape: BeveledRectangleBorder(
+                              side: BorderSide(
+                                  color:
+                                      const Color.fromARGB(125, 255, 255, 255),
+                                  width: 1),
+                              borderRadius:
+                                  BorderRadius.all(Radius.elliptical(8, 5)),
+                            ),
+                            shadowColor:
+                                const Color.fromARGB(255, 255, 255, 255),
+                            alignment: Alignment.center,
                             title: Text('Detalles del gasto'),
-                            content: Text(documents['details'] ?? ''),
+                            backgroundColor: Color.fromARGB(255, 239, 224, 255),
+                            content: Text('${documents['details'] ?? ''}'),
                             actions: [
                               TextButton(
                                 onPressed: () {

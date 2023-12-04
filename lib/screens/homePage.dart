@@ -24,7 +24,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   PageController? _controller;
-  int currentPage = DateTime.now().month - 1;
+  int currentPage = DateTime.now().month;
   Stream<QuerySnapshot>? _query;
   GraphType currentType = GraphType.LINES;
 
@@ -63,7 +63,7 @@ class _HomePageState extends State<HomePage> {
 
         return Scaffold(
           bottomNavigationBar: BottomAppBar(
-            notchMargin: 8.0,
+            notchMargin: 7.0,
             color: Color.fromARGB(45, 255, 255, 255),
             shape: CircularNotchedRectangle(),
             elevation: 10,
@@ -101,8 +101,8 @@ class _HomePageState extends State<HomePage> {
           floatingActionButton: FloatingActionButton(
             heroTag: 'add_button',
             child: Icon(Icons.add),
-            elevation: 8,
-            backgroundColor: Color.fromARGB(102, 234, 0, 255),
+            elevation: 15,
+            backgroundColor: Color.fromARGB(255, 135, 38, 144),
             onPressed: () {
               Navigator.of(context).pushNamed('/add');
             },
@@ -152,7 +152,7 @@ class _HomePageState extends State<HomePage> {
               return MonthWidget(
                 days: daysInMonth(currentPage + 1),
                 documents: data.data?.docs ?? [],
-                month: currentPage + 1,
+                month: currentPage,
                 graphType: currentType,
                 categoryIcons: {},
                 details: data.data?.docs[0]['details'],

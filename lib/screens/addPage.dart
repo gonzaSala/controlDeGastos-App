@@ -295,6 +295,7 @@ class _AddPageState extends State<AddPage> {
                       'day': date.day,
                       'year': date.year,
                       'details': details,
+                      'timestamp': DateTime.now()
                     });
                     Navigator.of(context).pop();
                   }
