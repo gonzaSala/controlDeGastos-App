@@ -17,7 +17,14 @@ class _groupLoginState extends State<groupLogin> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Volver al login')),
+      appBar: AppBar(
+        title: Text(
+          'Volver al login',
+          style: TextStyle(color: Colors.white),
+        ),
+        backgroundColor: Color.fromARGB(0, 255, 255, 255),
+        foregroundColor: Colors.white,
+      ),
       body: SafeArea(
         child: Center(
           child: Column(

@@ -88,7 +88,9 @@ class _HomePageState extends State<HomePage> {
                   width: 48.0,
                 ),
                 _bottomAction(Icons.settings, () {
-                  setState(() {});
+                  setState(() {
+                    Navigator.of(context).pushNamed('/settings');
+                  });
                 }),
                 _bottomAction(Icons.exit_to_app_rounded, () {
                   Provider.of<LoginState>(context, listen: false).logout();
@@ -152,7 +154,7 @@ class _HomePageState extends State<HomePage> {
               return MonthWidget(
                 days: daysInMonth(currentPage + 1),
                 documents: data.data?.docs ?? [],
-                month: currentPage,
+                month: currentPage + 1,
                 graphType: currentType,
                 categoryIcons: {},
                 details: data.data?.docs[0]['details'],

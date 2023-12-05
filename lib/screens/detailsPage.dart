@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:control_gastos/expenses_repository.dart';
+import 'package:control_gastos/screens/ui/backgroundTheme.dart';
 import 'package:control_gastos/states/login_state.dart';
 import 'package:control_gastos/screens/ui/dayExpensesListTile.dart';
 import 'package:flutter/material.dart';
@@ -27,20 +28,7 @@ class DetailsPage extends StatelessWidget {
           backgroundColor: Color.fromARGB(55, 0, 0, 0),
           foregroundColor: Colors.white,
         ),
-        body: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [
-                Color(0xff000000),
-                Color(0xff614497),
-                Color(0xff8b4497),
-                Color(0xff97447a)
-              ],
-              stops: [0.25, 0.75, 0.87, 0.93],
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-            ),
-          ),
+        body: BackgroundContainerObscure(
           child: ListView.builder(
             itemCount: documents.length,
             itemBuilder: (BuildContext context, int index) {

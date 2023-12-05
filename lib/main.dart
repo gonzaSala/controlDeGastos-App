@@ -1,5 +1,7 @@
 import 'package:control_gastos/expenses_repository.dart';
 import 'package:control_gastos/screens/detailsPageContainer.dart';
+import 'package:control_gastos/screens/settingScreen.dart';
+import 'package:control_gastos/screens/ui/backgroundTheme.dart';
 import 'package:control_gastos/states/login_state.dart';
 import 'package:control_gastos/notification_services.dart';
 import 'package:control_gastos/screens/addPage.dart';
@@ -81,19 +83,7 @@ class MyApp extends StatelessWidget {
             });
           }
         },
-        home: Container(
-          decoration: BoxDecoration(
-              gradient: LinearGradient(
-            colors: [
-              Color(0xff000000),
-              Color(0xff614497),
-              Color(0xff8b4497),
-              Color(0xff97447a)
-            ],
-            stops: [0.25, 0.75, 0.87, 0.93],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-          )),
+        home: BackgroundContainerObscure(
           child: Stack(children: [
             Builder(
               builder: (context) {
@@ -111,35 +101,14 @@ class MyApp extends StatelessWidget {
           ]),
         ),
         routes: {
-          '/add': (BuildContext context) => Container(
-                decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                  colors: [
-                    Color(0xff000000),
-                    Color(0xff614497),
-                    Color(0xff8b4497),
-                    Color(0xff97447a)
-                  ],
-                  stops: [0.25, 0.75, 0.87, 0.93],
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                )),
+          '/add': (BuildContext context) => BackgroundContainerObscure(
                 child: AddPage(),
               ),
-          '/groupLogin': (BuildContext context) => Container(
-                decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                  colors: [
-                    Color(0xff000000),
-                    Color(0xff614497),
-                    Color(0xff8b4497),
-                    Color(0xff97447a)
-                  ],
-                  stops: [0.25, 0.75, 0.87, 0.93],
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                )),
+          '/groupLogin': (BuildContext context) => BackgroundContainerObscure(
                 child: groupLogin(),
+              ),
+          '/settings': (BuildContext context) => BackgroundContainerObscure(
+                child: Settings(),
               ),
         },
       ),

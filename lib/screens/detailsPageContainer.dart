@@ -21,6 +21,9 @@ class DetailsPageContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('DetailsPageContainer - Building widget');
+    print(
+        'DetailsPageContainer - Params: ${params.categoryName}, ${params.month}');
     return Consumer<expensesRepository>(
       builder: (BuildContext context, expensesRepository db, Widget? child) {
         var _query = db.queryByCategory(params.month, params.categoryName);

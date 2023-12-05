@@ -61,20 +61,6 @@ class MonthWidget extends StatefulWidget {
 
 class _MonthWidgetState extends State<MonthWidget> {
   int selectedDay = 3;
-  Future<void> _loadLastMonthExpenses() async {
-    try {
-      // Obtén la suma de los gastos del mes anterior
-      double lastMonthExpenses =
-          await Provider.of<expensesRepository>(context, listen: false)
-              .sumExpensesLastMonth();
-
-      // Haz lo que quieras con lastMonthExpenses, por ejemplo, mostrarlo en el log
-      print('Gastos del mes anterior: $lastMonthExpenses');
-    } catch (e) {
-      // Manejar errores según tus necesidades
-      print('Error al cargar los gastos del mes anterior: $e');
-    }
-  }
 
   String selectedOption = 'optionMonth';
   List<int> daysInMonth = [];
@@ -85,7 +71,6 @@ class _MonthWidgetState extends State<MonthWidget> {
     final now = DateTime.now();
     final lastDayOfMonth = DateTime(now.year, now.month + 1, 0).day;
     daysInMonth = List<int>.generate(lastDayOfMonth, (index) => index + 1);
-    _loadLastMonthExpenses();
   }
 
   @override

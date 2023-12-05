@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:control_gastos/states/login_state.dart';
 import 'package:control_gastos/widgets/category_selector_widget.dart';
