@@ -1,44 +1,65 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:provider/provider.dart';
+
+class NotificationState with ChangeNotifier {
+  bool _notificationsEnabled = true;
+
+  bool get notificationsEnabled => _notificationsEnabled;
+
+  void toggleNotifications() {
+    _notificationsEnabled = !_notificationsEnabled;
+    notifyListeners();
+  }
+}
 
 class NotificationServices {
-  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+  static final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
-  final AndroidInitializationSettings androidInitializationSettings =
-      AndroidInitializationSettings('ic_launcher_adaptive_fore');
 
-  final DarwinInitializationSettings darwinInitializationSettings =
-      DarwinInitializationSettings();
-
-  void initNotifications() async {
+  static Future init() async {
+    const AndroidInitializationSettings initializationSettingsAndroid =
+        AndroidInitializationSettings('mipmap/ic_launcher');
+    final DarwinInitializationSettings initializationSettingsDarwin =
+        DarwinInitializationSettings(
+            onDidReceiveLocalNotification: (id, title, body, payload) => null);
+    final LinuxInitializationSettings initializationSettingsLinux =
+        LinuxInitializationSettings(defaultActionName: 'Open notification');
     final InitializationSettings initializationSettings =
         InitializationSettings(
-      android: androidInitializationSettings,
-      iOS: darwinInitializationSettings,
-    );
-
-    await flutterLocalNotificationsPlugin
-        .initialize(initializationSettings)
-        .then((init) => showNotification());
+            android: initializationSettingsAndroid,
+            iOS: initializationSettingsDarwin,
+            linux: initializationSettingsLinux);
+    flutterLocalNotificationsPlugin.initialize(initializationSettings,
+        onDidReceiveNotificationResponse: (details) => null);
   }
 
-  void showNotification() async {
-    AndroidNotificationDetails androidNotificationDetails =
-        AndroidNotificationDetails('channelId', 'channelName');
+  static Future showSimpleNotification(BuildContext context) async {
+    const AndroidNotificationDetails androidNotificationDetails =
+        AndroidNotificationDetails('1', 'your channel name',
+            channelDescription: 'your channel description',
+            importance: Importance.max,
+            priority: Priority.high,
+            ticker: 'ticker');
+    const NotificationDetails notificationDetails =
+        NotificationDetails(android: androidNotificationDetails);
 
-    DarwinNotificationDetails darwinNotificationDetails =
-        DarwinNotificationDetails();
+    var notificationState =
+        Provider.of<NotificationState>(context, listen: false);
 
-    NotificationDetails notificationDetails = NotificationDetails(
-      android: androidNotificationDetails,
-      iOS: darwinNotificationDetails,
-    );
-
-    await flutterLocalNotificationsPlugin.periodicallyShow(
-        0,
-        'Las cuentas claras!',
-        'No te olvides de agregar tus gastos!!!',
+    if (notificationState.notificationsEnabled) {
+      await flutterLocalNotificationsPlugin.periodicallyShow(
+        1,
+        'hola titulo',
+        'hola body',
         RepeatInterval.everyMinute,
-        notificationDetails);
+        notificationDetails,
+        payload: 'hola payload',
+      );
+    }
+  }
+
+  static Future cancel(int id) async {
+    await flutterLocalNotificationsPlugin.cancel(1);
   }
 }

@@ -1,9 +1,10 @@
 import 'package:control_gastos/expenses_repository.dart';
+import 'package:control_gastos/firebase_Api.dart';
 import 'package:control_gastos/screens/detailsPageContainer.dart';
 import 'package:control_gastos/screens/settingScreen.dart';
 import 'package:control_gastos/screens/ui/backgroundTheme.dart';
 import 'package:control_gastos/states/login_state.dart';
-import 'package:control_gastos/notification_services.dart';
+//import 'package:control_gastos/notification_services.dart';
 import 'package:control_gastos/screens/addPage.dart';
 import 'package:control_gastos/screens/detailsPage.dart';
 import 'package:control_gastos/screens/groupLogin.dart';
@@ -15,6 +16,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:control_gastos/firebase_options.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -24,8 +26,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  final notificationService = NotificationServices();
-  notificationService.initNotifications();
+  await FirebaseApi().initNotifications();
 
   runApp(MyApp());
 }
@@ -35,8 +36,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider<ThemeState>(
-          create: (_) => ThemeState(),
+        //  ChangeNotifierProvider(
+        //     create: (context) => NotificationState(),
+        //   ),
+        ChangeNotifierProvider<LoginState>(
+          create: (BuildContext context) => LoginState(),
         ),
         ChangeNotifierProvider<LoginState>(
           create: (BuildContext context) => LoginState(),

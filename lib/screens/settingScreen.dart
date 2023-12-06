@@ -1,41 +1,43 @@
+import 'package:control_gastos/notification_services.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class Settings extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    var notificationState = Provider.of<NotificationState>(context);
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Opciones'),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            ElevatedButton(
-              onPressed: () {
-                (context as Element).markNeedsBuild();
-              },
-              style: ElevatedButton.styleFrom(
-                primary: Colors.blue,
-              ),
-              child: Text(
-                'Activar/Desactivar Fondo Azul',
-                style: TextStyle(color: Colors.white),
-              ),
-            ),
-            SizedBox(height: 16.0),
-            Text(
-              'Estado actual del fondo:',
-              style: TextStyle(
-                fontSize: 18.0,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            SizedBox(height: 8.0),
-          ],
-        ),
+      body: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          Text(
+            'Notificaciones',
+            style: TextStyle(color: Colors.white),
+          ),
+          Switch(
+            activeColor: Color.fromARGB(255, 216, 255, 203),
+            activeTrackColor: const Color.fromARGB(255, 255, 255, 255),
+            inactiveThumbColor: Colors.grey.withOpacity(0.7),
+            inactiveTrackColor: Colors.grey.withOpacity(0.5),
+            splashRadius: 80.0,
+            value: notificationState.notificationsEnabled,
+            onChanged: (bool value) {
+              notificationState.toggleNotifications();
+              if (value) {
+                // Habilitar notificaciones
+                NotificationServices.showSimpleNotification(context);
+              } else {
+                // Deshabilitar notificaciones
+                NotificationServices.cancel(1);
+              }
+            },
+          ),
+        ],
       ),
     );
   }
