@@ -83,8 +83,8 @@ class _MonthWidgetState extends State<MonthWidget> {
           if (selectedOption == 'optionDay') _daySelector(),
           _graph(),
           Container(
-            color: Colors.blueAccent.withOpacity(0.18),
-            height: 14,
+            color: Colors.blueAccent.withOpacity(0.12),
+            height: 7,
           ),
           _list(),
         ],
@@ -263,50 +263,57 @@ class _MonthWidgetState extends State<MonthWidget> {
       name = 'Otros';
     }
 
-    return ListTile(
-      onTap: () {
-        Navigator.of(context).pushNamed('/details',
-            arguments: DetailsParams(
-              name,
-              widget.month,
-            ));
-      },
-      leading: Icon(
-        icon,
-        size: 32.0,
-        color: getColor,
+    return Container(
+      margin: EdgeInsets.only(top: 5),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20),
+        color: Color.fromARGB(42, 101, 94, 234),
       ),
-      title: Text(
-        name,
-        style: TextStyle(
-          fontWeight: FontWeight.bold,
-          fontSize: 20.0,
-          color: Color.fromARGB(255, 167, 186, 196),
+      child: ListTile(
+        onTap: () {
+          Navigator.of(context).pushNamed('/details',
+              arguments: DetailsParams(
+                name,
+                widget.month,
+              ));
+        },
+        leading: Icon(
+          icon,
+          size: 32.0,
+          color: getColor,
         ),
-      ),
-      subtitle: Text(
-        '$percent% of expenses',
-        style: TextStyle(
-          fontSize: 16,
-          color: Color.fromARGB(255, 141, 155, 162),
-        ),
-      ),
-      trailing: Container(
-          decoration: BoxDecoration(
-            color: Colors.blueAccent.withOpacity(0.2),
-            borderRadius: BorderRadius.circular(5.0),
+        title: Text(
+          name,
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 20.0,
+            color: Color.fromARGB(255, 167, 186, 196),
           ),
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              '\$$value',
-              style: TextStyle(
-                color: const Color.fromARGB(255, 114, 163, 247),
-                fontWeight: FontWeight.w500,
-                fontSize: 18.0,
-              ),
+        ),
+        subtitle: Text(
+          '$percent% of expenses',
+          style: TextStyle(
+            fontSize: 16,
+            color: Color.fromARGB(255, 141, 155, 162),
+          ),
+        ),
+        trailing: Container(
+            decoration: BoxDecoration(
+              color: Colors.blueAccent.withOpacity(0.2),
+              borderRadius: BorderRadius.circular(5.0),
             ),
-          )),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                '\$$value',
+                style: TextStyle(
+                  color: const Color.fromARGB(255, 114, 163, 247),
+                  fontWeight: FontWeight.w500,
+                  fontSize: 18.0,
+                ),
+              ),
+            )),
+      ),
     );
   }
 
@@ -354,29 +361,27 @@ class _MonthWidgetState extends State<MonthWidget> {
     // Implementación de colores dinámicos para cada categoría
     switch (categoryName) {
       case 'Otros':
-        return const Color.fromARGB(
-            255, 241, 111, 71); // Cambiado a un tono diferente de naranja
+        return Colors.indigo;
       case 'Shopping':
-        return Colors.indigoAccent; // Cambiado a un tono diferente de índigo
+        return Colors.purple;
       case 'Comida':
-        return Colors.green; // Cambiado a un tono diferente de verde
+        return Colors.blueAccent;
       case 'Transporte':
-        return Colors.amber; // Cambiado a un tono diferente de ámbar
+        return Color.fromARGB(255, 147, 91, 242);
       case 'Alcohol':
-        return Colors.red; // Cambiado a un tono diferente de rojo
+        return Colors.blue;
       case 'Salud':
-        return Colors
-            .tealAccent; // Cambiado a un tono diferente de verde azulado
+        return Colors.pinkAccent;
       case 'Deudas':
-        return Colors.purpleAccent; // Cambiado a un tono diferente de morado
+        return Colors.purpleAccent;
       case 'Mascotas':
-        return Colors.brown; // Cambiado a un tono diferente de marrón
+        return Colors.blueGrey;
       case 'Educación':
-        return Colors.cyan; // Cambiado a un tono diferente de cian
+        return Colors.teal;
       case 'Ropa':
-        return Colors.pink; // Cambiado a un tono diferente de rosa
+        return Colors.deepPurpleAccent;
       case 'Hogar':
-        return Colors.lightBlue; // Cambiado a un tono diferente de azul claro
+        return Colors.indigoAccent;
       default:
         return Colors.grey;
     }

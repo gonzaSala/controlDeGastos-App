@@ -45,7 +45,7 @@ class CategoryWidget extends StatelessWidget {
               child: Icon(
                 icon,
                 size: 34,
-                color: Color.fromARGB(255, 195, 191, 254),
+                color: getColor(name),
               ),
             ),
             Text(
@@ -56,6 +56,36 @@ class CategoryWidget extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+Color getColor(String categoryName) {
+  // Implementación de colores dinámicos para cada categoría
+  switch (categoryName) {
+    case 'Otros':
+      return Colors.indigo;
+    case 'Shopping':
+      return Colors.purple;
+    case 'Comida':
+      return Colors.blueAccent;
+    case 'Transporte':
+      return Color.fromARGB(255, 147, 91, 242);
+    case 'Alcohol':
+      return Colors.blue;
+    case 'Salud':
+      return Colors.pinkAccent;
+    case 'Deudas':
+      return Colors.purpleAccent;
+    case 'Mascotas':
+      return Colors.blueGrey;
+    case 'Educación':
+      return Colors.teal;
+    case 'Ropa':
+      return Colors.deepPurpleAccent;
+    case 'Hogar':
+      return Colors.indigoAccent;
+    default:
+      return Colors.grey;
   }
 }
 

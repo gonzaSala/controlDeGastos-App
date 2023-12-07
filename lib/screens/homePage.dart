@@ -138,12 +138,21 @@ class _HomePageState extends State<HomePage> {
                       'No hay gastos para mostrar.',
                       style: Theme.of(context)
                           .textTheme
-                          .bodySmall!
+                          .bodyLarge!
                           .copyWith(color: Colors.white),
                     ),
-                    SizedBox(height: 80),
-                    Image.asset(
-                      'assets/nothing.png',
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Container(
+                      margin: EdgeInsets.all(30),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(80),
+                          color: const Color.fromARGB(35, 255, 255, 255)),
+                      padding: EdgeInsets.all(50),
+                      child: Image.asset(
+                        'assets/noHayDatos.gif',
+                      ),
                     ),
                   ],
                 ));

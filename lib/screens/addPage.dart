@@ -60,6 +60,7 @@ class _AddPageState extends State<AddPage> {
             'Fecha ($dateStr)',
             style: TextStyle(
               color: Color.fromARGB(255, 255, 218, 218),
+              fontWeight: FontWeight.bold,
             ),
           ),
         ),
@@ -110,7 +111,7 @@ class _AddPageState extends State<AddPage> {
       height: 80,
       decoration: BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(15)),
-          border: Border.all(color: Color.fromARGB(71, 255, 255, 255)),
+          border: Border.all(color: Color.fromARGB(37, 255, 255, 255)),
           color: Color.fromARGB(31, 126, 126, 126)),
       child: CategorySelectorWidget(
         categories: categories,
