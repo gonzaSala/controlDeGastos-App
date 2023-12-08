@@ -14,6 +14,16 @@ class _groupLoginState extends State<groupLogin> {
   final TextEditingController groupNameController = TextEditingController();
   final TextEditingController groupPasswordController = TextEditingController();
 
+  bool _isPasswordValid(String password) {
+    return password.length >= 8;
+  }
+
+  bool isPasswordValid = true;
+
+  String _passwordRequirementsMessage() {
+    return 'La contraseña debe tener al menos 8 caracteres.';
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -67,17 +77,36 @@ class _groupLoginState extends State<groupLogin> {
               SizedBox(height: 10),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                child: TextField(
-                  controller: groupPasswordController,
-                  obscureText: true,
-                  decoration: InputDecoration(
-                    enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.grey)),
-                    focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.grey.shade400)),
-                    fillColor: Colors.grey.shade200,
-                    filled: true,
-                  ),
+                child: Column(
+                  children: [
+                    TextField(
+                      controller: groupPasswordController,
+                      obscureText: true,
+                      onChanged: (password) {
+                        // Verificar las condiciones de la contraseña y actualizar el estado
+                        setState(() {
+                          isPasswordValid = _isPasswordValid(password);
+                        });
+                      },
+                      decoration: InputDecoration(
+                        enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.grey)),
+                        focusedBorder: OutlineInputBorder(
+                            borderSide:
+                                BorderSide(color: Colors.grey.shade400)),
+                        fillColor: Colors.grey.shade200,
+                        filled: true,
+                      ),
+                    ),
+                    SizedBox(height: 8),
+                    Text(
+                      !isPasswordValid ? _passwordRequirementsMessage() : '',
+                      style: TextStyle(
+                        color: Colors.red,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ],
                 ),
               ),
               SizedBox(height: 20),
@@ -91,15 +120,25 @@ class _groupLoginState extends State<groupLogin> {
                   }
                 },
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     ElevatedButton(
                       onPressed: () {
                         String email =
                             groupNameController.text + '@onlygastos.com';
                         String password = groupPasswordController.text;
-                        Provider.of<LoginState>(context, listen: false)
-                            .registerWithEmailPassword(email, password);
+                        if (password.length < 8) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                  'La contraseña debe tener al menos 8 caracteres.'),
+                              backgroundColor: Colors.red,
+                            ),
+                          );
+                        } else {
+                          Provider.of<LoginState>(context, listen: false)
+                              .registerWithEmailPassword(email, password);
+                        }
                       },
                       child: Text('Crear Grupo'),
                     ),

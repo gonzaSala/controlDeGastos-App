@@ -42,9 +42,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<LoginState>(
           create: (BuildContext context) => LoginState(),
         ),
-        ChangeNotifierProvider<LoginState>(
-          create: (BuildContext context) => LoginState(),
-        ),
+
         ProxyProvider<LoginState, expensesRepository>(
           update: (_, LoginState value, __) {
             if (value.isLoggedIn() && value.currentUser() != null) {
@@ -65,8 +63,7 @@ class MyApp extends StatelessWidget {
           textTheme: GoogleFonts.latoTextTheme(Theme.of(context).textTheme),
           brightness: Brightness.dark,
           primaryColor: Color.fromARGB(255, 255, 255, 255),
-          secondaryHeaderColor: const Color.fromARGB(255, 4, 169, 92),
-          // Otras propiedades del tema según sea necesario
+          secondaryHeaderColor: Color.fromARGB(255, 136, 141, 139),
         ),
         builder: (context, child) => ResponsiveBreakpoints.builder(
           child: child!,
@@ -105,6 +102,9 @@ class MyApp extends StatelessWidget {
           ]),
         ),
         routes: {
+          '/home': (BuildContext context) => BackgroundContainerObscure(
+                child: HomePage(),
+              ),
           '/add': (BuildContext context) => BackgroundContainerObscure(
                 child: AddPage(),
               ),

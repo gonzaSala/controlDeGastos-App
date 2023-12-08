@@ -1,3 +1,5 @@
+import 'package:control_gastos/screens/groupLogin.dart';
+import 'package:control_gastos/screens/ui/backgroundTheme.dart';
 import 'package:control_gastos/states/login_state.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -75,7 +77,10 @@ class _LoginPageState extends State<LoginPage> {
                 builder:
                     (BuildContext context, LoginState value, Widget? child) {
                   if (value.isLoading()) {
-                    return CircularProgressIndicator();
+                    return CircularProgressIndicator(
+                      color: const Color.fromARGB(135, 255, 255, 255),
+                      strokeWidth: 5,
+                    );
                   } else {
                     return child!;
                   }
@@ -88,15 +93,47 @@ class _LoginPageState extends State<LoginPage> {
                       iconSize: 80,
                       icon: Image.asset('assets/googleIcon.png'),
                       onPressed: () {
-                        Provider.of<LoginState>(context, listen: false)
-                            .loginWithGoogle();
+                        try {
+                          Provider.of<LoginState>(context, listen: false)
+                              .loginWithGoogle();
+                        } catch (e) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text('Error al iniciar sesión: $e'),
+                              backgroundColor: Colors.red,
+                            ),
+                          );
+                        }
                       },
                     ),
                     IconButton(
                       iconSize: 80,
                       icon: Image.asset('assets/groupIcon.png'),
                       onPressed: () {
-                        Navigator.of(context).pushNamed('/groupLogin');
+                        Navigator.of(context).push(
+                          PageRouteBuilder(
+                            pageBuilder:
+                                (context, animation, secondaryAnimation) {
+                              return BackgroundContainerObscure(
+                                  child: groupLogin());
+                            },
+                            transitionDuration: Duration(milliseconds: 800),
+                            transitionsBuilder: (context, animation,
+                                secondaryAnimation, child) {
+                              const begin = Offset(0.0, 1.0);
+                              const end = Offset.zero;
+                              const curve = Curves.easeInOut;
+
+                              var tween = Tween(begin: begin, end: end)
+                                  .chain(CurveTween(curve: curve));
+                              var offsetAnimation = animation.drive(tween);
+                              return SlideTransition(
+                                position: offsetAnimation,
+                                child: child,
+                              );
+                            },
+                          ),
+                        );
                       },
                     ),
                   ],

@@ -16,13 +16,15 @@ class CategoryWidget extends StatelessWidget {
   final IconData icon;
   final bool selected;
 
-  const CategoryWidget(
+  CategoryWidget(
       {super.key,
       required this.name,
       required this.icon,
       required this.selected});
   @override
   Widget build(BuildContext context) {
+    //  double height = MediaQuery.of(context).size.height * 0.15;
+
     return Container(
       width: 80,
       child: Padding(
@@ -33,7 +35,7 @@ class CategoryWidget extends StatelessWidget {
             Container(
               alignment: Alignment.center,
               width: 65,
-              height: 55,
+              height: 55, // height,
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20.0),
                   border: Border.all(
@@ -50,7 +52,8 @@ class CategoryWidget extends StatelessWidget {
             ),
             Text(
               name,
-              style: TextStyle(color: Color.fromARGB(255, 195, 191, 254)),
+              style: TextStyle(
+                  color: Color.fromARGB(255, 195, 191, 254), fontSize: 12),
             )
           ],
         ),
