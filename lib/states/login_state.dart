@@ -11,8 +11,11 @@ class LoginState with ChangeNotifier {
   final FirebaseAuth auth = FirebaseAuth.instance;
 
   bool loggedIn = false;
+  bool userExisting = false;
   bool loading = false;
   User? user;
+
+  bool isUserExisting() => userExisting;
 
   bool isLoggedIn() => loggedIn;
 
@@ -58,12 +61,14 @@ class LoginState with ChangeNotifier {
 
       loading = false;
       if (user != null) {
+        userExisting = false;
         loggedIn = true;
         await FirebaseAuth.instance.currentUser?.reload();
         notifyListeners();
         print('Inicio de sesión con email y contraseña exitoso.');
       }
     } catch (error) {
+      userExisting = true;
       loading = false;
       loggedIn = false;
       notifyListeners();

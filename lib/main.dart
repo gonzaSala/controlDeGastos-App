@@ -63,7 +63,8 @@ class MyApp extends StatelessWidget {
           textTheme: GoogleFonts.latoTextTheme(Theme.of(context).textTheme),
           brightness: Brightness.dark,
           primaryColor: Color.fromARGB(255, 255, 255, 255),
-          secondaryHeaderColor: Color.fromARGB(255, 136, 141, 139),
+          secondaryHeaderColor: const Color.fromARGB(255, 4, 169, 92),
+          // Otras propiedades del tema según sea necesario
         ),
         builder: (context, child) => ResponsiveBreakpoints.builder(
           child: child!,
@@ -85,25 +86,43 @@ class MyApp extends StatelessWidget {
           }
         },
         home: BackgroundContainerObscure(
-          child: Stack(children: [
-            Builder(
-              builder: (context) {
-                var state = Provider.of<LoginState>(context);
-                print('isLoggedIn: ${state.isLoggedIn()}');
-                if (state.isLoggedIn()) {
-                  print('Building HomePage');
-                  return HomePage();
-                } else {
-                  print('Building LoginPage');
-                  return LoginPage();
-                }
-              },
-            ),
-          ]),
+          child: Stack(
+            children: [
+              Builder(
+                builder: (context) {
+                  var loginState = Provider.of<LoginState>(context);
+                  print('isLoggedIn: ${loginState.isLoggedIn()}');
+
+                  if (loginState.isLoggedIn()) {
+                    print('Building HomePage');
+                    return HomePage();
+                  } else {
+                    print('Building LoginPage');
+                    return loginState.isUserExisting()
+                        ? AlertDialog(
+                            title: Text('Error de inicio de sesión'),
+                            content: Text(
+                                'No se pudo iniciar sesión, verifique los datos'),
+                            actions: <Widget>[
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context)
+                                      .pushNamed('/groupLogin');
+                                },
+                                child: Text('OK'),
+                              ),
+                            ],
+                          )
+                        : LoginPage();
+                  }
+                },
+              ),
+            ],
+          ),
         ),
         routes: {
-          '/home': (BuildContext context) => BackgroundContainerObscure(
-                child: HomePage(),
+          '/loginPage': (BuildContext context) => BackgroundContainerObscure(
+                child: LoginPage(),
               ),
           '/add': (BuildContext context) => BackgroundContainerObscure(
                 child: AddPage(),

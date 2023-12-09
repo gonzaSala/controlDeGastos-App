@@ -73,6 +73,9 @@ class _LoginPageState extends State<LoginPage> {
                   )
                 ],
               ),
+              SizedBox(
+                height: 10,
+              ),
               Consumer<LoginState>(
                 builder:
                     (BuildContext context, LoginState value, Widget? child) {
@@ -89,52 +92,111 @@ class _LoginPageState extends State<LoginPage> {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   mainAxisSize: MainAxisSize.max,
                   children: [
-                    IconButton(
-                      iconSize: 80,
-                      icon: Image.asset('assets/googleIcon.png'),
-                      onPressed: () {
-                        try {
-                          Provider.of<LoginState>(context, listen: false)
-                              .loginWithGoogle();
-                        } catch (e) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text('Error al iniciar sesión: $e'),
-                              backgroundColor: Colors.red,
+                    Container(
+                      decoration: BoxDecoration(
+                          boxShadow: [
+                            BoxShadow(
+                              color: Color.fromARGB(47, 158, 158, 158),
+                              spreadRadius: 4,
+                              blurRadius: 10,
+                              offset: Offset(0, 2),
+                            ),
+                          ],
+                          color: Color.fromARGB(48, 157, 155, 155),
+                          borderRadius: BorderRadius.circular(20),
+                          border: Border.all(
+                              width: 1,
+                              color: Color.fromARGB(45, 255, 255, 255))),
+                      child: IconButton(
+                        iconSize: 80,
+                        icon: Image.asset(
+                          'assets/personalcon.png',
+                          fit: BoxFit.cover,
+                        ),
+                        onPressed: () {
+                          showMenu(
+                            context: context,
+                            position: RelativeRect.fromLTRB(50, 300, 50, 100),
+                            items: [
+                              PopupMenuItem(
+                                child: ListTile(
+                                  leading: Image.asset('assets/googleIcon.png'),
+                                  title: Text('Iniciar sesión con Google'),
+                                  trailing: IconButton(
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                      icon: Icon(Icons.close)),
+                                  onTap: () {
+                                    Navigator.pop(context);
+                                    try {
+                                      Provider.of<LoginState>(context,
+                                              listen: false)
+                                          .loginWithGoogle();
+                                    } catch (e) {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        SnackBar(
+                                          content: Text(
+                                              'Error al iniciar sesión: $e'),
+                                          backgroundColor: Colors.red,
+                                        ),
+                                      );
+                                    }
+                                  },
+                                ),
+                              ),
+                              // Puedes agregar más opciones de inicio de sesión si lo deseas
+                            ],
+                          );
+                        },
+                      ),
+                    ),
+                    Container(
+                      decoration: BoxDecoration(
+                          boxShadow: [
+                            BoxShadow(
+                              color: Color.fromARGB(47, 158, 158, 158),
+                              spreadRadius: 4,
+                              blurRadius: 10,
+                              offset: Offset(0, 2),
+                            ),
+                          ],
+                          color: Color.fromARGB(48, 157, 155, 155),
+                          borderRadius: BorderRadius.circular(20),
+                          border: Border.all(
+                              width: 1,
+                              color: Color.fromARGB(45, 255, 255, 255))),
+                      child: IconButton(
+                        iconSize: 80,
+                        icon: Image.asset('assets/groupIcon.png'),
+                        onPressed: () {
+                          Navigator.of(context).push(
+                            PageRouteBuilder(
+                              pageBuilder:
+                                  (context, animation, secondaryAnimation) {
+                                return BackgroundContainerObscure(
+                                    child: groupLogin());
+                              },
+                              transitionDuration: Duration(milliseconds: 800),
+                              transitionsBuilder: (context, animation,
+                                  secondaryAnimation, child) {
+                                const begin = Offset(1.0, 0.0);
+                                const end = Offset.zero;
+                                const curve = Curves.easeInOut;
+
+                                var tween = Tween(begin: begin, end: end)
+                                    .chain(CurveTween(curve: curve));
+                                var offsetAnimation = animation.drive(tween);
+                                return SlideTransition(
+                                  position: offsetAnimation,
+                                  child: child,
+                                );
+                              },
                             ),
                           );
-                        }
-                      },
-                    ),
-                    IconButton(
-                      iconSize: 80,
-                      icon: Image.asset('assets/groupIcon.png'),
-                      onPressed: () {
-                        Navigator.of(context).push(
-                          PageRouteBuilder(
-                            pageBuilder:
-                                (context, animation, secondaryAnimation) {
-                              return BackgroundContainerObscure(
-                                  child: groupLogin());
-                            },
-                            transitionDuration: Duration(milliseconds: 800),
-                            transitionsBuilder: (context, animation,
-                                secondaryAnimation, child) {
-                              const begin = Offset(0.0, 1.0);
-                              const end = Offset.zero;
-                              const curve = Curves.easeInOut;
-
-                              var tween = Tween(begin: begin, end: end)
-                                  .chain(CurveTween(curve: curve));
-                              var offsetAnimation = animation.drive(tween);
-                              return SlideTransition(
-                                position: offsetAnimation,
-                                child: child,
-                              );
-                            },
-                          ),
-                        );
-                      },
+                        },
+                      ),
                     ),
                   ],
                 ),

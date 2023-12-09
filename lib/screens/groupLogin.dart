@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:control_gastos/screens/homePage.dart';
+import 'package:control_gastos/screens/loginPage.dart';
 import 'package:control_gastos/states/login_state.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -48,7 +49,7 @@ class _groupLoginState extends State<groupLogin> {
                     iconSize: 80,
                     icon: Image.asset('assets/groupIcon.png'),
                     onPressed: () {
-                      Navigator.of(context).pop();
+                      Navigator.of(context).popAndPushNamed('/loginPage');
                     },
                   ),
                 ],
@@ -60,15 +61,22 @@ class _groupLoginState extends State<groupLogin> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 25.0),
                 child: TextField(
+                  cursorWidth: 0.8,
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: Color.fromARGB(198, 255, 255, 255),
+                    fontWeight: FontWeight.w100,
+                  ),
                   controller: groupNameController,
                   decoration: InputDecoration(
                     enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.grey)),
                     focusedBorder: OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.grey.shade400)),
-                    fillColor: Colors.grey.shade200,
+                    fillColor: Color.fromARGB(46, 238, 238, 238),
                     filled: true,
                   ),
+                  cursorColor: Color.fromARGB(39, 255, 255, 255),
                 ),
               ),
               SizedBox(height: 30),
@@ -83,18 +91,24 @@ class _groupLoginState extends State<groupLogin> {
                       controller: groupPasswordController,
                       obscureText: true,
                       onChanged: (password) {
-                        // Verificar las condiciones de la contraseña y actualizar el estado
                         setState(() {
                           isPasswordValid = _isPasswordValid(password);
                         });
                       },
+                      cursorWidth: 0.8,
+                      cursorColor: Color.fromARGB(39, 255, 255, 255),
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: Color.fromARGB(198, 255, 255, 255),
+                        fontWeight: FontWeight.w100,
+                      ),
                       decoration: InputDecoration(
                         enabledBorder: OutlineInputBorder(
                             borderSide: BorderSide(color: Colors.grey)),
                         focusedBorder: OutlineInputBorder(
                             borderSide:
                                 BorderSide(color: Colors.grey.shade400)),
-                        fillColor: Colors.grey.shade200,
+                        fillColor: Color.fromARGB(46, 238, 238, 238),
                         filled: true,
                       ),
                     ),
@@ -119,7 +133,8 @@ class _groupLoginState extends State<groupLogin> {
                     return child!;
                   }
                 },
-                child: Row(
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     ElevatedButton(
@@ -147,8 +162,10 @@ class _groupLoginState extends State<groupLogin> {
                         String email =
                             groupNameController.text + '@onlygastos.com';
                         String password = groupPasswordController.text;
+
                         await Provider.of<LoginState>(context, listen: false)
                             .loginWithEmailPassword(email, password);
+
                         Navigator.pushReplacementNamed(context, '/');
                       },
                       child: Text('Unirse al Grupo'),
