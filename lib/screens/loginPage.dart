@@ -38,7 +38,7 @@ class _LoginPageState extends State<LoginPage> {
           child: Column(
             children: <Widget>[
               Expanded(
-                flex: 1,
+                flex: 2,
                 child: Container(),
               ),
               Text(
@@ -53,7 +53,7 @@ class _LoginPageState extends State<LoginPage> {
                 child: Image.asset('assets/loginPage.png'),
               ),
               Text(
-                'Tu app de finanzas personales',
+                'Tu app de gastos personales y/o grupales',
                 style: Theme.of(context)
                     .textTheme
                     .bodySmall!
@@ -90,13 +90,12 @@ class _LoginPageState extends State<LoginPage> {
                 },
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  mainAxisSize: MainAxisSize.max,
                   children: [
                     Container(
                       decoration: BoxDecoration(
                           boxShadow: [
                             BoxShadow(
-                              color: Color.fromARGB(47, 158, 158, 158),
+                              color: Color.fromARGB(46, 41, 41, 41),
                               spreadRadius: 4,
                               blurRadius: 10,
                               offset: Offset(0, 2),
@@ -106,7 +105,7 @@ class _LoginPageState extends State<LoginPage> {
                           borderRadius: BorderRadius.circular(20),
                           border: Border.all(
                               width: 1,
-                              color: Color.fromARGB(45, 255, 255, 255))),
+                              color: Color.fromARGB(113, 97, 97, 97))),
                       child: IconButton(
                         iconSize: 80,
                         icon: Image.asset(
@@ -115,6 +114,18 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         onPressed: () {
                           showMenu(
+                            elevation: 8,
+                            shape: BeveledRectangleBorder(
+                              side: BorderSide(
+                                  color:
+                                      const Color.fromARGB(125, 255, 255, 255),
+                                  width: 1),
+                              borderRadius:
+                                  BorderRadius.all(Radius.elliptical(8, 5)),
+                            ),
+                            shadowColor:
+                                const Color.fromARGB(255, 255, 255, 255),
+                            color: Color.fromARGB(255, 239, 224, 255),
                             context: context,
                             position: RelativeRect.fromLTRB(50, 300, 50, 100),
                             items: [
@@ -146,6 +157,7 @@ class _LoginPageState extends State<LoginPage> {
                                   },
                                 ),
                               ),
+
                               // Puedes agregar más opciones de inicio de sesión si lo deseas
                             ],
                           );
@@ -156,7 +168,7 @@ class _LoginPageState extends State<LoginPage> {
                       decoration: BoxDecoration(
                           boxShadow: [
                             BoxShadow(
-                              color: Color.fromARGB(47, 158, 158, 158),
+                              color: Color.fromARGB(46, 41, 41, 41),
                               spreadRadius: 4,
                               blurRadius: 10,
                               offset: Offset(0, 2),
@@ -166,7 +178,7 @@ class _LoginPageState extends State<LoginPage> {
                           borderRadius: BorderRadius.circular(20),
                           border: Border.all(
                               width: 1,
-                              color: Color.fromARGB(45, 255, 255, 255))),
+                              color: Color.fromARGB(113, 97, 97, 97))),
                       child: IconButton(
                         iconSize: 80,
                         icon: Image.asset('assets/groupIcon.png'),
@@ -176,21 +188,40 @@ class _LoginPageState extends State<LoginPage> {
                               pageBuilder:
                                   (context, animation, secondaryAnimation) {
                                 return BackgroundContainerObscure(
-                                    child: groupLogin());
+                                  child: groupLogin(),
+                                );
                               },
-                              transitionDuration: Duration(milliseconds: 800),
                               transitionsBuilder: (context, animation,
                                   secondaryAnimation, child) {
                                 const begin = Offset(1.0, 0.0);
                                 const end = Offset.zero;
-                                const curve = Curves.easeInOut;
-
+                                const curve = Curves.ease;
                                 var tween = Tween(begin: begin, end: end)
                                     .chain(CurveTween(curve: curve));
                                 var offsetAnimation = animation.drive(tween);
-                                return SlideTransition(
-                                  position: offsetAnimation,
-                                  child: child,
+
+                                var fadeTween =
+                                    Tween<double>(begin: 0.0, end: 1.0);
+                                var fadeAnimation = animation.drive(fadeTween);
+
+                                return FadeTransition(
+                                  opacity: fadeAnimation,
+                                  child: SlideTransition(
+                                    position: offsetAnimation,
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color:
+                                                Colors.black.withOpacity(0.2),
+                                            spreadRadius: 2,
+                                            blurRadius: 15,
+                                          ),
+                                        ],
+                                      ),
+                                      child: child,
+                                    ),
+                                  ),
                                 );
                               },
                             ),
