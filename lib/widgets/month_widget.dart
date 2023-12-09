@@ -1,16 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:control_gastos/expenses_repository.dart';
-import 'package:control_gastos/screens/detailsPage.dart';
-import 'package:control_gastos/screens/addPage.dart';
+
 import 'package:control_gastos/screens/detailsPageContainer.dart';
 import 'package:control_gastos/states/login_state.dart';
 import 'package:control_gastos/widgets/graph_widgett.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
-import 'package:collection/collection.dart';
 
 enum GraphType { LINES, PIE }
 
@@ -61,13 +56,14 @@ class MonthWidget extends StatefulWidget {
 
 class _MonthWidgetState extends State<MonthWidget>
     with SingleTickerProviderStateMixin {
-  int selectedDay = 3;
+  int selectedDay = DateTime.now().day;
 
   String selectedOption = 'optionMonth';
   List<int> daysInMonth = [];
 
   late AnimationController controller;
   late Animation<double> animation;
+  bool isRotated = false;
 
   @override
   void initState() {
@@ -75,20 +71,19 @@ class _MonthWidgetState extends State<MonthWidget>
     final now = DateTime.now();
     final lastDayOfMonth = DateTime(now.year, now.month + 1, 0).day;
     daysInMonth = List<int>.generate(lastDayOfMonth, (index) => index + 1);
-
     controller = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 500),
+      duration: const Duration(milliseconds: 350),
     );
 
-    animation = Tween<double>(begin: 0.0, end: 1.0).animate(controller)
-      ..addStatusListener((status) {
-        if (status == AnimationStatus.completed) {
-          controller.stop();
-        } else if (status == AnimationStatus.dismissed) {
-          controller.reverse();
-        }
-      });
+    animation = Tween<double>(
+      begin: 0,
+      end: 0.25,
+    ).animate(controller);
+    CurvedAnimation(
+      parent: controller,
+      curve: Curves.easeInOut,
+    );
   }
 
   @override
@@ -116,29 +111,11 @@ class _MonthWidgetState extends State<MonthWidget>
     );
   }
 
-  void toggleAnimationTrue() {
-    if (controller.isAnimating) {
-      controller.reset();
-    } else {
-      controller.forward();
-    }
-  }
-
-  void toggleAnimationFalse() {
-    if (controller.isAnimating) {
-      controller.forward();
-    } else {
-      controller.reverse();
-    }
-  }
-
   Widget _popMenu() {
     return PopupMenuButton<String>(
-      child: AnimatedIcon(
-        icon: AnimatedIcons.view_list,
-        progress: controller,
-        color: Colors.white,
-        size: 50.0,
+      icon: RotationTransition(
+        turns: animation,
+        child: Icon(Icons.arrow_forward_ios),
       ),
       itemBuilder: (BuildContext context) => [
         PopupMenuItem<String>(
@@ -150,13 +127,40 @@ class _MonthWidgetState extends State<MonthWidget>
           child: Text('Dia'),
         ),
       ],
-      onSelected: (String value) {
+      onCanceled: () {
         setState(() {
-          selectedOption = value;
+          isRotated = !isRotated;
+
+          if (isRotated) {
+            controller.forward();
+          } else {
+            controller.reverse();
+          }
         });
       },
-      onOpened: () => toggleAnimationTrue(),
-      onCanceled: () => toggleAnimationFalse(),
+      onOpened: () {
+        setState(() {
+          isRotated = !isRotated;
+
+          if (isRotated) {
+            controller.forward();
+          } else {
+            controller.reverse();
+          }
+        });
+      },
+      onSelected: (String value) {
+        setState(() {
+          isRotated = !isRotated;
+
+          selectedOption = value;
+          if (isRotated) {
+            controller.forward();
+          } else {
+            controller.reverse();
+          }
+        });
+      },
       offset: Offset(0, 40),
       elevation: 8,
       shape: BeveledRectangleBorder(
@@ -228,19 +232,17 @@ class _MonthWidgetState extends State<MonthWidget>
                 selectedDay = value!;
               });
             },
-            menuMaxHeight: 100,
+            borderRadius: BorderRadius.circular(30),
+            menuMaxHeight: 200,
             underline: Container(
-              height: 2, // Altura de la línea de debajo del botón
-              color: const Color.fromARGB(
-                  127, 255, 255, 255), // Color de la línea de debajo del botón
+              height: 2,
+              color: const Color.fromARGB(127, 255, 255, 255),
             ),
-            alignment: AlignmentDirectional.centerEnd,
+            alignment: AlignmentDirectional.center,
             elevation: 15,
             padding: EdgeInsets.symmetric(horizontal: 2),
-            style: TextStyle(
-                color: const Color.fromARGB(
-                    255, 23, 22, 22)), // Estilo del texto del botón
-            dropdownColor: const Color.fromARGB(255, 33, 31, 31),
+            style: TextStyle(color: const Color.fromARGB(255, 23, 22, 22)),
+            dropdownColor: Color.fromARGB(211, 21, 21, 21),
           ),
         ],
       ),
@@ -248,11 +250,9 @@ class _MonthWidgetState extends State<MonthWidget>
   }
 
   Widget _expensesDay() {
-    // Filtrar los documentos para obtener solo los del día seleccionado
     final dayDocuments =
         widget.documents.where((doc) => doc['day'] == selectedDay);
 
-    // Calcular el total de gastos del día
     double totalExpensesDay =
         dayDocuments.map((doc) => doc['value']).fold(0.0, (a, b) => a + b);
 

@@ -22,6 +22,7 @@ class DetailsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    documents.sort((a, b) => a['day'].compareTo(b['day']));
     return Scaffold(
         appBar: AppBar(
           title: Text(categoryName.toUpperCase()),
