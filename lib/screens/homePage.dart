@@ -145,13 +145,16 @@ class _HomePageState extends State<HomePage> {
                       height: 20,
                     ),
                     Container(
-                      margin: EdgeInsets.all(30),
+                      margin: EdgeInsets.all(10),
                       decoration: BoxDecoration(
+                          border: Border.all(
+                              width: 2,
+                              color: const Color.fromARGB(43, 255, 255, 255)),
                           borderRadius: BorderRadius.circular(80),
-                          color: const Color.fromARGB(35, 255, 255, 255)),
-                      padding: EdgeInsets.all(50),
+                          color: Color.fromARGB(34, 197, 19, 19)),
+                      padding: EdgeInsets.all(25),
                       child: Image.asset(
-                        'assets/noHayDatos.gif',
+                        'assets/noHayDatos.png',
                       ),
                     ),
                   ],

@@ -59,11 +59,15 @@ class MonthWidget extends StatefulWidget {
   State<MonthWidget> createState() => _MonthWidgetState();
 }
 
-class _MonthWidgetState extends State<MonthWidget> {
+class _MonthWidgetState extends State<MonthWidget>
+    with SingleTickerProviderStateMixin {
   int selectedDay = 3;
 
   String selectedOption = 'optionMonth';
   List<int> daysInMonth = [];
+
+  late AnimationController controller;
+  late Animation<double> animation;
 
   @override
   void initState() {
@@ -71,6 +75,26 @@ class _MonthWidgetState extends State<MonthWidget> {
     final now = DateTime.now();
     final lastDayOfMonth = DateTime(now.year, now.month + 1, 0).day;
     daysInMonth = List<int>.generate(lastDayOfMonth, (index) => index + 1);
+
+    controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 500),
+    );
+
+    animation = Tween<double>(begin: 0.0, end: 1.0).animate(controller)
+      ..addStatusListener((status) {
+        if (status == AnimationStatus.completed) {
+          controller.stop();
+        } else if (status == AnimationStatus.dismissed) {
+          controller.reverse();
+        }
+      });
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
   }
 
   @override
@@ -92,9 +116,30 @@ class _MonthWidgetState extends State<MonthWidget> {
     );
   }
 
+  void toggleAnimationTrue() {
+    if (controller.isAnimating) {
+      controller.reset();
+    } else {
+      controller.forward();
+    }
+  }
+
+  void toggleAnimationFalse() {
+    if (controller.isAnimating) {
+      controller.forward();
+    } else {
+      controller.reverse();
+    }
+  }
+
   Widget _popMenu() {
     return PopupMenuButton<String>(
-      icon: Icon(Icons.keyboard_arrow_down_sharp, color: Colors.white),
+      child: AnimatedIcon(
+        icon: AnimatedIcons.view_list,
+        progress: controller,
+        color: Colors.white,
+        size: 50.0,
+      ),
       itemBuilder: (BuildContext context) => [
         PopupMenuItem<String>(
           value: 'optionMonth',
@@ -110,12 +155,17 @@ class _MonthWidgetState extends State<MonthWidget> {
           selectedOption = value;
         });
       },
-      offset: Offset(0, 40), // Ajusta la posición vertical del menú
-      elevation: 4, // Sombra del menú emergente
-      color: Colors.white, // Color de fondo del menú emergente
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(15.0), // Bordes redondeados
+      onOpened: () => toggleAnimationTrue(),
+      onCanceled: () => toggleAnimationFalse(),
+      offset: Offset(0, 40),
+      elevation: 8,
+      shape: BeveledRectangleBorder(
+        side: BorderSide(
+            color: const Color.fromARGB(125, 255, 255, 255), width: 1),
+        borderRadius: BorderRadius.all(Radius.elliptical(8, 5)),
       ),
+      shadowColor: const Color.fromARGB(255, 255, 255, 255),
+      color: Color.fromARGB(255, 239, 224, 255),
     );
   }
 

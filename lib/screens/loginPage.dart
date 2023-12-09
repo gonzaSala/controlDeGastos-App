@@ -38,7 +38,7 @@ class _LoginPageState extends State<LoginPage> {
           child: Column(
             children: <Widget>[
               Expanded(
-                flex: 2,
+                flex: 1,
                 child: Container(),
               ),
               Text(
@@ -49,8 +49,10 @@ class _LoginPageState extends State<LoginPage> {
                     .copyWith(color: Colors.white),
               ),
               Padding(
-                padding: const EdgeInsets.all(32.0),
-                child: Image.asset('assets/loginPage.png'),
+                padding: const EdgeInsets.all(15.0),
+                child: Image.asset(
+                  'assets/loginPage.png',
+                ),
               ),
               Text(
                 'Tu app de gastos personales y/o grupales',
