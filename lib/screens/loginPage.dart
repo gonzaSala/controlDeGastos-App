@@ -103,7 +103,7 @@ class _LoginPageState extends State<LoginPage> {
                               offset: Offset(0, 2),
                             ),
                           ],
-                          color: Color.fromARGB(48, 157, 155, 155),
+                          color: Color.fromARGB(40, 50, 50, 50),
                           borderRadius: BorderRadius.circular(20),
                           border: Border.all(
                               width: 1,
@@ -159,8 +159,6 @@ class _LoginPageState extends State<LoginPage> {
                                   },
                                 ),
                               ),
-
-                              // Puedes agregar más opciones de inicio de sesión si lo deseas
                             ],
                           );
                         },
@@ -176,7 +174,7 @@ class _LoginPageState extends State<LoginPage> {
                               offset: Offset(0, 2),
                             ),
                           ],
-                          color: Color.fromARGB(48, 157, 155, 155),
+                          color: Color.fromARGB(40, 50, 50, 50),
                           borderRadius: BorderRadius.circular(20),
                           border: Border.all(
                               width: 1,

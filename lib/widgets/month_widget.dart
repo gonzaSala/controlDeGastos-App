@@ -7,6 +7,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+import 'package:animated_text_kit/animated_text_kit.dart';
+
 enum GraphType { LINES, PIE }
 
 class MonthWidget extends StatefulWidget {
@@ -151,6 +153,8 @@ class _MonthWidgetState extends State<MonthWidget>
       },
       onSelected: (String value) {
         setState(() {
+          selectedOption = value;
+
           isRotated = !isRotated;
 
           selectedOption = value;
@@ -193,13 +197,19 @@ class _MonthWidgetState extends State<MonthWidget>
             ),
           ],
         ),
-        Text(
-          '\$${widget.total.toStringAsFixed(2)}',
-          style: TextStyle(
-            color: Colors.blueGrey[200],
-            fontWeight: FontWeight.bold,
-            fontSize: 40.0,
-          ),
+        AnimatedTextKit(
+          totalRepeatCount: 1,
+          animatedTexts: [
+            TypewriterAnimatedText(
+              '\$${widget.total.toStringAsFixed(2)}',
+              textStyle: TextStyle(
+                  color: Colors.blueGrey[200],
+                  fontWeight: FontWeight.bold,
+                  fontSize: 40.0),
+              curve: Curves.easeInOut,
+              speed: Duration(milliseconds: 150),
+            ),
+          ],
         ),
       ],
     );
@@ -275,11 +285,10 @@ class _MonthWidgetState extends State<MonthWidget>
         Text(
           '\$${totalExpensesDay.toStringAsFixed(2)}',
           style: TextStyle(
-            color: Colors.blueGrey[200],
-            fontWeight: FontWeight.bold,
-            fontSize: 40.0,
-          ),
-        ),
+              color: Colors.blueGrey[200],
+              fontWeight: FontWeight.bold,
+              fontSize: 40.0),
+        )
       ],
     );
   }

@@ -35,6 +35,12 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  @override
+  void initState() {
+    super.initState();
+    _body();
+  }
+
   Widget _bottomAction(IconData icon, Function callback) {
     return InkWell(
       child: Padding(
@@ -104,7 +110,7 @@ class _HomePageState extends State<HomePage> {
             elevation: 15,
             backgroundColor: Color.fromARGB(255, 135, 38, 144),
             onPressed: () {
-              Navigator.of(context).pushNamed('/add');
+              Navigator.of(context).pushReplacementNamed('/add');
             },
           ),
           body: _body(),

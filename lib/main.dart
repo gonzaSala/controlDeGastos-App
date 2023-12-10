@@ -26,6 +26,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
   await FirebaseApi().initNotifications();
 
   runApp(MyApp());
@@ -36,6 +37,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider<FirebaseApi>(
+          create: (context) => FirebaseApi(),
+        ),
         //  ChangeNotifierProvider(
         //     create: (context) => NotificationState(),
         //   ),
@@ -107,7 +111,7 @@ class MyApp extends StatelessWidget {
                               TextButton(
                                 onPressed: () {
                                   Navigator.of(context)
-                                      .pushNamed('/groupLogin');
+                                      .pushReplacementNamed('/groupLogin');
                                 },
                                 child: Text('OK'),
                               ),
@@ -121,6 +125,9 @@ class MyApp extends StatelessWidget {
           ),
         ),
         routes: {
+          '/homePage': (BuildContext context) => BackgroundContainerObscure(
+                child: HomePage(),
+              ),
           '/loginPage': (BuildContext context) => BackgroundContainerObscure(
                 child: LoginPage(),
               ),

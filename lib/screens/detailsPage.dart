@@ -39,6 +39,16 @@ class DetailsPage extends StatelessWidget {
                   key: Key(document.id),
                   onDismissed: (direction) async {
                     OnDelete(document.id);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        backgroundColor: const Color.fromARGB(85, 0, 0, 0),
+                        duration: Duration(milliseconds: 700),
+                        content: Text(
+                          'Se eliminó el gasto: \$${document['value'].toString()}',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    );
                   },
                   confirmDismiss: (direction) async {
                     final result = await showDialog(
@@ -68,16 +78,6 @@ class DetailsPage extends StatelessWidget {
                         );
                       },
                     );
-
-                    if (result == true) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(
-                            'Se eliminó el gasto: \$${document['value'].toString()}',
-                          ),
-                        ),
-                      );
-                    }
 
                     return result;
                   },

@@ -21,7 +21,11 @@ class _AddPageState extends State<AddPage> {
   String dateStr = 'hoy';
   DateTime date = DateTime.now();
 
-  bool TxtFieldVisible = false;
+  @override
+  void initState() {
+    super.initState();
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +72,7 @@ class _AddPageState extends State<AddPage> {
         actions: [
           IconButton(
               onPressed: () {
-                Navigator.of(context).pop();
+                Navigator.of(context).pushReplacementNamed('/homePage');
               },
               icon: Icon(
                 Icons.close_outlined,
@@ -296,7 +300,7 @@ class _AddPageState extends State<AddPage> {
                       'details': details,
                       'timestamp': DateTime.now()
                     });
-                    Navigator.of(context).pop();
+                    Navigator.of(context).pushReplacementNamed('/homePage');
                   }
                   if (value == 0 || category == '') {
                     showDialog(

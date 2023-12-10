@@ -177,7 +177,7 @@ class _groupLoginState extends State<groupLogin> {
                                 .registerWithEmailPassword(email, password);
                           }
                         },
-                        child: Text('Crear Grupo'),
+                        child: Text('Crear grupo'),
                       ),
                     ),
                     SizedBox(
@@ -210,7 +210,7 @@ class _groupLoginState extends State<groupLogin> {
 
                           Navigator.pushReplacementNamed(context, '/');
                         },
-                        child: Text('Ingresar al Grupo'),
+                        child: Text('Ingresar al grupo'),
                       ),
                     ),
                   ],
