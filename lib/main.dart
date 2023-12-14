@@ -67,8 +67,7 @@ class MyApp extends StatelessWidget {
           textTheme: GoogleFonts.latoTextTheme(Theme.of(context).textTheme),
           brightness: Brightness.dark,
           primaryColor: Color.fromARGB(255, 255, 255, 255),
-          secondaryHeaderColor: const Color.fromARGB(255, 4, 169, 92),
-          // Otras propiedades del tema según sea necesario
+          secondaryHeaderColor: Color.fromARGB(255, 70, 75, 73),
         ),
         builder: (context, child) => ResponsiveBreakpoints.builder(
           child: child!,

@@ -8,7 +8,6 @@ import 'package:image_picker/image_picker.dart';
 
 class expensesRepository {
   final String? userId;
-  String? _profileImageUrl;
 
   expensesRepository({required this.userId});
 

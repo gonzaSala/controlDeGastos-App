@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 enum GraphType { LINES, PIE }
 
@@ -101,6 +102,9 @@ class _MonthWidgetState extends State<MonthWidget>
         children: <Widget>[
           if (selectedOption == 'optionMonth') _expensesMonth(),
           if (selectedOption == 'optionDay') _expensesDay(),
+          SizedBox(
+            height: 10,
+          ),
           if (selectedOption == 'optionDay') _daySelector(),
           _graph(),
           Container(
@@ -191,9 +195,6 @@ class _MonthWidgetState extends State<MonthWidget>
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               _popMenu(),
-              SizedBox(
-                width: 80,
-              ),
               Text(
                 'Total gastos del mes',
                 style: TextStyle(
@@ -293,9 +294,6 @@ class _MonthWidgetState extends State<MonthWidget>
         children: <Widget>[
           Row(mainAxisAlignment: MainAxisAlignment.start, children: [
             _popMenu(),
-            SizedBox(
-              width: 80,
-            ),
             Text(
               'Total gastos del día $selectedDay',
               style: TextStyle(

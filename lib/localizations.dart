@@ -52,9 +52,7 @@ class initLocalizations {
     }
   }
 
-  // Devuelve 'initLocalizations?' ya que puede ser nulo
   static initLocalizations? of(BuildContext context) {
-    // Usa la función estática 'Localizations.of' de Flutter
     return Localizations.of<initLocalizations>(context, initLocalizations);
   }
 }
