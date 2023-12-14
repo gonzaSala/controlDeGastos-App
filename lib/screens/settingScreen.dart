@@ -80,7 +80,6 @@ class _SettingsState extends State<Settings> {
   Widget _uploadProfilePicture(BuildContext context, expensesRepository repo) {
     return Container(
       width: double.infinity,
-      color: Color.fromARGB(23, 163, 163, 163),
       padding: EdgeInsets.all(8),
       child: Stack(
         children: [
@@ -168,7 +167,6 @@ class _SettingsState extends State<Settings> {
   Widget _deleteData(BuildContext context, expensesRepository repo) {
     return Container(
       alignment: Alignment.topLeft,
-      color: Color.fromARGB(23, 163, 163, 163),
       padding: EdgeInsets.all(8),
       child: TextButton(
         onPressed: () {

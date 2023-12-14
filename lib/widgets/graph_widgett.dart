@@ -111,9 +111,10 @@ class LinesGraphState extends State<LinesGraph> {
         lineBarsData: [
           LineChartBarData(
               spots: flSpotList,
+              curveSmoothness: 0.7,
               isCurved: true,
               barWidth: 0.5,
-              isStepLineChart: true,
+              isStepLineChart: false,
               belowBarData: BarAreaData(
                   show: true,
                   gradient: LinearGradient(

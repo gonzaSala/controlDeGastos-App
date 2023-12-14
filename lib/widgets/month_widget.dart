@@ -178,83 +178,99 @@ class _MonthWidgetState extends State<MonthWidget>
   }
 
   Widget _expensesMonth() {
-    return Column(
-      children: <Widget>[
-        Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            _popMenu(),
-            SizedBox(
-              width: 80,
-            ),
-            Text(
-              'Total gastos del mes',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 16.0,
-                color: Colors.blueGrey[300],
+    return Container(
+      padding: EdgeInsets.only(bottom: 10),
+      decoration: BoxDecoration(
+          border:
+              Border.all(color: Color.fromARGB(49, 255, 255, 255), width: 1),
+          borderRadius: BorderRadius.circular(10),
+          color: Color.fromARGB(40, 37, 51, 130)),
+      child: Column(
+        children: <Widget>[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              _popMenu(),
+              SizedBox(
+                width: 80,
               ),
-            ),
-          ],
-        ),
-        AnimatedTextKit(
-          totalRepeatCount: 1,
-          animatedTexts: [
-            TypewriterAnimatedText(
-              '\$${widget.total.toStringAsFixed(2)}',
-              textStyle: TextStyle(
-                  color: Colors.blueGrey[200],
+              Text(
+                'Total gastos del mes',
+                style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  fontSize: 40.0),
-              curve: Curves.easeInOut,
-              speed: Duration(milliseconds: 150),
-            ),
-          ],
-        ),
-      ],
+                  fontSize: 16.0,
+                  color: Colors.blueGrey[300],
+                ),
+              ),
+            ],
+          ),
+          AnimatedTextKit(
+            totalRepeatCount: 1,
+            animatedTexts: [
+              TypewriterAnimatedText(
+                '\$${widget.total.toStringAsFixed(2)}',
+                textStyle: TextStyle(
+                    color: Colors.blueGrey[200],
+                    fontWeight: FontWeight.bold,
+                    fontSize: 40.0),
+                curve: Curves.easeInOut,
+                speed: Duration(milliseconds: 150),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 
   Widget _daySelector() {
-    return Padding(
-      padding: const EdgeInsets.all(5.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Text(
-            'Seleccionar día:',
-            style: TextStyle(color: Colors.white),
-          ),
-          SizedBox(width: 10),
-          DropdownButton<int>(
-            value: selectedDay,
-            items: daysInMonth.map((day) {
-              return DropdownMenuItem<int>(
-                value: day,
-                child: Text(
-                  day.toString(),
-                  style: TextStyle(color: Colors.white),
-                ),
-              );
-            }).toList(),
-            onChanged: (value) {
-              setState(() {
-                selectedDay = value!;
-              });
-            },
-            borderRadius: BorderRadius.circular(30),
-            menuMaxHeight: 200,
-            underline: Container(
-              height: 2,
-              color: const Color.fromARGB(127, 255, 255, 255),
+    return Container(
+      padding: EdgeInsets.only(bottom: 10),
+      decoration: BoxDecoration(
+          border:
+              Border.all(color: Color.fromARGB(49, 255, 255, 255), width: 1),
+          borderRadius: BorderRadius.circular(10),
+          color: Color.fromARGB(239, 2, 8, 47)),
+      child: Padding(
+        padding: const EdgeInsets.all(5.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text(
+              'Seleccionar día:',
+              style: TextStyle(color: Colors.white),
             ),
-            alignment: AlignmentDirectional.center,
-            elevation: 15,
-            padding: EdgeInsets.symmetric(horizontal: 2),
-            style: TextStyle(color: const Color.fromARGB(255, 23, 22, 22)),
-            dropdownColor: Color.fromARGB(211, 21, 21, 21),
-          ),
-        ],
+            SizedBox(width: 10),
+            DropdownButton<int>(
+              value: selectedDay,
+              items: daysInMonth.map((day) {
+                return DropdownMenuItem<int>(
+                  value: day,
+                  child: Text(
+                    day.toString(),
+                    style: TextStyle(color: Colors.white),
+                  ),
+                );
+              }).toList(),
+              onChanged: (value) {
+                setState(() {
+                  selectedDay = value!;
+                });
+              },
+              borderRadius: BorderRadius.circular(30),
+              menuMaxHeight: 200,
+              underline: Container(
+                height: 2,
+                color: const Color.fromARGB(127, 255, 255, 255),
+              ),
+              alignment: AlignmentDirectional.center,
+              elevation: 15,
+              padding: EdgeInsets.symmetric(horizontal: 2),
+              style: TextStyle(color: const Color.fromARGB(255, 23, 22, 22)),
+              dropdownColor: Color.fromARGB(211, 21, 21, 21),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -266,30 +282,38 @@ class _MonthWidgetState extends State<MonthWidget>
     double totalExpensesDay =
         dayDocuments.map((doc) => doc['value']).fold(0.0, (a, b) => a + b);
 
-    return Column(
-      children: <Widget>[
-        Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-          _popMenu(),
-          SizedBox(
-            width: 80,
-          ),
-          Text(
-            'Total gastos del día $selectedDay',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 16.0,
-              color: Colors.blueGrey[300],
+    return Container(
+      padding: EdgeInsets.only(bottom: 10),
+      decoration: BoxDecoration(
+          border:
+              Border.all(color: Color.fromARGB(49, 255, 255, 255), width: 1),
+          borderRadius: BorderRadius.circular(10),
+          color: Color.fromARGB(40, 37, 51, 130)),
+      child: Column(
+        children: <Widget>[
+          Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+            _popMenu(),
+            SizedBox(
+              width: 80,
             ),
-          ),
-        ]),
-        Text(
-          '\$${totalExpensesDay.toStringAsFixed(2)}',
-          style: TextStyle(
-              color: Colors.blueGrey[200],
-              fontWeight: FontWeight.bold,
-              fontSize: 40.0),
-        )
-      ],
+            Text(
+              'Total gastos del día $selectedDay',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 16.0,
+                color: Colors.blueGrey[300],
+              ),
+            ),
+          ]),
+          Text(
+            '\$${totalExpensesDay.toStringAsFixed(2)}',
+            style: TextStyle(
+                color: Colors.blueGrey[200],
+                fontWeight: FontWeight.bold,
+                fontSize: 40.0),
+          )
+        ],
+      ),
     );
   }
 
