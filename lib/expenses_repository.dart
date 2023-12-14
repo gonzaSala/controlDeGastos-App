@@ -8,6 +8,7 @@ import 'package:image_picker/image_picker.dart';
 
 class expensesRepository {
   final String? userId;
+  String? _profileImageUrl;
 
   expensesRepository({required this.userId});
 
@@ -104,40 +105,33 @@ class expensesRepository {
     }
   }
 
-  final FirebaseStorage storage = FirebaseStorage.instance;
+  Future<String> uploadProfileImage(File imageFile) async {
+    try {
+      String userId = FirebaseAuth.instance.currentUser?.uid ?? '';
+      String path = 'user/$userId/profile/avatar.png';
 
-  Future<bool> uploadImg(File image) async {
-    final String nameFile = image.path.split('/').last;
+      final storageReference = FirebaseStorage.instance.ref().child(path);
+      await storageReference.putFile(imageFile);
 
-    final Reference ref = storage.ref().child('Images').child(nameFile);
-    final UploadTask uploadTask = ref.putFile(image);
-
-    final TaskSnapshot snapshot = await uploadTask.whenComplete(() => true);
-
-    final String url = await snapshot.ref.getDownloadURL();
-
-    if (snapshot.state == TaskState.success) {
-      return true;
-    } else {
-      return false;
+      String imageUrl = await storageReference.getDownloadURL();
+      return imageUrl;
+    } catch (e) {
+      print('Error al subir la imagen al almacenamiento: $e');
+      throw e;
     }
-  }
-
-  Future getImg() async {
-    final ImagePicker picker = ImagePicker();
-    final XFile? image = await picker.pickImage(source: ImageSource.gallery);
-
-    return image;
   }
 
   Future<String?> getProfileImageUrl() async {
     try {
-      final url =
-          await storage.ref().child('Images').child(userId!).getDownloadURL();
+      String userId = FirebaseAuth.instance.currentUser?.uid ?? '';
+      String path = 'user/$userId/profile/avatar.png';
 
-      return url;
+      final storageReference = FirebaseStorage.instance.ref().child(path);
+      String imageUrl = await storageReference.getDownloadURL();
+
+      return imageUrl;
     } catch (e) {
-      print('Error getting profile image URL: $e');
+      print('Error al obtener la URL de la imagen del almacenamiento: $e');
       return null;
     }
   }

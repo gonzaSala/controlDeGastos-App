@@ -14,7 +14,23 @@ class Settings extends StatefulWidget {
 }
 
 class _SettingsState extends State<Settings> {
+  String? _profileImageUrl;
+  bool _isLoading = false;
+
   File? _selectedImage;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _loadProfileImageFromStorage();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     var expensesRepo = Provider.of<expensesRepository>(context, listen: false);
@@ -37,35 +53,78 @@ class _SettingsState extends State<Settings> {
     );
   }
 
+  Future<String> _uploadImageToStorage() async {
+    try {
+      var expensesRepo =
+          Provider.of<expensesRepository>(context, listen: false);
+
+      String imageUrl =
+          await expensesRepo.uploadProfileImage(_selectedImage!) ?? '';
+      print('$imageUrl');
+
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setString('profileImageUrl', imageUrl);
+      print('Image URL saved in SharedPreferences: $imageUrl');
+
+      setState(() {
+        _profileImageUrl = prefs.getString('profileImageUrl');
+      });
+
+      return imageUrl;
+    } catch (e) {
+      print('Error al subir la imagen al almacenamiento: $e');
+      return '';
+    }
+  }
+
   Widget _uploadProfilePicture(BuildContext context, expensesRepository repo) {
     return Container(
       width: double.infinity,
-      alignment: Alignment.topLeft,
       color: Color.fromARGB(23, 163, 163, 163),
       padding: EdgeInsets.all(8),
-      child: Container(
-        width: 120,
-        height: 120,
-        child: Stack(
-          alignment: AlignmentDirectional.centerStart,
-          children: [
-            _loadProfileImage(context, repo),
-            Positioned(
-              bottom: 0,
-              right: 0,
-              child: FloatingActionButton(
-                onPressed: () async {
-                  await _pickImage(context, repo);
-                },
-                backgroundColor: Color.fromARGB(135, 162, 162, 162),
-                mini: true,
-                child: Icon(Icons.add),
-              ),
+      child: Stack(
+        children: [
+          _loadProfileImage(context, repo),
+          if (_isLoading)
+            Center(
+              child: CircularProgressIndicator(),
             ),
-          ],
-        ),
+          Positioned(
+              bottom: 0,
+              right: 250,
+              child: IconButton(
+                onPressed: () async {
+                  await _pickImage();
+                },
+                icon: Icon(
+                  Icons.add,
+                  color: Colors.white,
+                ),
+                iconSize: 30.0,
+                padding: EdgeInsets.all(15.0),
+                splashRadius: 30.0,
+                color: Color.fromARGB(135, 162, 162, 162),
+              )),
+        ],
       ),
     );
+  }
+
+  Future<void> _loadProfileImageFromStorage() async {
+    try {
+      var expensesRepo =
+          Provider.of<expensesRepository>(context, listen: false);
+      String? imageUrl = await expensesRepo.getProfileImageUrl();
+      print('asdasdasdasdasdasdsa');
+
+      if (imageUrl != null) {
+        setState(() {
+          _profileImageUrl = imageUrl;
+        });
+      }
+    } catch (e) {
+      print('Error al cargar la imagen del almacenamiento: $e');
+    }
   }
 
   Widget _loadProfileImage(BuildContext context, expensesRepository repo) {
@@ -73,6 +132,11 @@ class _SettingsState extends State<Settings> {
       return CircleAvatar(
         radius: 50,
         backgroundImage: FileImage(_selectedImage!),
+      );
+    } else if (_profileImageUrl != null) {
+      return CircleAvatar(
+        radius: 50,
+        backgroundImage: NetworkImage(_profileImageUrl!),
       );
     } else {
       return CircleAvatar(
@@ -82,35 +146,22 @@ class _SettingsState extends State<Settings> {
     }
   }
 
-  Future<void> _pickImage(BuildContext context, expensesRepository repo) async {
-    final ImagePicker _picker = ImagePicker();
-    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+  Future<void> _pickImage() async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
 
-    if (image != null) {
-      _selectedImage = File(image.path);
+    if (pickedFile != null) {
+      setState(() {
+        _isLoading = true;
+        _selectedImage = File(pickedFile.path);
+      });
+      String imageUrl = await _uploadImageToStorage();
+      print('${imageUrl}');
 
-      final success = await repo.uploadImg(_selectedImage!);
-
-      if (success) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Imagen cargada con éxito',
-                style: TextStyle(color: Colors.white)),
-            duration: Duration(seconds: 2),
-          ),
-        );
-        setState(() {
-          _loadProfileImage(context, repo);
-        });
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Error al cargar la imagen',
-                style: TextStyle(color: Colors.white)),
-            duration: Duration(seconds: 2),
-          ),
-        );
-      }
+      setState(() {
+        _profileImageUrl = imageUrl;
+        _isLoading = false;
+      });
     }
   }
 
