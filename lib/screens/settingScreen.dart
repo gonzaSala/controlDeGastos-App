@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:control_gastos/expenses_repository.dart';
+import 'package:flutter_iconpicker/flutter_iconpicker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:flutter/material.dart';
@@ -48,8 +49,77 @@ class _SettingsState extends State<Settings> {
           _uploadProfilePicture(context, expensesRepo),
           _notifications(context),
           _deleteData(context, expensesRepo),
+          _createCategoryButton(context), // Nuevo botón para crear categoría
         ],
       ),
+    );
+  }
+
+  Widget _createCategoryButton(BuildContext context) {
+    return Container(
+      alignment: Alignment.topLeft,
+      padding: EdgeInsets.all(8),
+      child: TextButton(
+        onPressed: () {
+          _createCategory(context);
+        },
+        child: Text(
+          'Crear Categoría',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _createCategory(BuildContext context) {
+    final TextEditingController newCategoryName = TextEditingController();
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Crear Nueva Categoría'),
+          content: Column(
+            children: [
+              TextField(
+                controller: newCategoryName,
+                decoration: InputDecoration(hintText: 'Ingrese el nombre'),
+              ),
+              ElevatedButton(
+                  onPressed: () async {
+                    IconData? iconValue =
+                        await FlutterIconPicker.showIconPicker(
+                      context,
+                      iconSize: 40.0,
+                      iconPickerShape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      iconColor: Colors.blue,
+                      title: Text('Seleccione un Icono'),
+                    );
+                  },
+                  child: Text('Seleccione el icono'))
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('Cancelar'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('Crear Categoría'),
+            ),
+          ],
+        );
+      },
     );
   }
 

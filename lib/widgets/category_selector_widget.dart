@@ -28,7 +28,7 @@ class CategoryWidget extends StatelessWidget {
     return Container(
       width: 80,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 5.3),
+        padding: EdgeInsets.all(8),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
@@ -50,11 +50,14 @@ class CategoryWidget extends StatelessWidget {
                 color: getColor(name),
               ),
             ),
-            Text(
-              name,
-              style: TextStyle(
-                  color: Color.fromARGB(255, 195, 191, 254), fontSize: 12),
-            )
+            Container(
+              margin: EdgeInsets.only(top: 6),
+              child: Text(
+                name,
+                style: TextStyle(
+                    color: Color.fromARGB(255, 195, 191, 254), fontSize: 12),
+              ),
+            ),
           ],
         ),
       ),

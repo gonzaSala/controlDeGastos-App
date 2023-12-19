@@ -183,6 +183,7 @@ class _MonthWidgetState extends State<MonthWidget>
 
   Widget _expensesMonth() {
     return Container(
+      width: 350,
       padding: EdgeInsets.only(bottom: 10),
       decoration: BoxDecoration(
           border:
@@ -226,7 +227,8 @@ class _MonthWidgetState extends State<MonthWidget>
 
   Widget _daySelector() {
     return Container(
-      padding: EdgeInsets.only(bottom: 10),
+      width: 180,
+      padding: EdgeInsets.all(2),
       decoration: BoxDecoration(
           border:
               Border.all(color: Color.fromARGB(49, 255, 255, 255), width: 1),
@@ -284,6 +286,7 @@ class _MonthWidgetState extends State<MonthWidget>
         dayDocuments.map((doc) => doc['value']).fold(0.0, (a, b) => a + b);
 
     return Container(
+      width: 350,
       padding: EdgeInsets.only(bottom: 10),
       decoration: BoxDecoration(
           border:

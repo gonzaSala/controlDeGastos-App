@@ -52,6 +52,7 @@ class expensesRepository {
     String categoryName,
     String details,
     int value,
+    IconData icon,
     DateTime date,
   ) {
     FirebaseFirestore.instance
@@ -66,6 +67,7 @@ class expensesRepository {
       'year': date.year,
       'details': details,
       'timestamp': DateTime.now(),
+      'icon': icon.codePoint,
     });
   }
 
@@ -131,6 +133,40 @@ class expensesRepository {
       return imageUrl;
     } catch (e) {
       print('Error al obtener la URL de la imagen del almacenamiento: $e');
+      return null;
+    }
+  }
+
+  String? selectedCategoryName;
+  IconData? selectedCategoryIcon;
+
+  Future<String> uploadExpenseIcon(File imageFile, String iconName) async {
+    try {
+      String userId = FirebaseAuth.instance.currentUser?.uid ?? '';
+      String path = 'user/$userId/expenses/icons/$iconName.png';
+
+      final storageReference = FirebaseStorage.instance.ref().child(path);
+      await storageReference.putFile(imageFile);
+
+      String imageUrl = await storageReference.getDownloadURL();
+      return imageUrl;
+    } catch (e) {
+      print('Error al subir el icono al almacenamiento: $e');
+      throw e;
+    }
+  }
+
+  Future<String?> getExpenseIconUrl(String iconName) async {
+    try {
+      String userId = FirebaseAuth.instance.currentUser?.uid ?? '';
+      String path = 'user/$userId/expenses/icons/$iconName.png';
+
+      final storageReference = FirebaseStorage.instance.ref().child(path);
+      String imageUrl = await storageReference.getDownloadURL();
+
+      return imageUrl;
+    } catch (e) {
+      print('Error al obtener la URL del icono del almacenamiento: $e');
       return null;
     }
   }

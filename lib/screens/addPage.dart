@@ -112,7 +112,7 @@ class _AddPageState extends State<AddPage> {
     };
 
     return Container(
-      height: 80,
+      height: 100,
       decoration: BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(15)),
           border: Border.all(color: Color.fromARGB(37, 255, 255, 255)),
