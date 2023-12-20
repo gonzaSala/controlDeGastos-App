@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:control_gastos/screens/categoryData.dart';
 
 import 'package:control_gastos/screens/detailsPageContainer.dart';
 import 'package:control_gastos/states/login_state.dart';
@@ -401,34 +402,23 @@ class _MonthWidgetState extends State<MonthWidget>
     );
   }
 
-  List<Map<String, IconData>> categoryIcons = [
-    {
-      'Otros': Icons.wallet,
-      'Shopping': Icons.shopping_cart,
-      'Comida': FontAwesomeIcons.burger,
-      'Transporte': Icons.directions_bus_sharp,
-      'Alcohol': FontAwesomeIcons.beerMugEmpty,
-      'Salud': Icons.local_hospital_outlined,
-      'Deudas': Icons.business_center_rounded,
-      'Mascotas': Icons.pets_sharp,
-      'Educación': Icons.school_rounded,
-      'Ropa': FontAwesomeIcons.personDress,
-      'Hogar': Icons.home,
-    }
-  ];
-
   Widget _list() {
+    List<CategoryIcon> categoryIcons = CategoryData.getCategoryIcons();
+
     return Expanded(
       child: ListView.separated(
         itemCount: widget.categories.keys.length,
         itemBuilder: (BuildContext context, int index) {
           var key = widget.categories.keys.elementAt(index);
           var data = widget.categories[key];
-          var categoryIcon =
-              categoryIcons.firstWhere((element) => element.containsKey(key));
+          var categoryIcon = categoryIcons.firstWhere(
+            (element) => element.name == key,
+            orElse: () => CategoryIcon('Error', Icons.error),
+          );
+
           var colorIcon = getColor(key);
 
-          return _item(categoryIcon[key] ?? Icons.error, key,
+          return _item(categoryIcon.icon, key,
               (100 * data! ~/ widget.total).toInt(), data, colorIcon);
         },
         separatorBuilder: (BuildContext context, int index) {

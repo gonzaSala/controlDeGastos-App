@@ -3,9 +3,13 @@ import 'package:flutter/material.dart';
 class CategorySelectorWidget extends StatefulWidget {
   final Map<String, IconData> categories;
   final Function(String) onValueChanged;
+  final Function(String name, IconData icon) addCategory;
 
   const CategorySelectorWidget(
-      {super.key, required this.categories, required this.onValueChanged});
+      {super.key,
+      required this.categories,
+      required this.onValueChanged,
+      required this.addCategory});
 
   @override
   State<CategorySelectorWidget> createState() => _CategorySelectorWidgetState();

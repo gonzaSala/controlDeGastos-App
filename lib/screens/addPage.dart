@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:control_gastos/screens/categoryData.dart';
 import 'package:control_gastos/states/login_state.dart';
 import 'package:control_gastos/widgets/category_selector_widget.dart';
 import 'package:flutter/foundation.dart';
@@ -97,29 +98,21 @@ class _AddPageState extends State<AddPage> {
   }
 
   Widget _categorySelector() {
-    Map<String, IconData> categories = {
-      'Otros': Icons.wallet,
-      'Shopping': Icons.shopping_cart,
-      'Comida': FontAwesomeIcons.burger,
-      'Transporte': Icons.directions_bus_sharp,
-      'Alcohol': FontAwesomeIcons.beerMugEmpty,
-      'Salud': Icons.local_hospital_outlined,
-      'Deudas': Icons.business_center_rounded,
-      'Mascotas': Icons.pets_sharp,
-      'Educación': Icons.school_rounded,
-      'Ropa': FontAwesomeIcons.personDress,
-      'Hogar': Icons.home,
-    };
-
     return Container(
       height: 100,
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(15)),
-          border: Border.all(color: Color.fromARGB(37, 255, 255, 255)),
-          color: Color.fromARGB(31, 126, 126, 126)),
+        borderRadius: BorderRadius.all(Radius.circular(15)),
+        border: Border.all(color: Color.fromARGB(37, 255, 255, 255)),
+        color: Color.fromARGB(31, 126, 126, 126),
+      ),
       child: CategorySelectorWidget(
-        categories: categories,
+        categories: CategoryData.categories,
         onValueChanged: (newCategory) => category = newCategory,
+        addCategory: (String name, IconData icon) {
+          setState(() {
+            CategoryData.categories[name] = icon;
+          });
+        },
       ),
     );
   }
