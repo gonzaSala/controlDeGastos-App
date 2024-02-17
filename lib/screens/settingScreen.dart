@@ -30,7 +30,7 @@ class _SettingsState extends State<Settings> {
     super.initState();
 
     _loadProfileImageFromStorage();
-    _loadCategoriesFromSharedPreferences();
+    CategoryData.loadCategoriesFromSharedPreferences();
   }
 
   @override
@@ -56,7 +56,28 @@ class _SettingsState extends State<Settings> {
           _notifications(context),
           _deleteData(context, expensesRepo),
           _createCategoryButton(context),
+          eliminarCategoria(context)
         ],
+      ),
+    );
+  }
+
+  Widget eliminarCategoria(BuildContext context) {
+    return Container(
+      alignment: Alignment.topLeft,
+      padding: EdgeInsets.all(8),
+      child: TextButton(
+        onPressed: () {
+          _mostrarDialogoEliminarCategoria(context, CategoryData.categories);
+        },
+        child: Text(
+          'Eliminar Categoría',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
       ),
     );
   }
@@ -81,96 +102,239 @@ class _SettingsState extends State<Settings> {
     );
   }
 
-  void _createCategory(
-      BuildContext context, Map<String, IconData> categories) async {
-    final TextEditingController newCategoryNameController =
-        TextEditingController();
-    IconData? newCategoryIcon;
+  void _eliminarCategoria(BuildContext context,
+      Map<String, IconData> categories, String categoryName) async {
+    categories.remove(categoryName);
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String storedCategories = prefs.getString('categories') ?? '{}';
     Map<String, dynamic> savedCategories =
         Map<String, dynamic>.from(json.decode(storedCategories));
 
+    if (savedCategories.containsKey(categoryName)) {
+      savedCategories.remove(categoryName);
+      prefs.setString('categories', json.encode(savedCategories));
+    }
+  }
+
+  void _mostrarDialogoEliminarCategoria(
+      BuildContext context, Map<String, IconData> categories) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Crear Nueva Categoría'),
-          content: Column(
-            children: [
-              TextField(
-                controller: newCategoryNameController,
-                decoration: InputDecoration(hintText: 'Ingrese el nombre'),
-              ),
-              ElevatedButton(
-                onPressed: () async {
-                  IconData? iconValue = await FlutterIconPicker.showIconPicker(
-                    context,
-                    iconSize: 40.0,
-                    iconPickerShape: RoundedRectangleBorder(
+          shadowColor: Colors.white70,
+          elevation: 5,
+          backgroundColor: Color.fromARGB(211, 19, 17, 21),
+          title: Text(
+            'Eliminar Categoría',
+            style:
+                TextStyle(color: Colors.white70, fontWeight: FontWeight.bold),
+            textAlign: TextAlign.center,
+          ),
+          content: SingleChildScrollView(
+            child: Column(
+              children: categories.keys.map((String categoryName) {
+                return ListTile(
+                  title: Text(categoryName,
+                      style: TextStyle(
+                          color: Colors.white70, fontWeight: FontWeight.bold)),
+                  onTap: () {
+                    _eliminarCategoria(context, categories, categoryName);
+                    Navigator.of(context).pop();
+                  },
+                );
+              }).toList(),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  void _createCategory(
+      BuildContext context, Map<String, IconData> categories) async {
+    final TextEditingController newCategoryNameController =
+        TextEditingController();
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? storedCategories = prefs.getString('categories');
+    Map<String, dynamic> savedCategories =
+        Map<String, dynamic>.from(json.decode(storedCategories!));
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shadowColor: Colors.white70,
+          elevation: 5,
+          backgroundColor: Color.fromARGB(211, 19, 17, 21),
+          title: Text(
+            'Crear Nueva Categoría',
+            style:
+                TextStyle(color: Colors.white70, fontWeight: FontWeight.bold),
+            textAlign: TextAlign.center,
+          ),
+          content: SingleChildScrollView(
+            child: Column(
+              children: [
+                SizedBox(
+                  height: 10,
+                ),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.white,
+                    onPrimary: Colors.black,
+                    onSurface: Colors.black,
+                    textStyle: TextStyle(color: Colors.black),
+                    shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(15),
                     ),
-                    iconColor: Colors.blue,
-                    iconPackModes: [IconPack.fontAwesomeIcons],
-                    title: Text('Seleccione un Icono'),
-                  );
+                  ),
+                  onPressed: () async {
+                    IconData? iconValue =
+                        await FlutterIconPicker.showIconPicker(
+                      context,
+                      backgroundColor: const Color.fromARGB(227, 255, 255, 255),
+                      iconSize: 40.0,
+                      closeChild: Text(
+                        "Cerrar",
+                        style: TextStyle(
+                            color: const Color.fromARGB(179, 21, 20, 20),
+                            fontWeight: FontWeight.bold),
+                      ),
+                      searchIcon: Icon(Icons.search_rounded,
+                          color: const Color.fromARGB(179, 21, 20, 20)),
+                      iconPickerShape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      iconColor: Color.fromARGB(175, 59, 21, 72),
+                      iconPackModes: [IconPack.material],
+                      title: Text(
+                        'Seleccione un Icono',
+                        style: TextStyle(
+                            color: const Color.fromARGB(179, 21, 20, 20)),
+                      ),
+                    );
 
-                  if (iconValue != null) {
-                    newCategoryIcon = iconValue;
-                    setState(() {});
-                  }
-                },
-                child: Text('Seleccione el icono'),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              AnimatedSwitcher(
-                duration: Duration(milliseconds: 300),
-                child: Icon(
-                  newCategoryIcon ?? Icons.category,
+                    if (iconValue != null) {
+                      setState(() {
+                        newCategoryIcon = iconValue;
+                      });
+                    }
+                    if (newCategoryIcon != null) {
+                      Navigator.of(context).pop();
+                      _createCategory(context, categories);
+                    }
+                  },
+                  child: Text('Seleccione el icono'),
                 ),
-              ),
-            ],
+                SizedBox(
+                  height: 10,
+                ),
+                AnimatedSwitcher(
+                  duration: Duration(milliseconds: 3500),
+                  child: Icon(
+                    newCategoryIcon ?? Icons.question_mark,
+                    size: 100,
+                    color: Colors.white70,
+                  ),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                TextField(
+                  controller: newCategoryNameController,
+                  style: TextStyle(color: Colors.white70),
+                  decoration: InputDecoration(
+                    hintText: 'Ingrese el nombre',
+                    hintStyle: TextStyle(color: Colors.white70),
+                    filled: true,
+                    fillColor: Colors.transparent,
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.white),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.white),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    suffixIcon: Icon(Icons.search, color: Colors.white),
+                  ),
+                ),
+              ],
+            ),
           ),
           actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text('Cancelar'),
-            ),
-            TextButton(
-              onPressed: () async {
-                String newCategoryName = newCategoryNameController.text;
-                if (newCategoryIcon != null) {
-                  setState(() {
-                    print(
-                        'Guardando categorías1: $newCategoryName - $newCategoryIcon');
+            Container(
+              child:
+                  Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text(
+                    'Cancelar',
+                    style: TextStyle(color: Colors.white70),
+                  ),
+                ),
+                TextButton(
+                  onPressed: () async {
+                    String newCategoryName = newCategoryNameController.text;
 
-                    categories[newCategoryName] = newCategoryIcon!;
-                  });
+                    if (newCategoryName == '') {
+                      showDialog(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                          content:
+                              Text('Selecciona un nombre y/o una categoría'),
+                          actions: <Widget>[
+                            FloatingActionButton(
+                              child: Text('Ok'),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                          ],
+                        ),
+                      );
+                    } else {
+                      if (newCategoryIcon != null) {
+                        setState(() {
+                          print(
+                              'Guardando categorías1: $newCategoryName - $newCategoryIcon');
 
-                  savedCategories[newCategoryName] =
-                      iconToString(newCategoryIcon!);
-                  prefs.setString('categories', json.encode(savedCategories));
-                  print(
-                      'Guardando shared: $newCategoryName - $newCategoryIcon');
-                } else {
-                  setState(() {
-                    categories.remove(newCategoryName);
-                  });
+                          categories[newCategoryName] = newCategoryIcon!;
+                        });
 
-                  savedCategories.remove(newCategoryName);
-                  prefs.setString('categories', json.encode(savedCategories));
-                }
+                        savedCategories[newCategoryName] =
+                            iconToString(newCategoryIcon!);
+                        prefs.setString(
+                            'categories', json.encode(savedCategories));
+                        print(
+                            'Guardando shared: $newCategoryName - $newCategoryIcon');
+                      } else {
+                        setState(() {
+                          categories.remove(newCategoryName);
+                          print(
+                              'Eliminando shared: $newCategoryName - $newCategoryIcon');
+                        });
 
-                Navigator.of(context).pop();
-              },
-              child: Text(newCategoryIcon != null
-                  ? 'Crear Categoría'
-                  : 'Eliminar Categoría'),
+                        savedCategories.remove(newCategoryName);
+                        prefs.setString(
+                            'categories', json.encode(savedCategories));
+                      }
+                      Navigator.of(context).pop();
+                    }
+                  },
+                  child: Text(
+                    newCategoryIcon != null
+                        ? 'Crear Categoría'
+                        : 'Guardar Categoría',
+                    style: TextStyle(color: Colors.greenAccent.shade400),
+                  ),
+                ),
+              ]),
             ),
           ],
         );
@@ -182,18 +346,17 @@ class _SettingsState extends State<Settings> {
     return icon.codePoint.toString();
   }
 
-  Future<void> _loadCategoriesFromSharedPreferences() async {
+  static void deleteCategory(String name) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String storedCategories = prefs.getString('categories') ?? '{}';
     Map<String, dynamic> savedCategories =
         Map<String, dynamic>.from(json.decode(storedCategories));
 
-    CategoryData.categories.clear();
-
-    savedCategories.forEach((name, iconData) {
-      CategoryData.categories[name] =
-          IconData(int.parse(iconData), fontFamily: 'MaterialIcons');
-    });
+    if (CategoryData.categories.containsKey(name)) {
+      CategoryData.categories.remove(name);
+      savedCategories.remove(name);
+      prefs.setString('categories', json.encode(savedCategories));
+    }
   }
 
   Future<String> _uploadImageToStorage() async {

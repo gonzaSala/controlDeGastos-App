@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:control_gastos/expenses_repository.dart';
 import 'package:control_gastos/firebase_Api.dart';
+import 'package:control_gastos/screens/categoryData.dart';
 import 'package:control_gastos/screens/detailsPageContainer.dart';
 import 'package:control_gastos/screens/settingScreen.dart';
 import 'package:control_gastos/screens/ui/backgroundTheme.dart';
@@ -17,19 +20,43 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:control_gastos/firebase_options.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  await _loadDefaultCategories();
 
   await FirebaseApi().initNotifications();
 
   runApp(MyApp());
+}
+
+Future<void> _loadDefaultCategories() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  if (!prefs.containsKey('categories')) {
+    Map<String, dynamic> defaultCategories = {
+      'Otros': Icons.wallet.codePoint,
+      'Shopping': Icons.shopping_cart.codePoint,
+      'Comida': FontAwesomeIcons.burger.codePoint,
+      'Transporte': Icons.directions_bus_sharp.codePoint,
+      'Alcohol': FontAwesomeIcons.beerMugEmpty.codePoint,
+      'Salud': Icons.local_hospital_outlined.codePoint,
+      'Deudas': Icons.business_center_rounded.codePoint,
+      'Mascotas': Icons.pets_sharp.codePoint,
+      'Educación': Icons.school_rounded.codePoint,
+      'Ropa': FontAwesomeIcons.personDress.codePoint,
+      'Hogar': Icons.home.codePoint,
+    };
+
+    prefs.setString('categories', json.encode(defaultCategories));
+  }
 }
 
 class MyApp extends StatelessWidget {

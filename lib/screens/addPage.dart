@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:control_gastos/main.dart';
 import 'package:control_gastos/screens/categoryData.dart';
 import 'package:control_gastos/states/login_state.dart';
 import 'package:control_gastos/widgets/category_selector_widget.dart';
@@ -25,6 +26,7 @@ class _AddPageState extends State<AddPage> {
   @override
   void initState() {
     super.initState();
+    CategoryData.loadCategoriesFromSharedPreferences();
     setState(() {});
   }
 

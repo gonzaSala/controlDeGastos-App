@@ -49,6 +49,9 @@ class DetailsPage extends StatelessWidget {
                         ),
                       ),
                     );
+                    /*   Navigator.popUntil(
+                        context, ModalRoute.withName('/homePage'));*/
+                    Navigator.of(context).pushReplacementNamed('/homePage');
                   },
                   confirmDismiss: (direction) async {
                     final result = await showDialog(

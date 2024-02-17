@@ -197,8 +197,12 @@ class _MonthWidgetState extends State<MonthWidget>
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               _popMenu(),
+              SizedBox(
+                width: 55,
+              ),
               Text(
                 'Total gastos del mes',
+                textAlign: TextAlign.center,
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 16.0,
@@ -298,6 +302,9 @@ class _MonthWidgetState extends State<MonthWidget>
         children: <Widget>[
           Row(mainAxisAlignment: MainAxisAlignment.start, children: [
             _popMenu(),
+            SizedBox(
+              width: 55,
+            ),
             Text(
               'Total gastos del día $selectedDay',
               style: TextStyle(

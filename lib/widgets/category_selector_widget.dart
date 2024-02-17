@@ -95,7 +95,7 @@ Color getColor(String categoryName) {
     case 'Hogar':
       return Colors.indigoAccent;
     default:
-      return Colors.grey;
+      return Colors.white70;
   }
 }
 

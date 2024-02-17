@@ -1,4 +1,5 @@
 import 'package:control_gastos/expenses_repository.dart';
+import 'package:control_gastos/screens/categoryData.dart';
 import 'package:control_gastos/screens/loginPage.dart';
 import 'package:control_gastos/states/login_state.dart';
 import 'package:control_gastos/util.dart';
@@ -24,7 +25,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   PageController? _controller;
-  int currentPage = DateTime.now().month;
+  int currentPage = DateTime.now().month - 1;
   Stream<QuerySnapshot>? _query;
   GraphType currentType = GraphType.LINES;
 
@@ -38,6 +39,8 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+    CategoryData.loadCategoriesFromSharedPreferences();
+
     _body();
   }
 
